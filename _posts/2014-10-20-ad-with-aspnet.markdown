@@ -15,7 +15,7 @@ To limit the solution to the these directors, authentication and authorization w
 #The Problem
 
 Getting authentication to work was a snap.  Microsoft provides the System.Web.Security.ActiveDirectoryMembershipProvider
-class to use as your membership provider.  Putting an [Authorize] attribute on my action methods or entire controllers was all I needed to get it working (besides, of course, the system.web/authentication web.config updates and a controller to show my login form and handle the submit credentials).
+class to use as your membership provider.  Putting an `[Authorize]` attribute on my action methods or entire controllers was all I needed to get it working (besides, of course, the system.web/authentication web.config updates and a controller to show my login form and handle the submit credentials).
 
 Here's my relevant web.config setup:
 
@@ -106,7 +106,7 @@ return _authorized;
 
 Notice that I also included a little code to distinguish between the user not being authenticated (which the call to base.AuthorizeCore takes care of) and not being authorized. Without the code in HandleUnauthorizedRequest, if the user successfully logs in but is not in the AD group, he just sees the log in screen again which doesn't communicate the problem very well.
 
-The this.Log() code uses a Nuget packaged called this.Log. The LDAPHelper class is something I wrote. The code is below:
+The this.Log() code uses a Nuget package called this.Log. The LDAPHelper class is something I wrote. The code is below:
 
 {% highlight csharp %}
 public static class LDAPHelper

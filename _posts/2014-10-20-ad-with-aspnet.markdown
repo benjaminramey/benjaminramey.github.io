@@ -1,7 +1,7 @@
 ---
 title:  "Active Directory Authentication in ASP.NET MVC 5 with Forms Authentication and Group-Based Authorization"
 date:   2014-10-20 9:03:00
-description: How to integrate MVC authorization attributes with Active Directory.
+description: "How to integrate MVC authorization attributes with Active Directory."
 ---
 
 I know that blog post title is sure a mouth-full, but it describes the whole problem I was trying to solve in a recent project.
@@ -42,9 +42,9 @@ The tough part came when I wanted to limit access to users in that AD group. Mic
 
 I tried several methods I found online. Most of them were based on creating my own custom RoleProvider and querying AD to iterate through the user's groups (treating them like roles) and seeing if one of them matched my AD group I was looking for. However, I could never get it to work. Each code example I found eventually gave me this AD error when I iterated through the current user's AD groups:
 
-{% highlight %}
+`
 The specified directory service attribute or value does not exist.
-{% endhighlight %}
+`
 
 The Solution
 
@@ -52,7 +52,7 @@ Eventually, I found a solution online that worked. Instead of setting up a custo
 
 Here is my custom AuthorizeAttribute:
 
-{% highlight csharp %}
+{% highlight c# %}
 public class AuthorizeADAttribute : AuthorizeAttribute
 {
 private bool _authenticated;
@@ -108,7 +108,7 @@ Notice that I also included a little code to distinguish between the user not be
 
 The this.Log() code uses a Nuget package called this.Log. The LDAPHelper class is something I wrote. The code is below:
 
-{% highlight csharp %}
+{% highlight c# %}
 public static class LDAPHelper
 {
 public static string GetLDAPContainer()
@@ -174,7 +174,7 @@ My code is mostly based on example code I found on a very helpful [StackOverflow
 
 To use this code, all you have to do is use your custom AuthorizeAttribute instead of the built-in one. Something like this:
 
-{% highlight csharp %}
+{% highlight c# %}
 [AuthorizeAD(Groups="Some AD group name")]
 public class HomeController : Controller
 {

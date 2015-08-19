@@ -1,4 +1,4 @@
-name: 
+name: Fishy Business
 description: "The man, the myth, the legend"
 meta_description: "The man, the myth, the legend"
 
@@ -11,8 +11,8 @@ paginate: 20
 baseurl: /
 domain_name: 'http://www.benramey.com'
 google_analytics: 'UA-XXXXXXXX-X'
-disqus: false
-disqus_shortname: 'your-disqus-shortname'
+disqus: true
+disqus_shortname: 'fishybusiness'
 
 # Details for the RSS feed generator
 url:            'http://www.benramey.com'

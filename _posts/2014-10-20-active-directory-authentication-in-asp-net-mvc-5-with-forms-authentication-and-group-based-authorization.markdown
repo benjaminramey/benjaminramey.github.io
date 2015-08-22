@@ -42,9 +42,8 @@ The tough part came when I wanted to limit access to users in that AD group. Mic
 
 I tried several methods I found online. Most of them were based on creating my own custom RoleProvider and querying AD to iterate through the user's groups (treating them like roles) and seeing if one of them matched my AD group I was looking for. However, I could never get it to work. Each code example I found eventually gave me this AD error when I iterated through the current user's AD groups:
 
-`
-The specified directory service attribute or value does not exist.
-`
+
+    The specified directory service attribute or value does not exist.
 
 #The Solution
 

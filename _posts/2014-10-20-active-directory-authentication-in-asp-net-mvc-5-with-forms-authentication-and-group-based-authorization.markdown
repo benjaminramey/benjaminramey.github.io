@@ -30,10 +30,10 @@ Here's my relevant web.config setup:
 <membership defaultProvider="ADMembershipProvider">
     <providers>
             <clear/>
-                <add name="ADMembershipProvider"
-                     type="System.Web.Security.ActiveDirectoryMembershipProvider"
-                     connectionStringName="ADConnectionString"
-                     attributeMapUsername="sAMAccountName"/>
+            <add name="ADMembershipProvider"
+                 type="System.Web.Security.ActiveDirectoryMembershipProvider"
+                 connectionStringName="ADConnectionString"
+                 attributeMapUsername="sAMAccountName"/>
     </providers>
 </membership>
 {% endhighlight %}

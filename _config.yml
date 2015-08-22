@@ -19,7 +19,7 @@ url:            'http://www.benramey.com'
 author:         'Ben Ramey'
 authorTwitter:  'grimfere'
 
-permalink:       /:year/:title/
+permalink:       /:year/:month/:date/:title/
 
 defaults:
     -

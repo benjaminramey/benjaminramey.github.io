@@ -13,7 +13,7 @@ messages were received.  Since I explicitly wanted to test the state no matter w
 the messages arrived in, I needed all permutations of those messages so I could send
 them to the Saga in each order and test the resulting state.
 
-I found this super article ont he subject that gave all the code I needed: [Generating Permutations with C# Iterators][article].
+I found this super article on the subject that gave all the code I needed: [Generating Permutations with C# Iterators][article].
 
 Thanks IanG on Tap!
 

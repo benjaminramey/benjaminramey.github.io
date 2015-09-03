@@ -1,5 +1,5 @@
 ---
-title:  "Permuations with Iterators in C#"
+title:  "Permutations with Iterators in C#"
 date:   2015-09-03 12:27:00
 description: "Link to great code for generator permutations of objects with iterators"
 ---

@@ -622,6 +622,14 @@ h2.month {
   margin-left: 2px;
 }
 
+ol ol {
+	margin-left: 10px;
+	list-style-type: lower-alpha;
+}
+ol {
+	list-style-type: decimal;
+}
+
 /* Media Queries */
 @media screen and (max-width: 540px) {
 	#wrapper { padding:20px 20px 20px 20px;}

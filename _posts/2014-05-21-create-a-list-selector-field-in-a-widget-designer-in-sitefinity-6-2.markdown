@@ -113,7 +113,7 @@ Next, choose the List property from your controller and set it up as follows.  E
 
 In the generated .ascx file, update the `ServiceUrl` property on the FlatSelector control to `/Sitefinity/Services/Lists/ListService.svc/?managerType=&providerName=&itemType=Telerik.Sitefinity.Lists.Model.List&provider=&sortExpression=LastModified%20DESC&skip=0&take=50`.
 
-![Service URL 1]((/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png)
+![Service URL 1](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png)
 
 In the generated .cs file, remove line 135 that sets the ConstantFilter property to `Visible=true`.
 

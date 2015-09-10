@@ -623,11 +623,11 @@ h2.month {
 }
 
 ol ol {
-	margin-left: 10px;
-	list-style-type: lower-alpha;
+	margin-left: 20px;
+	list-style: lower-alpha;
 }
 ol {
-	list-style-type: decimal;
+	list-style: decimal;
 }
 
 /* Media Queries */

@@ -105,21 +105,21 @@ Click "Next" on the next screen. Choose your FAQItemController from the list on 
 
 ####Step 2.1: Choose widget designer fields
 
-Next, choose the List property from your controller and set it up as follows.  Especially note two things.  First, choose the DynamicContentSelector.  Second, update the "Select the content type for the selector" to `Telerik.Sitefinity.Lists.Model.List`.  Click on "Add".
+Next, choose the List property from your controller and set it up as follows.  Especially note two things.  First, choose the DynamicContentSelector.  Second, update the "Select the content type for the selector" to 'Telerik.Sitefinity.Lists.Model.List'.  Click on "Add".
 
 ![Create a widget designer](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-fields1.png)
 
 ####Step 2.2: Update generated widget designer files
 
-In the generated .ascx file, update the `ServiceUrl` property on the FlatSelector control to `/Sitefinity/Services/Lists/ListService.svc/?managerType=&providerName=&itemType=Telerik.Sitefinity.Lists.Model.List&provider=&sortExpression=LastModified%20DESC&skip=0&take=50`.
+In the generated .ascx file, update the 'ServiceUrl' property on the FlatSelector control to '/Sitefinity/Services/Lists/ListService.svc/?managerType=&providerName=&itemType=Telerik.Sitefinity.Lists.Model.List&provider=&sortExpression=LastModified%20DESC&skip=0&take=50'.
 
 ![Service URL 1](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png)
 
-In the generated .cs file, remove line 135 that sets the ConstantFilter property to `Visible=true`.
+In the generated .cs file, remove line 135 that sets the ConstantFilter property to 'Visible=true'.
 
 ![FAQItemDesigner remove line 135](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-removeline135.png)
 
-Finally, in the generated .js file, change the property that is used as the value of the selected list from `OriginalContentId` to `Id`.  This code can be found in the `_ListDoneSelecting` method.
+Finally, in the generated .js file, change the property that is used as the value of the selected list from 'OriginalContentId' to 'Id'.  This code can be found in the '_ListDoneSelecting' method.
 
 ![FAQItemDesigner update js file](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-changejsfile.png)
 

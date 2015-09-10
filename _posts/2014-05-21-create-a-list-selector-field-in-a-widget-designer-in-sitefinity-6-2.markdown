@@ -4,11 +4,11 @@ date:   2014-05-21
 description: "Create a List Selector Field in a Widget Designer in Sitefinity 6.2"
 ---
 
-> [9/25/14 update] See Hardy’s comments below for necessary updates to my steps when using Sitefinity 7.1 and up.  Thanks, Hardy!
+> [9/25/14 update] See Hardy's comments below for necessary updates to my steps when using Sitefinity 7.1 and up.  Thanks, Hardy!
 
 #Scenario
 
-I am designing a fairly simple widget in Sitefinity (version 6.2, but this probably applies to other versions as well) that will display a simple FAQ list.  The FAQ list has two major parts: 1) a “table of contents” type ordered-list at the top that lists each question and links to the answer further down the page, and 2) the list of questions with the answers below them.
+I am designing a fairly simple widget in Sitefinity (version 6.2, but this probably applies to other versions as well) that will display a simple FAQ list.  The FAQ list has two major parts: 1) a "table of contents" type ordered-list at the top that lists each question and links to the answer further down the page, and 2) the list of questions with the answers below them.
 
 #Approach
 
@@ -18,11 +18,11 @@ So, my widget, after being placed on a page, would only need to allow a content 
 
 #Solution
 
-My solution would involved a widget designer control and a customized FlatSelector field.  Here’s an overview with details below.
+My solution would involved a widget designer control and a customized FlatSelector field.  Here's an overview with details below.
 
 ##Overview
 
-1. Create a Sitefinity MVC widget with a single “List” field that will contain the list GUID
+1. Create a Sitefinity MVC widget with a single "List" field that will contain the list GUID
 1. Create a Sitefinity widget designer for this MVC widget with a single FlatSelector field
   1. Update the FlatSelector ItemType field
   1. Update the FlatSelector ServiceURL field
@@ -31,15 +31,15 @@ My solution would involved a widget designer control and a customized FlatSelect
 
 ##Details
 
-For some reason, Sitefinity widget designer documentation is really hard for me to find.  Maybe I’m the only one.  Maybe Sitefinity needs to put some more dollars toward good documentation!  Anyway, after some searching and some trial and error, I found this page giving me an idea of how I should accomplish what I was trying to do: [Sitefinity article][sf-article]
+For some reason, Sitefinity widget designer documentation is really hard for me to find.  Maybe I'm the only one.  Maybe Sitefinity needs to put some more dollars toward good documentation!  Anyway, after some searching and some trial and error, I found this page giving me an idea of how I should accomplish what I was trying to do: [Sitefinity article][sf-article]
 
-To summarize, it tells you how to create a widget designer with Sitefinity Thunder and then change the generated control to point to some of the generic content types (like Lists).  However, it didn’t have all the details I needed.  I had to troubleshoot and that’s why I’m writing this post.
+To summarize, it tells you how to create a widget designer with Sitefinity Thunder and then change the generated control to point to some of the generic content types (like Lists).  However, it didn't have all the details I needed.  I had to troubleshoot and that's why I'm writing this post.
 
 ###Step 1: Create the Widget
 
 Below are the details for how I setup my MVC widget.  Translate the various tasks for the same effect if you prefer a WebForms widget.
 
-Using Sitefinity Thunder, create your widget.  Don’t create the designer at this time.  I like using MVC widgets but there’s no reason this won’t work with a WebForms widget.  I called my widget “FAQList”.
+Using Sitefinity Thunder, create your widget.  Don't create the designer at this time.  I like using MVC widgets but there's no reason this won't work with a WebForms widget.  I called my widget "FAQList".
 
 ####Step 1.1: Update controller properties
 
@@ -97,33 +97,33 @@ public ActionResult Index()
 
 ###Step 2: Create widget designer
 
-Once your widget is created, you can create your widget designer.  Using Thunder, create a widget designer for an existing widget. Name your widget designer.  I use the name of the widget and append “Designer”.
+Once your widget is created, you can create your widget designer.  Using Thunder, create a widget designer for an existing widget. Name your widget designer.  I use the name of the widget and append "Designer".
 
 ![FAQItemDesigner widget designer naming](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-naming.png)
 
-Click “Next” on the next screen. Choose your FAQItemController from the list on the next screen.
+Click "Next" on the next screen. Choose your FAQItemController from the list on the next screen.
 
 ####Step 2.1: Choose widget designer fields
 
-Next, choose the List property from your controller and set it up as follows.  Especially note two things.  First, choose the DynamicContentSelector.  Second, update the “Select the content type for the selector” to “Telerik.Sitefinity.Lists.Model.List”.  Click on “Add”.
+Next, choose the List property from your controller and set it up as follows.  Especially note two things.  First, choose the DynamicContentSelector.  Second, update the "Select the content type for the selector" to `Telerik.Sitefinity.Lists.Model.List`.  Click on "Add".
 
 ![Create a widget designer](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-fields1.png)
 
 ####Step 2.2: Update generated widget designer files
 
-In the generated .ascx file, update the “ServiceUrl” property on the FlatSelector control to “~/Sitefinity/Services/Lists/ListService.svc/?managerType=&providerName=&itemType=Telerik.Sitefinity.Lists.Model.List&provider=&sortExpression=LastModified%20DESC&skip=0&take=50″.
+In the generated .ascx file, update the `ServiceUrl` property on the FlatSelector control to `/Sitefinity/Services/Lists/ListService.svc/?managerType=&providerName=&itemType=Telerik.Sitefinity.Lists.Model.List&provider=&sortExpression=LastModified%20DESC&skip=0&take=50`.
 
 ![Service URL 1]((/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png)
 
-In the generated .cs file, remove line 135 that sets the ConstantFilter property to “Visible=true”.
+In the generated .cs file, remove line 135 that sets the ConstantFilter property to `Visible=true`.
 
 ![FAQItemDesigner remove line 135](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-removeline135.png)
 
-Finally, in the generated .js file, change the property that is used as the value of the selected list from “OriginalContentId” to “Id”.  This code can be found in the “_ListDoneSelecting” method.
+Finally, in the generated .js file, change the property that is used as the value of the selected list from `OriginalContentId` to `Id`.  This code can be found in the `_ListDoneSelecting` method.
 
 ![FAQItemDesigner update js file](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-changejsfile.png)
 
-At this point, you should be done!  Build your project, plop your new widget on a page and test it out!  Here’s what mine looks like.
+At this point, you should be done!  Build your project, plop your new widget on a page and test it out!  Here's what mine looks like.
 
 The edit dialog:
 ![FAQItemDesigner edit screen](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-editscreen.png)

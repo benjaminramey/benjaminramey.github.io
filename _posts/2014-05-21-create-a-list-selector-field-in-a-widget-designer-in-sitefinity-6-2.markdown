@@ -21,7 +21,6 @@ So, my widget, after being placed on a page, would only need to allow a content 
 My solution would involved a widget designer control and a customized FlatSelector field.  Here's an overview with details below.
 
 ##Overview
-
 1. Create a Sitefinity MVC widget with a single "List" field that will contain the list GUID
 1. Create a Sitefinity widget designer for this MVC widget with a single FlatSelector field
   1. Update the FlatSelector ItemType field
@@ -29,20 +28,18 @@ My solution would involved a widget designer control and a customized FlatSelect
   1. Update the FlatSelector DataMembers
   1. Update the widget designer Javascript to choose the list ID
 
-##Details
 
+##Details
 For some reason, Sitefinity widget designer documentation is really hard for me to find.  Maybe I'm the only one.  Maybe Sitefinity needs to put some more dollars toward good documentation!  Anyway, after some searching and some trial and error, I found this page giving me an idea of how I should accomplish what I was trying to do: [Sitefinity article][sf-article]
 
 To summarize, it tells you how to create a widget designer with Sitefinity Thunder and then change the generated control to point to some of the generic content types (like Lists).  However, it didn't have all the details I needed.  I had to troubleshoot and that's why I'm writing this post.
 
 ###Step 1: Create the Widget
-
 Below are the details for how I setup my MVC widget.  Translate the various tasks for the same effect if you prefer a WebForms widget.
 
 Using Sitefinity Thunder, create your widget.  Don't create the designer at this time.  I like using MVC widgets but there's no reason this won't work with a WebForms widget.  I called my widget "FAQList".
 
 ####Step 1.1: Update controller properties
-
 Remove whatever properties Thunder automatically adds on the MVC controller and add your own List property of type Guid.
 
 {% highlight csharp %}
@@ -51,7 +48,6 @@ public Guid List { get; set; }
 {% endhighlight %}
 
 ####Step 1.2: Update widget view model
-
 I added a simple POCO to describe each FAQ item (containing a question and answer) and then added a list of these POCOs as the only property on my view model.
 
 {% highlight csharp %}
@@ -68,7 +64,6 @@ public class FAQItem
 {% endhighlight %}
 
 ####Step 1.3: Update Index action
-
 Update the Index action to use the List property to access the content-author-chosen list, pull the items and stick them in the model.
 
 {% highlight csharp %}
@@ -96,7 +91,6 @@ public ActionResult Index()
 {% endhighlight %}
 
 ###Step 2: Create widget designer
-
 Once your widget is created, you can create your widget designer.  Using Thunder, create a widget designer for an existing widget. Name your widget designer.  I use the name of the widget and append "Designer".
 
 ![FAQItemDesigner widget designer naming](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-naming.png)
@@ -104,13 +98,11 @@ Once your widget is created, you can create your widget designer.  Using Thunder
 Click "Next" on the next screen. Choose your FAQItemController from the list on the next screen.
 
 ####Step 2.1: Choose widget designer fields
-
 Next, choose the List property from your controller and set it up as follows.  Especially note two things.  First, choose the DynamicContentSelector.  Second, update the "Select the content type for the selector" to 'Telerik.Sitefinity.Lists.Model.List'.  Click on "Add".
 
 ![Create a widget designer](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-fields1.png)
 
 ####Step 2.2: Update generated widget designer files
-
 In the generated .ascx file, update the 'ServiceUrl' property on the FlatSelector control to '/Sitefinity/Services/Lists/ListService.svc/?managerType=&providerName=&itemType=Telerik.Sitefinity.Lists.Model.List&provider=&sortExpression=LastModified%20DESC&skip=0&take=50'.
 
 ![Service URL 1](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png)

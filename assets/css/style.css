@@ -623,10 +623,10 @@ h2.month {
 }
 
 ol ol {
-	list-style-type: lower-alpha;
+	margin-left: 20px;
 }
 ol ol li {
-	margin-left: 20px;
+	list-style-type: lower-alpha;
 }
 ol li {
 	list-style-type: decimal;

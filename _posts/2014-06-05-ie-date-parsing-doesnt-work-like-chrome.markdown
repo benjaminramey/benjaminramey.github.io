@@ -4,8 +4,6 @@ date:   2014-06-05
 description: "IE Date Parsing Doesn’t Work Like Chrome"
 ---
 
-#IE Date Parsing Doesn’t Work Like Chrome
-
 I noticed a goofy issue today while working with a jQuery countdown plugin.  This plugin allows you to set an “until” date so that you counter counts down to zero at a certain date and time.
 
 I was setting the date like this:

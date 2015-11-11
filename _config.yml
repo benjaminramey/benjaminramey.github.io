@@ -1,42 +1,20 @@
-name: Fishy Business
-description: "The man, the myth, the legend"
-meta_description: "The man, the myth, the legend"
-
-aboutPage: true
+title: Ben Ramey's Blog
+tagline: "Programming problems, solutions and stories"
+description: I'm a .NET programmer working for VML.
 
 markdown: redcarpet
 highlighter: pygments
 
 paginate: 20
 baseurl: /
-domain_name: 'http://www.benramey.com'
+url: 'http://www.benramey.com'
+
 google_analytics: 'UA-1380501-7'
 disqus: true
 disqus_shortname: 'fishybusiness'
 
-# Details for the RSS feed generator
-url:            'http://www.benramey.com'
-author:         'Ben Ramey'
-authorTwitter:  'grimfere'
+author:
+    name: 'Ben Ramey'
+    url: 'http://www.benramey.com'
 
 permalink:       /:year/:month/:day/:title/
-
-defaults:
-    -
-        scope:
-            path: "" # empty string for all files
-            type: pages
-        values:
-            layout: default
-    -
-        scope:
-            path: "" # empty string for all files
-            type: posts
-        values:
-            layout: post
-    -
-        scope:
-            path: ""
-            type: drafts
-        values:
-            layout: post

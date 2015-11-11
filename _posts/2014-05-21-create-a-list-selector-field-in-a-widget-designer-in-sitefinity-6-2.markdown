@@ -1,4 +1,5 @@
 ---
+layout: post
 title:  "Create a List Selector Field in a Widget Designer in Sitefinity 6.2"
 date:   2014-05-21
 description: "Create a List Selector Field in a Widget Designer in Sitefinity 6.2"
@@ -90,41 +91,41 @@ public ActionResult Index()
 }
 {% endhighlight %}
 
-###Step 2: Create widget designer
+###Step 2: Create widget designer/public
 Once your widget is created, you can create your widget designer.  Using Thunder, create a widget designer for an existing widget. Name your widget designer.  I use the name of the widget and append "Designer".
 
-![FAQItemDesigner widget designer naming](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-naming.png)
+![FAQItemDesigner widget designer naming](/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-naming.png)
 
 Click "Next" on the next screen. Choose your FAQItemController from the list on the next screen.
 
 ####Step 2.1: Choose widget designer fields
 Next, choose the List property from your controller and set it up as follows.  Especially note two things.  First, choose the DynamicContentSelector.  Second, update the "Select the content type for the selector" to 'Telerik.Sitefinity.Lists.Model.List'.  Click on "Add".
 
-![Create a widget designer](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-fields1.png)
+![Create a widget designer](/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-fields1.png)
 
 ####Step 2.2: Update generated widget designer files
 In the generated .ascx file, update the 'ServiceUrl' property on the FlatSelector control to '/Sitefinity/Services/Lists/ListService.svc/?managerType=&providerName=&itemType=Telerik.Sitefinity.Lists.Model.List&provider=&sortExpression=LastModified%20DESC&skip=0&take=50'.
 
-![Service URL 1](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png)
+![Service URL 1](/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png)
 
 In the generated .cs file, remove line 135 that sets the ConstantFilter property to 'Visible=true'.
 
-![FAQItemDesigner remove line 135](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-removeline135.png)
+![FAQItemDesigner remove line 135](/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-removeline135.png)
 
 Finally, in the generated .js file, change the property that is used as the value of the selected list from 'OriginalContentId' to 'Id'.  This code can be found in the '_ListDoneSelecting' method.
 
-![FAQItemDesigner update js file](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-changejsfile.png)
+![FAQItemDesigner update js file](/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-changejsfile.png)
 
 At this point, you should be done!  Build your project, plop your new widget on a page and test it out!  Here's what mine looks like.
 
 The edit dialog:
-![FAQItemDesigner edit screen](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-editscreen.png)
+![FAQItemDesigner edit screen](/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-editscreen.png)
 
 The list select screen:
-![FAQItemDesigner select screen](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectscreen.png)
+![FAQItemDesigner select screen](/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectscreen.png)
 
 The selected item screen:
-![FAQItemDesigner selected screen](/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectedscreen.png)
+![FAQItemDesigner selected screen](/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectedscreen.png)
 
 
 [sf-article]: http://www.sitefinity.com/documentation/documentationarticles/change-your-dynamic-content-selector-to-choose-from-generic-content

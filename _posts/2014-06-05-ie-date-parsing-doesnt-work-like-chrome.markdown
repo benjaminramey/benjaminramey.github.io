@@ -1,4 +1,5 @@
 ---
+layout: post
 title:  "IE Date Parsing Doesn’t Work Like Chrome"
 date:   2014-06-05
 description: "IE Date Parsing Doesn’t Work Like Chrome"

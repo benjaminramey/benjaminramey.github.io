@@ -1,4 +1,5 @@
 ---
+layout: post
 title:  "Active Directory Authentication in ASP.NET MVC 5 with Forms Authentication and Group-Based Authorization"
 date:   2014-10-20 9:03:00
 description: "How to integrate MVC authorization attributes with Active Directory."

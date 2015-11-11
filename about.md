@@ -1,4 +1,5 @@
 ---
+layout: page
 title: About
 permalink: about/
 profile: true
@@ -13,5 +14,3 @@ them.
 
 If you find anything useful here, my hopes and dreams will truly be made
 complete!
-
-{% include footer.html %}

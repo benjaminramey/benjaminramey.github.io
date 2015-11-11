@@ -1,4 +1,5 @@
 ---
+layout: post
 title:  "Apply Git Patches to SVN Repository"
 date:   2014-09-23
 description: "Apply Git Patches to SVN Repository"

@@ -5,7 +5,7 @@ date:   2014-04-17
 description: "EPiServer 7: Cannot decrypt password"
 ---
 
-#Problem
+##Problem
 I’ve been dealing with an issue in EPiServer 7 recently.  I got this error when trying to log into the admin back-end of the site.
 
 {% highlight text %}
@@ -28,14 +28,14 @@ System.Web.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Exec
 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean& completedSynchronously) +165
 {% endhighlight %}
 
-#Scenario
+##Scenario
 We originally installed the Relate+ site for our EPiServer installation. Through various bad decisions, we didn’t keep the custom code and templates we wrote separate from the Relate+ stuff. So, we inevitably created a mess where we did not need a ton of the Relate+ templates, page types, block types, etc but we could not longer easily pull our custom stuff out from the tangled mess.
 
 Well, we undertook the disentangling anyway (a good decision) and ended up with a much cleaner code base. This meant re-installing EPiServer for a clean (without Relate+) beginning. The database would remain the same to keep our content.
 
 We ran into this error when we got the new, cleaned-up site installed and running and then tried to log into the administration portion of the site.
 
-#Solution
+##Solution
 At first, I found this post online: http://world.episerver.com/Modules/Forum/Pages/Thread.aspx?id=77776 which suggested changing over to the multiplexing membership and role providers and described the new hashing mechanism in EPiServer 7.
 
 At first, this seemed to work. Yay! But, the joy didn’t last long. I soon got the error again even after using the multiplexing providers. I dug a little deeper into the issue.

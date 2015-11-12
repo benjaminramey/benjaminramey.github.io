@@ -14,7 +14,7 @@ It took me about 13 hours of research to figure out what to do and then just abo
 
 When you create a search index in Sitefinity’s back-end, you can add a comma-separated list of extra fields to index. Sitefinity indexes a standard set (like Title). But, if you create custom dynamic modules with other fields you want to index you have to add them in this Additional Fields box. Here here:
 
-![Additional Fields](/public/images/2012-10-19-indexing-taxonomy-fields-for-search-in-sitefinity-51/additionalfields.png)
+![Additional Fields](/public/images/2012-10-19-indexing-taxonomy-fields-for-search-in-sitefinity-51/addtionalfields.png)
 
 Looking through the de-compiled code for Sitefinity’s SearchModule, I found that it registered a special outbound pipe that updates the Lucene indexes (not directly, but through Sitefinity’s abstraction, it appears) when you publish an item. It also registered various Translator classes with PipeTranslatorFactory.RegisterTranslator. Digging through the code in that SearchIndexOutboundPipe and the various translator classes it registered, I finally found that when the SearchIndexOutboundPipe runs, it reads that comma-separated list of additional fields from your index and ties them to the ConcatenationTranslator through some type of mapping. It looked like these translators were being used by the SearchModule to translate content values into index-able values for the Lucene indexing system.
 

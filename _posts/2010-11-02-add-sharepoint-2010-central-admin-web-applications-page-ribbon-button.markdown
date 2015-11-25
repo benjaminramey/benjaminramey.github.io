@@ -1,0 +1,15 @@
+---
+layout: post
+title:  "Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button"
+date:   2010-11-02
+description: "Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button"
+---
+I finally figured out today how to add a button to the Central Admin site’s ribbon for the WebApplicationsList page and have it behave like the other ribbon buttons on this page. The problem wasn’t so much adding the button–that part was easy. The problem was getting the button to behave like the other buttons. That is, getting it to enable and disable when a web application was selected from the list.
+
+It was pretty easy to find the methods for the new SharePoint 2010 javascript API to see if a list item is selected in a list and then make decisions based on that. The SP.UI.ListOperation.Selection methods are great for that. However, the WebApplicationList (http:///_admin/WebApplicationList.aspx) page list in the Central Administration site is not a list and so these methods don’t work.
+
+I had to do some digging in the SharePoint 2010 javacript files to find what I was looking for. I found what I was looking for in the C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\14\TEMPLATE\LAYOUTS\SP.UI.Admin.debug.js file. This is the debug version of the SP.UI.Admin.js file (so it’s possible to read it) that gets included on these pages. It includes a set of methods beginning with “SP.UI.Admin.WebApplicationPageComponent” that are used for the WebApplicationsList page.
+
+What you want is the SP.UI.Admin.WebApplicationPageComponent.get_selectedItem method. This method returns an object containing information about the selected web application on the page.
+
+Here is my final CustomAction XML for the button that enables the button when a web application is selected from the list and then opens up a dialog window when the button is clicked, passing the web application ID to the page that opens in the dialog box.

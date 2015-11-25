@@ -6,6 +6,7 @@ profile: true
 ---
 
 I have two purposes for this blog:
+
 1. I learn something from someone else's blog online almost every day
 doing my job.  I feel like it's only fair if I share the things I learn
 on my own with whoever can find it.  If I save you some time by writing

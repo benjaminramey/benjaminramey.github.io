@@ -10,7 +10,7 @@ baseurl: /
 searchbaseurl: 'http://www.benramey.com'
 url: 'http://www.benramey.com'
 
-google_analytics: 'UA-1380501-7'
+google_analytics_id: 'UA-1380501-7'
 disqus: true
 disqus_shortname: 'fishybusiness'
 

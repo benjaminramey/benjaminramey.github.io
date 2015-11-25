@@ -9,6 +9,7 @@ searchModule.controller("SearchController", [
 		$scope.searchData = [];		
 		$scope.query = "";
 		$scope.results = [];
+		$scope.showResults = false;
 		
 		$http.get("/search.json").then(
 			function(response) {

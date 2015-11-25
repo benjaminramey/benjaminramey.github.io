@@ -3,6 +3,7 @@
 	font-size: 1em;
 }
 
-.search ol {
+.search ol,
+.search p {
 	margin-top: 20px;
 }

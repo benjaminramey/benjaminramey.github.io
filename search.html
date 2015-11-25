@@ -9,7 +9,7 @@ search_omit: true
 	<div ng-controller="SearchController" class="search">
 		<input type="text" ng-model="query" ng-change="search(query)" placeholder="type your query"/>
 		
-		<ol ng-show="results">
+		<ol ng-show="query && results.length">
 			<li ng-repeat="r in results">
 				<a href="[[ r.link ]]">[[ r.title ]]</a>
 				<p>
@@ -17,6 +17,9 @@ search_omit: true
 				</p>
 			</li>
 		</ol>
+		<p ng-show="query && !results.length">
+			No results found.
+		</p>
 	</div>
 </div>
 

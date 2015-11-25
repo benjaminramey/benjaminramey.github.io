@@ -12,7 +12,7 @@ I knew the real solution had to be some type of command-line utility and a batch
 
 First of all, I found HTML Tidy which I could run from the Windows command line to format a file. Using a configuration file for the tidy.exe (placed in the same directory as tidy.exe and named tidcfg.ini–although neither matters, see below) that looked like this:
 
-{% highlight %}
+{% highlight text %}
 indent:yes
 indent-attributes:yes
 {% endhighlight %}
@@ -21,7 +21,7 @@ I got the formatting I wanted.
 
 Now, all I had to do was brush up on my Windows batch command skills to run tidy.exe on multiple files. Easy enough! This is what my batch file looked like:
 
-{% highlight %}
+{% highlight text %}
 for /d %%X in (C:\<path_to_parent_directory>\*) do (c:\<path_to_tidy.exe>\tidy.exe -m -xml -config c:\<path_to_tidy.ini_file>\tidycfg.ini %%X\<xml_file_name>.xml)
 {% endhighlight %}
 

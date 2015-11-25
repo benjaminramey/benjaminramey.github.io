@@ -10,7 +10,7 @@ One helpful way I’ve been able to use post-build events is to copy the compile
 
 Adding a post-build event couldn’t be much simpler either. In Visual Studio just right-click on the project you want to add the post-build event for in Solution Explorer and select “Properties”. You can either do that or, with the project selected in Solution Explorer, hit Alt-Enter. The project properties window will display. On the left-hand side, click the “Build Events” tab. You’ll see two boxes there. One is for pre-build events and one is for post-build events.
 
-{% highlight %}
+{% highlight text %}
 In the post-build events textbox add the following:
 IF NOT ($(ConfigurationName)) == (Debug) GOTO END
 cd $(ProjectDir)

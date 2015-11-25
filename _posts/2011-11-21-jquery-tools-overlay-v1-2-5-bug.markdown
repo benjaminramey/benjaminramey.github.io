@@ -12,7 +12,7 @@ In any case, the bug showed up when I had an existing overlay showing and wanted
 ##Solution
 While it’s somewhat of a hack, the best solution I found was to simply remove the div that Overlay creates with id “exposeMask” before I display the second overlay.
 
-{% highlight %}
+{% highlight text %}
 $(“#exposeMask”).remove();
 {% endhighlight %}
 

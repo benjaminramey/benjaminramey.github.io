@@ -12,7 +12,7 @@ It took me a long time to figure out a good method (I’m no graphic designer!),
 
 The first step, of course, is to find an icon.  There are billions of free ones out there on the web.  This is mine.
 
-![Blue phone icon](/public/images/2012-03-15-change-the-color-of-an-icon-with-gimp/icon-blue-phone.png)
+![Blue phone icon](/public/images/2012-03-15-change-the-color-of-an-icon-with-gimp/icon-phone-blue.png)
 
 I love it.  It’s just what I need–but what a terrible color!  I need something else.  It’s a PNG and when I open it in Gimp, here’s what it looks like.
 

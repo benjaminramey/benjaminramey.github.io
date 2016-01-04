@@ -25,19 +25,15 @@ uses all it's defined defaults.
 
 ## Solution
 I read the [documentation](http://www.rabbitmq.com/configure.html) a little more closely
-and finally came upon this line: "For environment changes to take effect on Windows, the service must be re-installed. It is
-not sufficient to restart the service."
+and finally came upon this line: "Windows service users will need to re-install the service after adding
+or removing a configuration file."
 
-Oops.  Guess I should have read the documentation more closely the first time around!  It's even italicized.  The 
-instructions are even there on the page. Here they are:
+Oops.  Guess I should have read the documentation more closely the first time around!  The easiest way to 
+do this is as follows (start a command prompt as administrator):
 
- 1. cd into the sbin folder under RabbitMQ server installation directory (e.g. C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.6.0\sbin)
- 1. Run rabbitmq-service.bat remove
- 1. Set environment variables via command line, i.e. run commands like the following: set RABBITMQ_BASE=c:\Data\RabbitMQ
- 1. Run rabbitmq-service.bat install
- 
-Note a couple of things.  First, this only installs the service and leaves it un-started.  To start it, just do this:
+	> cd "C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.6.0\sbin"
+	> .\rabbitmq-service.bat remove
+	> .\rabbitmq-service.bat install
+	> .\rabbitmq-service.bat start
 
-	> rabbitmq-service.bat start
-	
-Second, you'll need to start your command prompt as an administrator.
+Of course, The path you cd into will depend on the version of RabbitMQ you have installed.

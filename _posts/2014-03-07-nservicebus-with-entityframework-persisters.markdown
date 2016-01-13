@@ -5,10 +5,11 @@ date:   2014-03-07
 description: "NServiceBus with EntityFramework Persisters"
 ---
 
-    Update 1/13/2016
-    This code (much refactored and improved) is now available as a (NuGet package)[http://www.nuget.org/packages/GoodlyFere.NServiceBus.EntityFramework].
-    Please see documentation and the code over at the (GitHub repository)[https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework].
+## Update 1/13/2016
+This code (much refactored and improved) is now available as a [NuGet package](http://www.nuget.org/packages/GoodlyFere.NServiceBus.EntityFramework).
+Please see documentation and the code over at the [GitHub repository](https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework).
 
+## Summary
 NServiceBus is easily configurable to use NHibernate, RavenDB or in-memory persistence. RavenDB is built in and is the default. You can configure it to use in-memory persistence. You can install a NuGet package to use NHibernate which opens the door to many data stores.
 
 So, for a recent project in which we were using NServiceBus, I decided to use NHibernate as the ORM for our simple domain model. I might just be dumb, but I ran into all sorts of problems with NHibernate and MS DTC when I used a remove SQL server. Try as I might, I just couldn't get NHibernate to work to persist my domain model even though it persisted the NServiceBus stuff just fine.

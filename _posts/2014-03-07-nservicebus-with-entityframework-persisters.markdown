@@ -6,8 +6,8 @@ description: "NServiceBus with EntityFramework Persisters"
 ---
 
     Update 1/13/2016
-    This code (much refactored and improved) is now available as a [NuGet package](http://www.nuget.org/packages/GoodlyFere.NServiceBus.EntityFramework).
-    Please see documentation and the code over at the [GitHub repository](https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework).
+    This code (much refactored and improved) is now available as a (NuGet package)[http://www.nuget.org/packages/GoodlyFere.NServiceBus.EntityFramework].
+    Please see documentation and the code over at the (GitHub repository)[https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework].
 
 NServiceBus is easily configurable to use NHibernate, RavenDB or in-memory persistence. RavenDB is built in and is the default. You can configure it to use in-memory persistence. You can install a NuGet package to use NHibernate which opens the door to many data stores.
 

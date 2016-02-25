@@ -60,6 +60,7 @@ more close to what you are trying to do anyway--listen to all events that your
 system produces.
 
 So, I simply created a marker interface called `ICustomEvent`.
+
 ```
 public interface ICustomEvent : IEvent { }
 ```
@@ -68,6 +69,7 @@ Then, on all of my bus event classes, instead of implementing `IEvent` directly,
 I implemented `ICustomEvent`.
 
 My handler then looked like this.
+
 ```
 public class EventHandler : IHandleMessages<ICustomEvent>
 {

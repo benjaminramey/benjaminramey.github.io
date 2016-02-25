@@ -12,7 +12,7 @@ could be published on my bus.
 
 In other words, whenever an event of any type was published, I wanted one particular
 endpoint to subscribe to that event and then decide whether it should do
-anything with that even or not.
+anything with it.
 
 I thought the code to do that should be pretty simple.  Since all published
 events *should* implement the `IEvent` interface and NServiceBus supports
@@ -20,14 +20,6 @@ polymorphism in its message handling, creating a message handler that
 implemented `IHandleMessages<IEvent>` should be all I should have needed!
 
 I was testing this with only partial success and so I thought it was working.
-
-## My Partial Success
-The reason I had partial success was because I was also *explicitly* handling
-other events in the same endpoint on a special saga I had setup.  So, when
-the endpoint started up, it would subscribe to these events.  At first, I only
-wanted to send notifications for these events anyway, so it all seemed to be
-working.  My special `IEvent` would work because the `Saga` subscribed these
-endpoint to a few events explicitly.
 
 ```
 public class EventHandler : IHandleMessages<IEvent>
@@ -38,6 +30,14 @@ public class EventHandler : IHandleMessages<IEvent>
    }
 }
 ```
+
+## My Partial Success
+The reason I had partial success was because I was also *explicitly* handling
+other events in the same endpoint on a special saga I had setup.  So, when
+the endpoint started up, it would subscribe to these events.  At first, I only
+wanted to send notifications for these events anyway, so it all seemed to be
+working.  My special `IEvent` would work because the `Saga` subscribed this same
+endpoint to those few events explicitly.
 
 ## My Full Failure
 I realized I had only partially succeeded when I started wanting to send notifications

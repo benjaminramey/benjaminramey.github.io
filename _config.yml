@@ -3,7 +3,7 @@ tagline: "Programming problems, solutions and stories"
 description: I'm a .NET programmer working for VML.
 
 markdown: redcarpet
-highlighter: pygments
+highlighter: rouge
 
 paginate: 5
 baseurl: /

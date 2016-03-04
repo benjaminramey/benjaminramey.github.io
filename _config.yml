@@ -2,7 +2,7 @@ title: Ben Ramey's Blog
 tagline: "Programming problems, solutions and stories"
 description: I'm a .NET programmer working for VML.
 
-markdown: redcarpet
+markdown: kramdown
 highlighter: rouge
 
 paginate: 5

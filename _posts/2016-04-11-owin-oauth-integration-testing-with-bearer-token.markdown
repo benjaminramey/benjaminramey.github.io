@@ -45,6 +45,7 @@ use to encrypt a `ClaimsIdentity` into a valid bearer token.
 
 Update your server creation code like this:
 
+```
   var dataProtector;
   var server = TestServer.Create(app =>
   {
@@ -55,11 +56,13 @@ Update your server creation code like this:
       typeof(OAuthBearerAuthenticationMiddleware).Namespace,
       "Access_Token", "v1");
   });
+```
 
 Once you've "captured" the `dataProtector`, in your integration test (or in some
 helper code, probably) you can generate your `ClaimsIdentity` and then your
 bearer token with the `dataProtector`.
 
+```
   // inside an integration test
   using (server)
   {
@@ -75,3 +78,4 @@ bearer token with the `dataProtector`.
 
     // ... call your API through the test server with the bearer token...
   }
+```

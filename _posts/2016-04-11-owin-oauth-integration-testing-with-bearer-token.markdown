@@ -78,7 +78,7 @@ bearer token with the `dataProtector`.
 
     // ... call your API through the test server with the bearer token...
     var response = server.CreateRequest("/api/someendpoint")
-        .AddHeader("Authorization", "Bearer " + token)
+        .AddHeader("Authorization", "Bearer " + bearerToken)
         .GetAsync()
         .Result;
   }

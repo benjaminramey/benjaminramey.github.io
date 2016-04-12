@@ -45,7 +45,7 @@ use to encrypt a `ClaimsIdentity` into a valid bearer token.
 
 Update your server creation code like this:
 
-```
+{% highlight csharp %}
   var dataProtector;
   var server = TestServer.Create(app =>
   {
@@ -56,7 +56,7 @@ Update your server creation code like this:
       typeof(OAuthBearerAuthenticationMiddleware).Namespace,
       "Access_Token", "v1");
   });
-```
+{% endhighlight %}
 
 You have to get the `dataProtector` this way because it's the same way that
 the OWIN OAuth libraries get it before trying to decrypt the bearer token.
@@ -67,7 +67,7 @@ Once you've "captured" the `dataProtector`, in your integration test (or in some
 helper code, probably) you can generate your `ClaimsIdentity` and then your
 bearer token with the `dataProtector`.
 
-```
+{% highlight csharp %}
   // inside an integration test
   using (server)
   {
@@ -87,4 +87,4 @@ bearer token with the `dataProtector`.
         .GetAsync()
         .Result;
   }
-```
+{% endhighlight %}

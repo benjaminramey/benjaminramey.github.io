@@ -7,13 +7,13 @@ description: "How to integrate MVC authorization attributes with Active Director
 
 I know that blog post title is sure a mouth-full, but it describes the whole problem I was trying to solve in a recent project.
 
-##The Project
+## The Project
 
 Let me outline the project briefly.  We were building a report dashboard-type site that will live inside the client's network.  The dashboard gives an overview of various, very important information that relates to how the company is performing on a hourly basis.  So, the dashboard is only available to a certain group of directors.
 
 To limit the solution to the these directors, authentication and authorization would go through their existing Active Directory setup by putting the authorized users in a special AD group.
 
-##The Problem
+## The Problem
 
 Getting authentication to work was a snap.  Microsoft provides the System.Web.Security.ActiveDirectoryMembershipProvider
 class to use as your membership provider.  Putting an `[Authorize]` attribute on my action methods or entire controllers was all I needed to get it working (besides, of course, the system.web/authentication web.config updates and a controller to show my login form and handle the submit credentials).
@@ -46,7 +46,7 @@ I tried several methods I found online. Most of them were based on creating my o
 
     The specified directory service attribute or value does not exist.
 
-##The Solution
+## The Solution
 
 Eventually, I found a solution online that worked. Instead of setting up a custom RoleProvider, all it involved was creating a custom AuthorizeAttribute for your MVC controllers (or action methods) that checked the user's .IsMemberOf method to see if the member belonged the sought after group (or groups). I don't know why this method does not cause the same AD error as describe above, but I'm glad it doesn't! All I can assume is that it queries AD in a more friendly way.
 

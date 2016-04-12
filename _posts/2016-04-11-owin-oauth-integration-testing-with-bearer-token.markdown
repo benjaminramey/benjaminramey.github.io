@@ -58,6 +58,11 @@ Update your server creation code like this:
   });
 ```
 
+You have to get the `dataProtector` this way because it's the same way that
+the OWIN OAuth libraries get it before trying to decrypt the bearer token.
+See the source for the OWIN OAuth code here:
+[OAuthBearerAuthenticationMiddleware.cs](http://katanaproject.codeplex.com/SourceControl/latest#src/Microsoft.Owin.Security.OAuth/OAuthBearerAuthenticationMiddleware.cs)
+
 Once you've "captured" the `dataProtector`, in your integration test (or in some
 helper code, probably) you can generate your `ClaimsIdentity` and then your
 bearer token with the `dataProtector`.

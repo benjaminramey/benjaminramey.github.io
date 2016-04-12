@@ -19,7 +19,7 @@ we simply wrote helper methods that logged a test user in through the authorizat
 server (hosted along with the API in the OWIN test server), got a bearer token
 and then made the integration test calls.
 
-# Problem
+## Problem
 When we recently decided to split the authorization server and resource server
 code up into two separate code bases (so that they could be hosted separately)
 we ran into issues with the authorization and API calls no longer being possible within a
@@ -29,7 +29,7 @@ server was now designed to be hosted separately.  We'd have
 to somehow generate the bearer token without making a call with the OWIN test
 server.
 
-# Solution
+## Solution
 The solution is to generate a valid bearer token in your test code and send it
 along with your test API call as you would have previous.  How to generate that
 valid bearer token though??  It turns out to be easier than I thought.
@@ -67,7 +67,7 @@ bearer token with the `dataProtector`.
   using (server)
   {
     // create your valid identity any way you need to here
-    ClaimsIdentity identity = new ClaimsIdentity();
+    ClaimsIdentity identity = new ClaimsIdentity(new GenericIdentity("username"));
 
     // these classes are defined in the OWIN OAuth libraries.
     var properties = new AuthenticationProperties();
@@ -77,5 +77,9 @@ bearer token with the `dataProtector`.
     string bearerToken = format.Protect(ticket);
 
     // ... call your API through the test server with the bearer token...
+    var response = server.CreateRequest("/api/someendpoint")
+        .AddHeader("Authorization", "Bearer " + token)
+        .GetAsync()
+        .Result;
   }
 ```

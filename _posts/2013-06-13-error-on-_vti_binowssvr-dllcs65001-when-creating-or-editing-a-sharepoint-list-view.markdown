@@ -5,10 +5,10 @@ date:   2013-06-13
 description: "Error on /_vti_bin/owssvr.dll?cs=65001 When Creating or Editing a SharePoint List View"
 ---
 
-  UPDATE (6/14/2013):
-  After some further issues I encountered (unrelated to the OWSSVR.dll error, but on this module) I found out that the problem is with accessing query string parameters (at least). However, accessing the HttpRequest object’s Url property, for example, doesn’t cause this error.
+> UPDATE (6/14/2013):
+> After some further issues I encountered (unrelated to the OWSSVR.dll error, but on this module) I found out that the problem is with accessing query string parameters (at least). However, accessing the HttpRequest object’s Url property, for example, doesn’t cause this error.
 
-  So, I moved my code back to the BeginRequest event (to solve my other problem) and then I just did a simple HttpContext.Current.Request.Url.AbsoluteUri.Contains(“owssvr”) check to go on and check the query string parameters or not.
+> So, I moved my code back to the BeginRequest event (to solve my other problem) and then I just did a simple HttpContext.Current.Request.Url.AbsoluteUri.Contains(“owssvr”) check to go on and check the query string parameters or not.
 
 ## Problem
 I was recently very frustrated by the dreaded “Cannot complete this action” error on a SharePoint 2010 project when trying to edit or create a new view for any list.  I looked around and found several causes that others had pinpointed, but nothing really related to the specific situation I was seeing.  I wasn’t seeing this on a particular list or set of lists.  I could create an out-of-the-box SharePoint Document Library and get this error when trying to edit or create a view.

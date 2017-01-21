@@ -9,7 +9,7 @@ A co-worker of mine recently turned me on to Uncle Bob's blog.  Yup, that's Uncl
 
 Here's one of his latest posts that sparked a thought in me: [The Dark Path](http://blog.cleancoder.com/uncle-bob/2017/01/11/TheDarkPath.html).
 
-Make sure to read his follow-up post too: [Types and Tests](http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html)
+Make sure to read his follow-up post too: [Types and Tests](http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html).
 
 When I got done reading those posts, this was my simple thought: I like programming languages
 that expect me to be a great programmer.

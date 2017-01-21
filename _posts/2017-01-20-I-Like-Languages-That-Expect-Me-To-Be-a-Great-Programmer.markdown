@@ -27,8 +27,8 @@ loaded.  Aim it somewhere (safe). Pull the trigger. That's it.  But how about hi
 marksman could do that.
 
 The reason it's hard to be a great marksman is because of the flexibility of a rifle.  It's 
-relatively simple design lets you take it almost anywhere and lets you aim it at almost anyone
-thing.  The only way to make a rifle that even a novice could use to hit targets 1000 yards away
+relatively simple design lets you take it almost anywhere and lets you aim it at almost anything.
+The only way to make a rifle that even a novice could use to hit targets 1000 yards away
 would be to mount it on some kind of stand, add advanced aiming software somehow and let it
 pull the trigger.  But, that makes it hard to use, doesn't it?  You now at the least have a bulky tripod to
 lug around a need for a power source for the computer to aim the thing.  

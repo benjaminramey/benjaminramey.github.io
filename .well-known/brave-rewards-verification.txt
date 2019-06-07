@@ -1,4 +1,0 @@
-This is a Brave Rewards publisher verification file.
-
-Domain: benramey.com
-Token: 93d746b980cbe8564b9c9769ed7ed2ea25f15bdfd9c54cede2c86eff92751dec

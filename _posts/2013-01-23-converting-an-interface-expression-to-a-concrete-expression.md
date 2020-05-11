@@ -3,6 +3,8 @@ layout: post
 title:  "Converting an Interface Expression to a Concrete Expression"
 date:   2013-01-23
 description: "Converting an Interface Expression to a Concrete Expression"
+categories: [programming]
+tags: [.net]
 ---
 I had a case recently where I needed to convert a LINQ expression of the type of an interface and I needed to convert it to be based on a concrete implementation of that interface.  I came up with the  following solution, using an ExpressionVisitor and a simple helper method.
 

@@ -3,6 +3,8 @@ layout: post
 title:  "Indexing Taxonomy Fields For Search in Sitefinity 5.1"
 date:   2012-10-19
 description: "Indexing Taxonomy Fields For Search in Sitefinity 5.1"
+categories: [programming]
+tags: [sitefinity]
 ---
 ##Problem
 We recently ran into a rather surprising issue with a Sitefinity 5.1 installation. We wanted a pretty simple feature: when searching and using Lucene, we wanted the values of any taxonomy fields to be indexed with Sitefinity’s Lucene back-end so that items could be searched by their attached taxonomy. This is apparently impossible with the basic installation because you can only search short text and long text fields.

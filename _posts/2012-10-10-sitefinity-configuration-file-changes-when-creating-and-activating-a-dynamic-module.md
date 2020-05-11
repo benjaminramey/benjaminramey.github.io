@@ -3,6 +3,8 @@ layout: post
 title:  "Sitefinity Configuration File Changes When Creating and Activating a Dynamic Module"
 date:   2012-10-10
 description: "Sitefinity Configuration File Changes When Creating and Activating a Dynamic Module"
+categories: [programming]
+tags: [sitefinity]
 ---
 After you create and activate a dynamic module with Module Builder in Sitefinity several configuration files are changes inside of App_Data/Sitefinity/Configuration.  Here’s a list of what is changed.
 

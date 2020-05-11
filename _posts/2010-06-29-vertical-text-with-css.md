@@ -3,6 +3,8 @@ layout: post
 title:  "Vertical text with CSS"
 date:   2010-06-29
 description: "Vertical text with CSS"
+categories: [programming]
+tags: [css]
 ---
 I found a nice blog post today describing how to do vertical text with CSS. Instead of reposting his information, I’ll just give the link.
 

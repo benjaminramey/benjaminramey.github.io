@@ -3,6 +3,8 @@ layout: post
 title:  "Error occurred in deployment step ‘Recycle IIS Application Pool’: The local SharePoint server is not available. Check that the server is running and connected to the SharePoint farm."
 date:   2010-10-08
 description: "Error occurred in deployment step ‘Recycle IIS Application Pool’: The local SharePoint server is not available. Check that the server is running and connected to the SharePoint farm."
+categories: [programming]
+tags: [sharepoint]
 ---
 I got the above error today while trying to deploy a SharePoint 2010 project in Visual Studio 2010.  Very frustrating!!
 

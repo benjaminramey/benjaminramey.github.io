@@ -3,6 +3,8 @@ layout: post
 title:  "jQuery Tools Overlay v1.2.5 Bug"
 date:   2011-11-21
 description: "jQuery Tools Overlay v1.2.5 Bug"
+categories: [programming]
+tags: [jquery]
 ---
 ##Problem
 I noticed a bug in the jQuery Tools library today, specifically in version 1.2.5 and the Overlay plugin. I should say, I’m assuming it’s a bug. This is an existing website I am working on where I am not in a position to upgrade the jQuery Tools library to the latest version (1.2.6 is out, it looks like) and I don’t know how much of the problem may be due to how existing code is possibly interfering with the library.

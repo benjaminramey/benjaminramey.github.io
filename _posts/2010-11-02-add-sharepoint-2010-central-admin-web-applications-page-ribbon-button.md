@@ -3,6 +3,8 @@ layout: post
 title:  "Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button"
 date:   2010-11-02
 description: "Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button"
+categories: [programming]
+tags: [sharepoint]
 ---
 I finally figured out today how to add a button to the Central Admin site’s ribbon for the WebApplicationsList page and have it behave like the other ribbon buttons on this page. The problem wasn’t so much adding the button–that part was easy. The problem was getting the button to behave like the other buttons. That is, getting it to enable and disable when a web application was selected from the list.
 

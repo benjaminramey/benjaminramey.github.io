@@ -3,6 +3,8 @@ layout: post
 title:  "Ektron Html Encodes Certain Content Title Characters"
 date:   2013-03-20
 description: "Ektron Html Encodes Certain Content Title Characters"
+categories: [programming]
+tags: [ektron]
 ---
 I found out today, while trying to search for certain content items in Ektron, that Ektron HTML encodes certain characters in content titles–but does not, apparently, HTML encode the entire title.
 

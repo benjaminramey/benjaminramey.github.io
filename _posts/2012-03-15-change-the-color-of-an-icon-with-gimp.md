@@ -3,6 +3,8 @@ layout: post
 title:  "Change the color of an icon with Gimp"
 date:   2012-03-15
 description: "Change the color of an icon with Gimp"
+categories: [programming]
+tags: [gimp]
 ---
 Fairly often, I run across the perfect icon that I need for a website, but it’s just the wrong color.  I want to keep the nice blending to the background of the icon around the edges, the shape and everything that makes the icon look spiffy.  I just want the main color to be something else.
 

@@ -3,6 +3,8 @@ layout: post
 title:  "TaxonomyManager WCF Error in Ektron 8.5 3-tier Setup"
 date:   2013-03-15
 description: "TaxonomyManager WCF Error in Ektron 8.5 3-tier Setup"
+categories: [programming]
+tags: [ektron]
 ---
 ##Problem
 I’m currently working on a project to import data into an existing Ektron 8.5 SP3 installation. It is pulling existing product data from a database, transforming it into the smart form XML we need and then shoving that data into the Ektron installation.  In addition to creating content items, the import tool also updates metadata and taxonomy fields.

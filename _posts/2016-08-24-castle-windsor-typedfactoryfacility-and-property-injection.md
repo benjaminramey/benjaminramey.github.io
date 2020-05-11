@@ -3,10 +3,12 @@ layout: post
 title:  "Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior"
 date:   2016-08-24 12:37:00
 description: "Interesting (and unexpected) behavior of Windsor's property injection when using TypedFactoryFacility."
+categories: [programming]
+tags: [.net,castle-windsor]
 ---
 
 I finally got to the bottom of an issue today that came down to the way Castle.Windsor
-does property injection (injecting dependencies into public properties) when 
+does property injection (injecting dependencies into public properties) when
 you are also using their TypedFactoryFacility.  It was a tough one to track down, so
 I thought I'd put the solution out there for everyone else's benefit.
 
@@ -78,10 +80,10 @@ Notice a couple of things.
 
 ### Finding the Location of the Problem
 After lots of testing and debugging, I finally figured out that somehow a FuncProxy
-(see line 6 in the error stack trace above) was being injected into all of the 
+(see line 6 in the error stack trace above) was being injected into all of the
 public `Func<,>` properties on ParentClass.  Then, when methods were called that
 I did not override in my ChildClass, the Func would be called in the ParentClass
-and that's where Windsor was hooking in and eventually causing an error when it 
+and that's where Windsor was hooking in and eventually causing an error when it
 eventually tried to resolve a dependency on `Task`.
 
 ### One More Clue
@@ -121,7 +123,7 @@ Kernel.ComponentModelBuilder.RemoveContributor(propInjector);
 {% endhighlight %}
 
 I added this code into my Windsor container setup and tried again.  Everything worked just
-as expected.  
+as expected.
 
 ## Lessons Learned
 A couple of quick takeaways:

@@ -3,6 +3,8 @@ layout: post
 title:  "You Can't Subscribe to IEvent with NServiceBus"
 date:   2016-02-25 15:56:00
 description: "The problems with trying to subscribe to IEvent with NServiceBus"
+categories: [programming]
+tags: [.net,nservicebus]
 ---
 
 The reason you might want to subscribe to `IEvent` is pretty straightforward. I
@@ -45,7 +47,7 @@ for other events that were not in that `Saga`.  I dug into the issue for a few
 hours and finally began to wonder if NServiceBus (or maybe the RabbitMQ transport)
 was explicitly ignoring `IEvent` when it setup subscriptions.
 
-Sure enough, it does.  
+Sure enough, it does.
 
 To build a list of types to subscribe to, NServiceBus uses the `Conventions`
 class in the `NServiceBus.Core` namespace.  One of the checks that code does

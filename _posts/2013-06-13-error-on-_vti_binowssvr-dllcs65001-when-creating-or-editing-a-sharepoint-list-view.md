@@ -3,6 +3,8 @@ layout: post
 title:  "Error on /_vti_bin/owssvr.dll?cs=65001 When Creating or Editing a SharePoint List View"
 date:   2013-06-13
 description: "Error on /_vti_bin/owssvr.dll?cs=65001 When Creating or Editing a SharePoint List View"
+categories: [programming]
+tags: [sharepoint]
 ---
 
 > UPDATE (6/14/2013):

@@ -3,6 +3,8 @@ layout: post
 title:  "Determine SharePoint MOSS 2007 Service Pack Version"
 date:   2010-10-06
 description: "Determine SharePoint MOSS 2007 Service Pack Version"
+categories: [programming]
+tags: [sharepoint]
 ---
 Determining the service pack that you have installed for a particular
 SharePoint 2007 installation turned out to be a surprisingly opaque process.

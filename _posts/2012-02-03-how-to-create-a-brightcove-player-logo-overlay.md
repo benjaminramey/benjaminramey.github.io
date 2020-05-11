@@ -3,6 +3,8 @@ layout: post
 title:  "How to Create a Brightcove Player Logo Overlay"
 date:   2012-02-03
 description: "How to Create a Brightcove Player Logo Overlay"
+categories: [programming]
+tags: [brightcove]
 ---
 As simple as it ended up being, it took me quite a while to figure out how to correctly add a simple overlaying graphic to a Brightcove video player yesterday.  It involves a couple of steps which I did not find clearly laid out anywhere I looked.  So, I thought a nice little step-by-step blog post would be helpful to anyone else looking for the same thing.
 

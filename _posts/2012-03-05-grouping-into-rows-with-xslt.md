@@ -3,6 +3,8 @@ layout: post
 title:  "Grouping into Rows with XSLT"
 date:   2012-03-05
 description: "Grouping into Rows with XSLT"
+categories: [programming]
+tags: [xslt]
 ---
 Let’s say you have a simple XML document that looks something like this:
 
@@ -47,11 +49,11 @@ Turns out, it really isn’t difficult. You just have to think a little differen
 		omit-xml-declaration="yes"
 		indent="yes"
 		encoding="utf-8" />
-	
+
 	<xsl:template match="/root">
 		<xsl:apply-templates select="Pod[position() mod 3 = 1]" />
 	</xsl:template>
-	
+
 	<xsl:template name="PodRow"
 		match="Pod[position() mod 3 = 1]">
 		<div class="row">
@@ -62,14 +64,14 @@ Turns out, it really isn’t difficult. You just have to think a little differen
 			</xsl:choose>
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template name="PodWrapper"
 		match="Pod[position() mod 3 &gt; 1]">
 		<div class="pod">
 			<xsl:call-template name="PodContent"/>
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template name="PodContent">
 		<!– whatever content your "pods" contain can be marked up here –>
 	</xsl:template>
@@ -113,11 +115,11 @@ So, this is what I had to do:
 		omit-xml-declaration="yes"
 		indent="yes"
 		encoding="utf-8" />
-	
+
 	<xsl:template match="/root">
 		<xsl:apply-templates select="Pod[position() mod 3 = 1]" />
 	</xsl:template>
-	
+
 	<xsl:template name="PodRow"
 		match="Pod[position() mod 3 = 1]"
 		priority="2">
@@ -132,9 +134,9 @@ So, this is what I had to do:
 						select="following-sibling::Pod[position() &lt; 3]"/>
 				</xsl:otherwise>
 			</xsl:choose>
-		</div>	
+		</div>
 	</xsl:template>
-	
+
 	<xsl:template name="PodWrapper"
 		match="Pod[position() mod 3 &gt; 1]"
 		priority="0">
@@ -142,7 +144,7 @@ So, this is what I had to do:
 			<xsl:call-template name="PodContent"/>
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template name="PodWrapperLast"
 		priority="1"
 		match="Pod[position() mod 3 = 0 or position() = last()]">
@@ -150,7 +152,7 @@ So, this is what I had to do:
 			<xsl:call-template name="PodContent"/>
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template name="PodContent">
 		<!– whatever content your "pods" contain can be marked up here –>
 	</xsl:template>

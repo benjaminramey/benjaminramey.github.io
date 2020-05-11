@@ -3,6 +3,8 @@ layout: post
 title:  "SharePoint LINQ (SPMetal) in Anonymous User Context"
 date:   2013-05-23
 description: "SharePoint LINQ (SPMetal) in Anonymous User Context"
+categories: [programming]
+tags: [sharepoint]
 ---
 Refer to the links below to fix this issue of SPMetal LINQ queries failing in an anonymous user context in SharePoint 2010.
 

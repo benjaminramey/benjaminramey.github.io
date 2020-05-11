@@ -3,6 +3,8 @@ layout: post
 title:  "EPiServer 7: Cannot decrypt password"
 date:   2014-04-17
 description: "EPiServer 7: Cannot decrypt password"
+categories: [programming]
+tags: [episerver]
 ---
 
 ##Problem

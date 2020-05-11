@@ -3,6 +3,8 @@ layout: post
 title:  "SharePoint 2010 Page Layout Button Javascript Error"
 date:   2013-09-25
 description: "SharePoint 2010 Page Layout Button Javascript Error"
+categories: [programming]
+tags: [sharepoint]
 ---
 I ran across an issue today in SharePoint 2010 where the Page Layout button would not open. It would throw the following error in Internet Explorer:
 

@@ -3,6 +3,8 @@ layout: post
 title:  "Sitecore Rocks and SharePoint Package Interference"
 date:   2013-05-08
 description: "Sitecore Rocks and SharePoint Package Interference"
+categories: [programming]
+tags: [sitecore]
 ---
 I ran into an interesting problem today while working in Visual Studio 2010 on a SharePoint 2010 project.
 

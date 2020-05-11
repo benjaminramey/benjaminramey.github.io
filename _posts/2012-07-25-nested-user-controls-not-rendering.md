@@ -3,6 +3,8 @@ layout: post
 title:  "Nested User Controls Not Rendering"
 date:   2012-07-25
 description: "Nested User Controls Not Rendering"
+categories: [programming]
+tags: [sitecore]
 ---
 ##Problem
 I got caught today in a stupid problem.  But, it wasn’t obvious (at least to me) at first what was causing it.  I was doing something simple: nesting one UserControl inside of another.  But, the nested UserControl wasn’t showing up.  I couldn’t, for the life of me, figure out what I had done wrong.  If I didn’t nest the control, it worked fine.

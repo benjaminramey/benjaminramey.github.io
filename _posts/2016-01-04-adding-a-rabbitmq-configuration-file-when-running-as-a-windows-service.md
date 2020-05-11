@@ -3,6 +3,8 @@ layout: post
 title:  "Adding a RabbitMQ Configuration File When Running as a Windows Service"
 date:   2016-01-04 15:26:00
 description: "Instructions to add a RabbitMQ configuration file after having installed the Windows Service already."
+categories: [programming]
+tags: [rabbitmq]
 ---
 ## A little context
 I was having a hard time adding a rabbitmq.config file today.  I added it in the right location, restarted
@@ -28,7 +30,7 @@ I read the [documentation](http://www.rabbitmq.com/configure.html) a little more
 and finally came upon this line: "Windows service users will need to re-install the service after adding
 or removing a configuration file."
 
-Oops.  Guess I should have read the documentation more closely the first time around!  The easiest way to 
+Oops.  Guess I should have read the documentation more closely the first time around!  The easiest way to
 do this is as follows (start a command prompt as administrator):
 
 	> cd "C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.6.0\sbin"

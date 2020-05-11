@@ -3,6 +3,8 @@ layout: post
 title:  "Cannot remove file “master_page_name_here”. Error Code: 158"
 date:   2012-09-27
 description: "Cannot remove file “master_page_name_here”. Error Code: 158"
+categories: [programming]
+tags: [sharepoint]
 ---
   UPDATE (9/19/2013):
   Please see Jeff’s comment below for a better solution to this issue using best-practices for iterating through a SPSite’s AllWebs collection.

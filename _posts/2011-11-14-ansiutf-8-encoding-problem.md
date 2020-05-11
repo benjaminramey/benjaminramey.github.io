@@ -3,6 +3,8 @@ layout: post
 title:  "ANSI/UTF-8 Encoding Problem"
 date:   2011-11-14
 description: "ANSI/UTF-8 Encoding Problem"
+categories: [programming]
+tags: []
 ---
 ##Problem
 I ran into a problem in a project I was working on recently.  The basics of the project were to take data out of a MySQL database and transform that data into an XML file schema for a

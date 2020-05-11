@@ -3,6 +3,8 @@ layout: post
 title:  "Rendering must have placeholder chrome as its parent. Got ‘rendering’ instead"
 date:   2012-08-09
 description: "Rendering must have placeholder chrome as its parent. Got ‘rendering’ instead"
+categories: [programming]
+tags: [sitecore]
 ---
 ##Problem
 I got the error message (in my Firebug console) in the Sitecore Page Editor on a page where I had a nested sublayout.  I had a basic two-column layout for the main sublayout of the page.  Then, in the right column, I had another sublayout that further divided up the right column as I needed.  Here is what the nested sublayout looked like:

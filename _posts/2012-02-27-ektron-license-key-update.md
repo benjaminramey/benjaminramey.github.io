@@ -3,6 +3,8 @@ layout: post
 title:  "Ektron License Key Update"
 date:   2012-02-27
 description: "Ektron License Key Update"
+categories: [programming]
+tags: [ektron]
 ---
 ##Problem
 We use a temporary license key with our Ektron development website here at work. Because it’s temporary, we have to update it every-so-often. That happened today.

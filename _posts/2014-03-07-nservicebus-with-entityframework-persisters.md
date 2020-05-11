@@ -3,6 +3,8 @@ layout: post
 title:  "NServiceBus with EntityFramework Persisters"
 date:   2014-03-07
 description: "NServiceBus with EntityFramework Persisters"
+categories: [programming]
+tags: [.net,nservicebus]
 ---
 
 ## Update 1/13/2016

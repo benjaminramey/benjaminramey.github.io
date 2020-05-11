@@ -3,6 +3,8 @@ layout: post
 title:  "Duplicating SPWebConfigModifications"
 date:   2010-12-10
 description: "Duplicating SPWebConfigModifications"
+categories: [programming]
+tags: [sharepoint]
 ---
 ##Problem
 Despite everything looking OK (no duplicate SPWebConfigModifications for your web application), your SPWebConfigModifications are adding duplicate elements to your web.config file.

@@ -3,6 +3,8 @@ layout: post
 title:  "Using NuGetPackager 0.5.5 with GitVersionTask 3.4.1"
 date:   2016-03-03 15:04:00
 description: "A quick fix to use NuGetPackager 0.5.5 with GitVersionTask 3.4.1"
+categories: [programming]
+tags: [nuget,git]
 ---
 I'm using both [NuGetPackager](https://www.nuget.org/packages/NuGetPackager/)
 with [GitVersionTask](https://www.nuget.org/packages/GitVersionTask/) on

@@ -3,6 +3,8 @@ layout: post
 title:  "SharePoint 2010 401 Unauthorized Error"
 date:   2013-05-23
 description: "SharePoint 2010 401 Unauthorized Error"
+categories: [programming]
+tags: [sharepoint]
 ---
 
 There are many, many reasons why SharePoint will throw a 401 error.  Most of them are hard to track down and have absolutely no bearing on reality unless you’re a genius.  So, your only hope is to track down obscure registry updates (hacks), scour the internet for random things other people have found or just give up.  :-)

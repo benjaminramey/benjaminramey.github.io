@@ -3,6 +3,8 @@ layout: post
 title:  "Install SharePoint on Windows 7"
 date:   2012-02-03
 description: "Install SharePoint on Windows 7"
+categories: [programming]
+tags: [sharepoint]
 ---
 If you try to do a SharePoint 2010 installation on your client machine (that is, not a Windows Server OS) then you’ll get an error explaining that SharePoint 2010 can’t be installed on your operating system.
 

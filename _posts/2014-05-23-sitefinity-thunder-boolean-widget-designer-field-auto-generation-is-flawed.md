@@ -3,6 +3,8 @@ layout: post
 title:  "Sitefinity Thunder Boolean Widget Designer Field Auto-Generation is Flawed"
 date:   2014-05-23
 description: "Sitefinity Thunder Boolean Widget Designer Field Auto-Generation is Flawed"
+categories: [programming]
+tags: [sitefinity]
 ---
 
 ##Problem

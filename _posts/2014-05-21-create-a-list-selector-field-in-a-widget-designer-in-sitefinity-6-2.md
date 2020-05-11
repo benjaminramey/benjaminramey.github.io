@@ -3,6 +3,8 @@ layout: post
 title:  "Create a List Selector Field in a Widget Designer in Sitefinity 6.2"
 date:   2014-05-21
 description: "Create a List Selector Field in a Widget Designer in Sitefinity 6.2"
+categories: [programming]
+tags: [sitefinity]
 ---
 
 > [9/25/14 update] See Hardy's comments below for necessary updates to my steps when using Sitefinity 7.1 and up.  Thanks, Hardy!

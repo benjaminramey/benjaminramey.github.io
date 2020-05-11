@@ -3,6 +3,8 @@ layout: post
 title:  "Visual Studio Post Build Event to Copy DLLs"
 date:   2010-06-29
 description: "Visual Studio Post Build Event to Copy DLLs"
+categories: [programming]
+tags: [visual-studio]
 ---
 While doing SharePoint development, we use a lot of pre- and post-build events in Visual Studio projects to do various things like build and deploy SharePoint solutions to our development environments, activate features automatically and other similar things to make the process of building solutions for SharePoint as automated as possible.
 

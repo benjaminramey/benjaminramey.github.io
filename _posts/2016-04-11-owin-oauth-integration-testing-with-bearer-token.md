@@ -3,6 +3,8 @@ layout: post
 title:  "OWIN Integration Testing with OAuth Bearer Tokens"
 date:   2016-04-11 13:34:00
 description: "How to generate an OAuth bearer token to use with OWIN integration tests."
+categories: [programming]
+tags: [owin,.net]
 ---
 
 ## Situation
@@ -12,7 +14,7 @@ accomplish that, we use the OWIN OAuth libraries.
 
 Upon until recently, the OAuth authorization server (the thing that takes in
 the user credentials and issues the token) and the API (the resource server) were
-hosted in the same site and web project.  
+hosted in the same site and web project.
 
 Integration testing was pretty easy at this point.  For the authorized calls,
 we simply wrote helper methods that logged a test user in through the authorization

@@ -3,6 +3,8 @@ layout: post
 title:  "LINQ to Ektron Search Library"
 date:   2013-01-15
 description: "LINQ to Ektron Search Library"
+categories: [programming]
+tags: [ektron]
 ---
 I am currently working on a project at VML that will make use of Ektron’s 3-tier architecture. It will be an MVC 4.0 site that basically uses an existing Ektron site as a datasource. It pulls in various Ektron content and then feeds it into the MVC application (a mobile version of the Ektron site).
 

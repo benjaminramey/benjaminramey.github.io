@@ -3,6 +3,8 @@ layout: post
 title:  "Retrieve Dynamic Module Choice Field Value Options in Sitefinity"
 date:   2012-10-05
 description: "Retrieve Dynamic Module Choice Field Value Options in Sitefinity"
+categories: [programming]
+tags: [sitefinity]
 ---
 I am testing out Sitefinity right now for an upcoming project. So far, I really like everything I see. It’s a great CMS and should fit out needs just perfectly (for pretty cheap too).
 

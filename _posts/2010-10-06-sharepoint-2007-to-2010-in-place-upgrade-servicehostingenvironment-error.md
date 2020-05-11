@@ -3,6 +3,8 @@ layout: post
 title:  "SharePoint 2007 to 2010 in-place upgrade serviceHostingEnvironment error"
 date:   2010-10-06
 description: "SharePoint 2007 to 2010 in-place upgrade serviceHostingEnvironment error"
+categories: [programming]
+tags: [sharepoint]
 ---
 I’m testing an in-place SharePoint 2007 to SharePoint 2010 upgrade today and I came across this odd error during the update process.
 

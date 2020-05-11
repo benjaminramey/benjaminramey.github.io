@@ -3,6 +3,8 @@ layout: post
 title:  "Group List Into Sub-lists by Index"
 date:   2012-07-27
 description: "Group List Into Sub-lists by Index"
+categories: [programming]
+tags: [.net]
 ---
 ##Problem
 Everyone once-in-a-while I need to take a flat list (or array, or whatever) of items and divide it up into chunks.  It doesn’t have to be in any real order, necessarily, it just has to be in groups of two, three or four or however many items.  Most recently, I needed this to divide up a list of blog items into chunks of four to display in sets of “pages” that a user would page through with Javascript.

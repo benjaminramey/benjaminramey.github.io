@@ -3,6 +3,8 @@ layout: post
 title:  "Setting Selected Items on Sitefinity 5.1 PagesSelector in Javascript"
 date:   2012-10-25
 description: "Setting Selected Items on Sitefinity 5.1 PagesSelector in Javascript"
+categories: [programming]
+tags: [sitefinity]
 ---
 ##Problem
 Today I nearly tore my hair out trying to get set the selected items (having a list of GUIDs) on the PagesSelector control in Sitefinity through the Javascript API to the control.

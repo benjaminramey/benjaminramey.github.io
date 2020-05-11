@@ -3,6 +3,8 @@ layout: post
 title:  "Grace & Me"
 date:   2012-07-19
 description: "Grace & Me"
+categories: [personal]
+tags: []
 ---
 Our story really begins somewhere around the beginning of 2007.  That’s when Grace’s brother Nathan came down to Kansas City for a couple of Bible conferences that I (Ben) also happened to go to.  I barely remember meeting Nate, but he must have made an impression because we started to become good friends soon afterward.  On a whim one time as Nate and I were chatting on Facebook, he invited me up to a regular men’s Bible study in Colfax, WI led by Warren Henderson.  That’s eight hours away from Kansas City and so Nate never thought I’d actually say yes.  But, what Nate did not know was this was a tremendous answer to prayer for me.  I’d been praying that the Lord would bring some good, solid young men who were my age into my life.  This seemed like the perfect place to see that prayer answered.  Little did I know that it would some day lead to me marrying Nate’s sister!
 

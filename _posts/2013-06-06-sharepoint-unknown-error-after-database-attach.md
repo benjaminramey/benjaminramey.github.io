@@ -3,6 +3,8 @@ layout: post
 title:  "SharePoint Unknown Error After Database Attach"
 date:   2013-06-06
 description: "SharePoint Unknown Error After Database Attach"
+categories: [programming]
+tags: [sharepoint]
 ---
 There are many reasons you might get one of those blank screens with just the text “An unknown error has occurred” when working with SharePoint.  Just search for it online and you’ll find many fixes.
 

@@ -3,6 +3,8 @@ layout: post
 title:  "EPiServer 7 “The file ‘/link/GUID.aspx’ does not exist.” Error"
 date:   2014-03-27
 description: "EPiServer 7 “The file ‘/link/GUID.aspx’ does not exist.” Error"
+categories: [programming]
+tags: [episerver]
 ---
 
 I ran into the following error while working with an installation of EPiServer 7 this week. It took me a long time to finally figure out the solution.

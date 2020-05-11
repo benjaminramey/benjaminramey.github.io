@@ -3,6 +3,8 @@ layout: post
 title:  "Opening all SharePoint 2010 Documents in a new window"
 date:   2011-04-25
 description: "Opening all SharePoint 2010 Documents in a new window"
+categories: [programming]
+tags: [sharepoint,javascript]
 ---
 We wanted an easy solution to open every document in a SharePoint from a document library in a new window.  This way, the user stays on the page he is originally on and the document (PDF, Word doc, Excel files–whatever) will open in a blank window.
 
@@ -19,7 +21,7 @@ $(document).ready(
 				$("a[onclick*=’return DispEx’][target!=’_blank’]")
 					.attr("target", "_blank")
 					.removeAttr("onclick");
-					
+
 				// document type icons
 				$("td.ms-vb-icon>img[onclick]:not([documentUrl])")
 					.click(function (e) {

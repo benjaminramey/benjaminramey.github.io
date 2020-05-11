@@ -3,6 +3,8 @@ layout: post
 title:  "Limit Selected Items on Sitecore Multilist Field"
 date:   2012-06-12
 description: "Limit Selected Items on Sitecore Multilist Field"
+categories: [programming]
+tags: [sitecore]
 ---
 ##Problem
 You want to limit the number of items a user can choose for a multilist field in a data template in sitecore.

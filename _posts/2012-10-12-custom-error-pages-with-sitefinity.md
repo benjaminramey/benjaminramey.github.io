@@ -3,6 +3,8 @@ layout: post
 title:  "Custom Error Pages with Sitefinity"
 date:   2012-10-12
 description: "Custom Error Pages with Sitefinity"
+categories: [programming]
+tags: [sitefinity,.net]
 ---
 I had a considerably hard time today getting just a simple 404 error page (custom) to show up in all cases for a Sitefinity installation. It probably has nothing to do with Sitefinity and a lot more to do with my lack of experience doing this simple task. But, anyhow, here are my findings.
 

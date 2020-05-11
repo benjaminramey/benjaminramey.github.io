@@ -3,6 +3,8 @@ layout: post
 title:  "Ektron Paths"
 date:   2013-03-15
 description: "Ektron Paths"
+categories: [programming]
+tags: [ektron]
 ---
 For future reference, here is how you have to construct paths for finding Ektron content items, folders and taxonomy items.
 

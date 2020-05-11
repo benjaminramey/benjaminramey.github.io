@@ -2,16 +2,5 @@
 layout: default
 ---
 
-<div class="post">
-  <h1 class="post-title">{{ page.title }}</h1>
-  <span class="post-date">{{ page.date | date_to_string }}</span>
-  {{ content }}
-</div>
-
-<!-- Disqus comments -->
-{% if site.disqus %}
-<div class="comments">
-    <h2>Comments</h2>
-    {% include disqus.html %}
-</div>
-{% endif %}
+{% assign current_post = page %}
+{% include post.html %}

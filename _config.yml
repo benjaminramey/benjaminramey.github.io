@@ -5,7 +5,6 @@ description: I'm a .NET programmer working for VMLY&R.
 markdown: kramdown
 highlighter: rouge
 
-baseurl: /
 url: 'https://www.benramey.com'
 
 google_analytics_id: 'UA-1380501-7'

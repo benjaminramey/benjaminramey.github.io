@@ -5,7 +5,7 @@ description: I'm a .NET programmer working for VMLY&R.
 markdown: kramdown
 highlighter: rouge
 
-paginate: 5
+paginate: 1
 baseurl: /
 searchbaseurl: 'https://www.benramey.com'
 url: 'https://www.benramey.com'
@@ -19,3 +19,4 @@ author:
     url: 'https://www.benramey.com'
 
 permalink:       /:year/:month/:day/:title/
+plugins: [jekyll-paginate]

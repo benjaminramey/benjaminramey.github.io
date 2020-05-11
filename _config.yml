@@ -1,14 +1,14 @@
 title: Ben Ramey's Blog
 tagline: "Programming problems, solutions and stories"
-description: I'm a .NET programmer working for VML.
+description: I'm a .NET programmer working for VMLY&R.
 
 markdown: kramdown
 highlighter: rouge
 
 paginate: 5
 baseurl: /
-searchbaseurl: 'http://www.benramey.com'
-url: 'http://www.benramey.com'
+searchbaseurl: 'https://www.benramey.com'
+url: 'https://www.benramey.com'
 
 google_analytics_id: 'UA-1380501-7'
 disqus: true
@@ -16,6 +16,6 @@ disqus_shortname: 'fishybusiness'
 
 author:
     name: 'Ben Ramey'
-    url: 'http://www.benramey.com'
+    url: 'https://www.benramey.com'
 
 permalink:       /:year/:month/:day/:title/

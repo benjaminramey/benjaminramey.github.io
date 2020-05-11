@@ -5,10 +5,6 @@ description: I'm a .NET programmer working for VMLY&R.
 markdown: kramdown
 highlighter: rouge
 
-plugins: [jekyll-paginate]
-
-paginate: 5
-
 baseurl: /
 url: 'https://www.benramey.com'
 

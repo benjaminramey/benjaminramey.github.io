@@ -6,13 +6,13 @@ description: "Sitefinity Configuration File Changes When Creating and Activating
 ---
 After you create and activate a dynamic module with Module Builder in Sitefinity several configuration files are changes inside of App_Data/Sitefinity/Configuration.  Here’s a list of what is changed.
 
-##ContentViewConfig.config
+## ContentViewConfig.config
 A config:link element is added under contentViewControls.  Example:
 {% highlight xml %}
 <config:link definitionName="Telerik.Sitefinity.DynamicTypes.Model.Configchangetests.ConfigChangeBackendDefinition" path="dynamicModulesConfig/contentViewControls/Telerik.Sitefinity.DynamicTypes.Model.Configchangetests.ConfigChangeBackendDefinition" module="ModuleBuilder" />
 {% endhighlight %}
 
-##DynamicModulesConfig.config
+## DynamicModulesConfig.config
 And entire contentViewControl section is added under the contentViewControls element. Example:
 
 {% highlight xml %}
@@ -205,7 +205,7 @@ And entire contentViewControl section is added under the contentViewControls ele
 </contentViewControl>
 {% endhighlight %}
 
-##SecurityConfig.config
+## SecurityConfig.config
 A permission element is added underneath the permissions node. Example:
 {% highlight xml %}
 <permission title="Config changes permissions" description="Represents the most common application security permissions." loginUrl="~/Sitefinity/Login" ajaxLoginUrl="~/Sitefinity/Login/Ajax" name="Configchangetests-ConfigChange">
@@ -219,19 +219,19 @@ A permission element is added underneath the permissions node. Example:
 </permission>
 {% endhighlight %}
 
-##ToolboxesConfig.config
+## ToolboxesConfig.config
 A tool is added in the tools section. Example:
 {% highlight xml %}
 <add enabled="True" type="Telerik.Sitefinity.DynamicModules.Web.UI.Frontend.DynamicContentView, Telerik.Sitefinity" title="Config changes" cssClass="sfNewsViewIcn" moduleName="Config change tests" DynamicContentTypeName="Telerik.Sitefinity.DynamicTypes.Model.Configchangetests.ConfigChange" DefaultMasterTemplateKey="844f4eff-9a33-4799-84e5-2973d7a3db9b" DefaultDetailTemplateKey="7fd83546-0785-4050-998f-06428e7c6fa1" visibilityMode="None" name="Telerik.Sitefinity.DynamicTypes.Model.Configchangetests.ConfigChange" />
 {% endhighlight %}
 
-##WorkflowConfig.config
+## WorkflowConfig.config
 A workflow type is added in the workflowTypes section. Example:
 {% highlight xml %}
 <add title="Config change" moduleName="Config change tests" contentType="Telerik.Sitefinity.DynamicTypes.Model.Configchangetests.ConfigChange" />
 {% endhighlight %}
 
-##Deactivation
+## Deactivation
 No configuration changes are made in the Sitefinity configuration files when you just deactivate a dynamic module with Module Builder.
 
 Interestingly, when you delete a dynamic module, all of the changes mentioned above are completely reverted EXCEPT the ContentViewConfig.config file. It keeps the config:link element that was added when you added and activated the dynamic module originally. This is curious as it points to a configuration element in DynamicModulesConfig.config that is removed when you delete the dynamic module.

@@ -1,18 +1,38 @@
+# Setup
 title: Ben Ramey's Blog
 tagline: "Programming problems, solutions and stories"
 description: I'm a .NET programmer working for VMLY&R.
-
-markdown: kramdown
-highlighter: rouge
-
 url: 'https://www.benramey.com'
-
-google_analytics_id: 'UA-1380501-7'
-disqus: true
-disqus_shortname: 'fishybusiness'
+paginate: 1
+baseurl: ""
+permalink: /:year/:month/:day/:title/
 
 author:
     name: 'Ben Ramey'
     url: 'https://www.benramey.com'
+    email: benramey@fastmail.com
 
-permalink: /:year/:month/:day/:title/
+plugins:
+    - jekyll-gist
+    - jekyll-paginate
+    - jekyll-seo-tag
+    
+exclude:
+    - .editorconfig
+    - .git
+    - .jekyll-cache
+    - Gemfile
+    - Gemfile.lock
+    - LICENSE.md
+    - README.md
+
+sass:
+    sass_dir: _sass
+    style: :compressed
+
+markdown: kramdown
+highlighter: rouge
+
+# custom
+google_analytics_id: 'UA-1380501-7'
+disqus: true

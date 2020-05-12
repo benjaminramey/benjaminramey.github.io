@@ -19,7 +19,7 @@ title: Home
     {% endfor %}
 </div>
 
-<div class="pagination">
+<nav class="pagination d-flex justify-content-center">
     {% if paginator.next_page %}
     <a class="pagination-item older" href="{{ paginator.next_page_path | relative_url }}">Older</a>
     {% else %}
@@ -30,4 +30,4 @@ title: Home
     {% else %}
     <span class="pagination-item newer">Newer</span>
     {% endif %}
-</div>
+</nav>

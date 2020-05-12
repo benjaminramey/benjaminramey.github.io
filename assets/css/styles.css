@@ -9912,6 +9912,11 @@ nav.main a {
   text-transform: lowercase;
 }
 
+nav.pagination a, nav.pagination span {
+  display: block;
+  margin: 0 20px;
+}
+
 section {
   margin: 40px 0;
 }

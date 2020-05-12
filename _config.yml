@@ -16,7 +16,7 @@ plugins:
     - jekyll-gist
     - jekyll-paginate
     - jekyll-seo-tag
-    
+
 exclude:
     - .editorconfig
     - .git
@@ -25,10 +25,6 @@ exclude:
     - Gemfile.lock
     - LICENSE.md
     - README.md
-
-sass:
-    sass_dir: _sass
-    style: :compressed
 
 markdown: kramdown
 highlighter: rouge

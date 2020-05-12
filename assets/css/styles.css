@@ -9901,6 +9901,14 @@ header {
   border-style: solid;
   border-color: #555964;
 }
+header img {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+header small {
+  vertical-align: middle;
+}
 
 nav.main {
   margin-bottom: 20px;

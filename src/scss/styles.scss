@@ -1,10 +1,33 @@
+@import "variables";
+
 @import "bootstrap/scss/bootstrap";
 
-body {
-  color: #93979e;
-  background-color: #26282d;
+h1,
+h2,
+h3 {
+    color: lighten($body-color, 25%);
 }
 
-h1, h2, h3 {
-  color: white;
+header {
+    padding: 10px 0;
+    margin-top: 20px;
+    background-color: lighten($body-bg, 10%);
+    border-width: 1px 0;
+    border-style: solid;
+    border-color: lighten($body-bg, 20%);
+}
+
+nav {
+    margin-bottom: 20px;
+
+    a {
+        display: block;
+        padding: 5px;
+        margin: 0 10px;
+        text-transform: lowercase;
+    }
+}
+
+section {
+    margin: 40px 0;
 }

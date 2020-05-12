@@ -1,10 +1,10 @@
 const path = require('path');
 
 module.exports = {
+    mode: 'production',
     entry: [
         './src/js/index.js'
     ],
-    watch: true,
     output: {
         path: path.resolve(__dirname, 'assets'),
         filename: 'js/main.js'
@@ -15,26 +15,26 @@ module.exports = {
             {
                 test: /\.scss$/,
                 use: [
-					{
-						loader: 'file-loader',
-						options: {
-							name: 'css/[name].css',
-						}
-					},
-					{
-						loader: 'extract-loader'
-					},
-					{
-						loader: 'css-loader'
-					},
-					{
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'css/[name].css',
+                        }
+                    },
+                    {
+                        loader: 'extract-loader'
+                    },
+                    {
+                        loader: 'css-loader'
+                    },
+                    {
                         loader: 'sass-loader',
                         options: {
                             sassOptions: {
                                 includePaths: ['./node_modules']
                             }
                         }
-					}
+                    }
                 ]
             },
             // font file loader

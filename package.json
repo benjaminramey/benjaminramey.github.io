@@ -4,7 +4,10 @@
   "description": "Ben Ramey's Blog",
   "main": "index.js",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --mode=development --watch=true"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/benjaminramey/benjaminramey.github.io.git"

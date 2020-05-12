@@ -1,9 +1,7 @@
 ---
-layout: default
+layout: page
 title: Archive
 ---
-
-# Archive
 
 Browse all posts by month and year.
 

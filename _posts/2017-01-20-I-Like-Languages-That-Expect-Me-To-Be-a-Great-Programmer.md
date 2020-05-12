@@ -2,7 +2,7 @@
 layout: post
 title:  "I Like Languages That Expect Me To Be a Great Programmer"
 date:   2017-01-20 20:05:00
-description: "Great post on languages that are getting too 'safe'"
+description: "Languages that are getting too 'safe'!"
 categories: [programming]
 tags: []
 ---

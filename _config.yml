@@ -27,6 +27,9 @@ exclude:
     - README.md
     - node_modules
     - src
+    - package.json
+    - package-lock.json
+    - webpack.config.js
 
 include:
     - assets

@@ -2,11 +2,11 @@ const path = require('path');
 
 module.exports = {
     entry: [
-        './assets/js/index.js'
+        './src/js/index.js'
     ],
     watch: true,
     output: {
-        path: path.resolve(__dirname, 'wwwroot/assets'),
+        path: path.resolve(__dirname, 'assets'),
         filename: 'js/main.js'
     },
     module: {

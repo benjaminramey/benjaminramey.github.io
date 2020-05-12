@@ -9887,7 +9887,9 @@ h6 {
   color: #d6d8da;
 }
 
-h1 a, h2 a, h3 a {
+h1 a,
+h2 a,
+h3 a {
   color: inherit;
 }
 
@@ -9900,10 +9902,10 @@ header {
   border-color: #555964;
 }
 
-nav {
+nav.main {
   margin-bottom: 20px;
 }
-nav a {
+nav.main a {
   display: block;
   padding: 5px;
   margin: 0 10px;
@@ -9912,6 +9914,11 @@ nav a {
 
 section {
   margin: 40px 0;
+}
+
+article div.post-info time, article div.post-info nav {
+  display: block;
+  margin: 10px 20px 10px 0;
 }
 
 pre {

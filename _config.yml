@@ -36,6 +36,9 @@ include:
 markdown: kramdown
 highlighter: rouge
 
+category_title_prefix: ''
+tag_title_prefix: "#"
+
 # custom
 google_analytics_id: 'UA-1380501-7'
 disqus: true

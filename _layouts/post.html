@@ -8,13 +8,13 @@ layout: default
         <time datetime="{{ page.date | date_to_xmlschema }}" class="post-date">{{ page.date | date_to_string }}</time>
         <nav class="post-tags">
             {% for tag in page.tags %}
-            <a href="">#{{ tag }}</a>
+            <a href="{{ '/tags/' | append: tag | relative_url }}">#{{ tag }}</a>
             {% endfor %}
         </nav>
         <nav class="post-categories">
             <span>posted in:</span>
             {% for category in page.categories %}
-            <a href="">{{ category }}</a>
+            <a href="{{ '/categories/' | append: category | relative_url }}">{{ category }}</a>
             {% endfor %}
         </nav>
     </div>

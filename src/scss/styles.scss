@@ -64,9 +64,17 @@ section {
 
 article {
     div.post-info {
-        time, nav {
+        nav {
+            display: flex;
+            justify-content: start;
+        }
+        time, nav a {
             display: block;
             margin: 10px 20px 10px 0;
+        }
+        nav span {
+            display: block;
+            margin: 10px 5px;
         }
     }
 }

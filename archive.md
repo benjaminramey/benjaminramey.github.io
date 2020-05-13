@@ -1,6 +1,7 @@
 ---
 layout: page
 title: Archive
+innav: true
 ---
 
 Browse all posts by month and year.

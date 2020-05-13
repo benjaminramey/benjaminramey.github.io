@@ -9929,9 +9929,17 @@ section {
   margin: 40px 0;
 }
 
-article div.post-info time, article div.post-info nav {
+article div.post-info nav {
+  display: flex;
+  justify-content: start;
+}
+article div.post-info time, article div.post-info nav a {
   display: block;
   margin: 10px 20px 10px 0;
+}
+article div.post-info nav span {
+  display: block;
+  margin: 10px 5px;
 }
 
 pre {

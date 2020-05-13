@@ -1,1 +1,0 @@
-I use jekyll to generate the site, but have custom page generators that don't work with GitHub Pages, so I commit my generated site directly and point GitHub Pages to _site.

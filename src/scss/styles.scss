@@ -1,6 +1,7 @@
 @import "bootstrap-variables";
 @import "bootstrap/scss/bootstrap";
 @import "variables";
+@import "rouge-github";
 
 h1 {
     color: lighten($body-color, 35%);

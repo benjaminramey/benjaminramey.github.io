@@ -78,3 +78,14 @@ pre {
     background-color: lighten($body-bg, 5%);
     color: lighten($body-color, 5%);
 }
+
+blockquote {
+    @include border-radius();
+    padding: 10px 20px;
+    background-color: lighten($body-bg, 5%);
+    color: lighten($body-color, 5%);
+
+    p {
+        margin: 0;
+    }
+}

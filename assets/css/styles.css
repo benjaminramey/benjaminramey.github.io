@@ -9941,3 +9941,13 @@ pre {
   background-color: #32343b;
   color: #a0a4aa;
 }
+
+blockquote {
+  border-radius: 0.25rem;
+  padding: 10px 20px;
+  background-color: #32343b;
+  color: #a0a4aa;
+}
+blockquote p {
+  margin: 0;
+}

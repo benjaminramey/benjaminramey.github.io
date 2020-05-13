@@ -1,0 +1,63 @@
+<p>I had a case recently where I needed to convert a LINQ expression of the type of an interface and I needed to convert it to be based on a concrete implementation of that interface.  I came up with the  following solution, using an ExpressionVisitor and a simple helper method.</p>
+
+<p>First, the helper method in a static class.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">internal</span> <span class="k">static</span> <span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">TConcrete</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;&gt;</span> <span class="n">ConvertToConcreteExpression</span><span class="p">&lt;</span><span class="n">TConcrete</span><span class="p">,</span> <span class="n">TInterface</span><span class="p">&gt;(</span> <span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">TInterface</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;&gt;</span> <span class="n">interfaceExpression</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(!</span><span class="k">typeof</span><span class="p">(</span><span class="n">TInterface</span><span class="p">).</span><span class="nf">IsAssignableFrom</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">TConcrete</span><span class="p">)))</span>
+  <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="s">"TInterface must be assignable from TConcrete to convert an expression."</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">TransformVisitor</span><span class="p">&lt;</span><span class="n">TConcrete</span><span class="p">,</span> <span class="n">TInterface</span><span class="p">&gt;.</span><span class="nf">Transform</span><span class="p">(</span><span class="n">interfaceExpression</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Here is the TransformVisitor class.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">internal</span> <span class="k">class</span> <span class="nc">TransformVisitor</span><span class="p">&lt;</span><span class="n">TConcrete</span><span class="p">,</span> <span class="n">TInterface</span><span class="p">&gt;</span> <span class="p">:</span> <span class="n">ExpressionVisitor</span>
+<span class="p">{</span>
+  <span class="k">private</span> <span class="k">readonly</span> <span class="n">ParameterExpression</span> <span class="n">_param</span> <span class="p">=</span> <span class="n">Expression</span><span class="p">.</span><span class="nf">Parameter</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">TConcrete</span><span class="p">),</span> <span class="s">"param_0"</span><span class="p">);</span>
+
+  <span class="k">public</span> <span class="k">static</span> <span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">TConcrete</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;&gt;</span> <span class="nf">Transform</span><span class="p">(</span><span class="n">Expression</span> <span class="n">expression</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">visitor</span> <span class="p">=</span> <span class="k">new</span> <span class="n">TransformVisitor</span><span class="p">&lt;</span><span class="n">TConcrete</span><span class="p">,</span> <span class="n">TInterface</span><span class="p">&gt;();</span>
+    <span class="kt">var</span> <span class="n">newLambda</span> <span class="p">=</span> <span class="p">(</span><span class="n">Expression</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">TConcrete</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;&gt;)</span><span class="n">visitor</span><span class="p">.</span><span class="nf">Visit</span><span class="p">(</span><span class="n">expression</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">newLambda</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">protected</span> <span class="k">override</span> <span class="n">Expression</span> <span class="n">VisitLambda</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="n">Expression</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;</span> <span class="n">node</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">T</span><span class="p">).</span><span class="nf">IsAssignableFrom</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">TInterface</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;)))</span>
+    <span class="p">{</span>
+      <span class="k">return</span> <span class="n">Expression</span><span class="p">.</span><span class="n">Lambda</span><span class="p">&lt;</span><span class="n">Func</span><span class="p">&lt;</span><span class="n">TConcrete</span><span class="p">,</span> <span class="kt">bool</span><span class="p">&gt;&gt;(</span>
+        <span class="nf">Visit</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">Body</span><span class="p">),</span>
+        <span class="n">_param</span>
+      <span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="k">base</span><span class="p">.</span><span class="nf">VisitLambda</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">protected</span> <span class="k">override</span> <span class="n">Expression</span> <span class="nf">VisitMember</span><span class="p">(</span><span class="n">MemberExpression</span> <span class="n">node</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">Member</span><span class="p">.</span><span class="n">DeclaringType</span><span class="p">.</span><span class="nf">IsAssignableFrom</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">TInterface</span><span class="p">)))</span>
+    <span class="p">{</span>
+      <span class="k">return</span> <span class="n">Expression</span><span class="p">.</span><span class="nf">MakeMemberAccess</span><span class="p">(</span>
+      <span class="nf">Visit</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">Expression</span><span class="p">),</span>
+      <span class="k">typeof</span><span class="p">(</span><span class="n">TConcrete</span><span class="p">).</span><span class="nf">GetProperty</span><span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">Member</span><span class="p">.</span><span class="n">Name</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="k">base</span><span class="p">.</span><span class="nf">VisitMember</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+  <span class="p">}</span>
+
+  <span class="k">protected</span> <span class="k">override</span> <span class="n">Expression</span> <span class="nf">VisitParameter</span><span class="p">(</span><span class="n">ParameterExpression</span> <span class="n">node</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">node</span><span class="p">.</span><span class="n">Type</span><span class="p">.</span><span class="nf">IsAssignableFrom</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="n">TInterface</span><span class="p">)))</span>
+    <span class="p">{</span>
+      <span class="k">return</span> <span class="n">_param</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="k">base</span><span class="p">.</span><span class="nf">VisitParameter</span><span class="p">(</span><span class="n">node</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+

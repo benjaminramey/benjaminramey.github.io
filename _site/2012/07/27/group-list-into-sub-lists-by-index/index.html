@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>
+        
+        Group List Into Sub-lists by Index &middot; Ben Ramey's Blog
+        
+    </title>
+
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="">
+    <link rel="icon" type="image/png" sizes="32x32" href="">
+    <link rel="icon" type="image/png" sizes="16x16" href="">
+    <link rel="manifest" href="">
+
+    <link rel="alternate" type="application/atom+xml" title="Ben Ramey's Blog" href="/atom.xml">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Group List Into Sub-lists by Index" />
+<meta name="author" content="Ben Ramey" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Group List Into Sub-lists by Index" />
+<meta property="og:description" content="Group List Into Sub-lists by Index" />
+<link rel="canonical" href="https://www.benramey.com/2012/07/27/group-list-into-sub-lists-by-index/" />
+<meta property="og:url" content="https://www.benramey.com/2012/07/27/group-list-into-sub-lists-by-index/" />
+<meta property="og:site_name" content="Ben Ramey’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2012-07-27T00:00:00-05:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","dateModified":"2012-07-27T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.benramey.com/2012/07/27/group-list-into-sub-lists-by-index/"},"url":"https://www.benramey.com/2012/07/27/group-list-into-sub-lists-by-index/","author":{"@type":"Person","name":"Ben Ramey"},"headline":"Group List Into Sub-lists by Index","description":"Group List Into Sub-lists by Index","datePublished":"2012-07-27T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+<body>
+    <header>
+        <div class="container">
+            <div class="d-flex justify-content-between align-item-center">
+                <a href="/" class="d-flex justify-content-start align-items-center mr-2" title="Home">
+                    <img src="https://en.gravatar.com/userimage/738990/32d8e61848233a67f5e02dcc43be0ff8.jpeg"
+                        alt="Gravatar" />
+                    <span class="ml-2">Ben Ramey's Blog</span>
+                </a>
+                <div class="d-none d-sm-flex flex-column justify-content-around ml-2">
+                    <small>Scripture, programming problems, solutions and stories.</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main">
+        <div class="container d-flex justify-content-center">
+            
+            
+            
+            
+            
+            
+            
+            <a href="/archive/">Archive</a>
+            
+            
+            
+            
+            
+            
+            
+            <a href="/categories/">Categories</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <a href="/tags/">Tags</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <article class="post">
+    <h1 class="post-title">Group List Into Sub-lists by Index</h1>
+    <div class="post-info d-flex justify-content-start">
+        <time datetime="2012-07-27T00:00:00-05:00" class="post-date">27 Jul 2012</time>
+        <nav class="post-tags">
+            
+            <a href="/tags/.net">#.net</a>
+            
+        </nav>
+        <nav class="post-categories">
+            <span>posted in:</span>
+            
+            <a href="/categories/programming">programming</a>
+            
+        </nav>
+    </div>
+    <p>##Problem
+Everyone once-in-a-while I need to take a flat list (or array, or whatever) of items and divide it up into chunks.  It doesn’t have to be in any real order, necessarily, it just has to be in groups of two, three or four or however many items.  Most recently, I needed this to divide up a list of blog items into chunks of four to display in sets of “pages” that a user would page through with Javascript.</p>
+
+<p>##Solution
+I found a great, compact solution on Stack Overflow here: <a href="http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq">http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq</a>.  Take a look at answer number one and make sure to pay attention to the warnings others gave about performance for large sets of items.  I’m working on a small set, so it’s not too important in my case.</p>
+
+<p>Here’s the code I used to set a Repeater DataSource:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">PodsRepeater</span><span class="p">.</span><span class="n">DataSource</span> <span class="p">=</span> <span class="n">Data</span><span class="p">.</span><span class="n">Items</span>
+  <span class="p">.</span><span class="nf">Select</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Index</span> <span class="p">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">Value</span> <span class="p">=</span> <span class="n">x</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nf">GroupBy</span><span class="p">(</span><span class="n">obj</span> <span class="p">=&gt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">Index</span> <span class="p">/</span> <span class="m">4</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">obj</span> <span class="p">=&gt;</span> <span class="n">obj</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">v</span> <span class="p">=&gt;</span> <span class="n">v</span><span class="p">.</span><span class="n">Value</span><span class="p">).</span><span class="nf">ToList</span><span class="p">());</span></code></pre></figure>
+
+
+</article>
+
+<!-- Disqus comments -->
+
+<section class="comments">
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://www.benramey.com/2012/07/27/group-list-into-sub-lists-by-index/';
+        this.page.identifier = '/2012/07/27/group-list-into-sub-lists-by-index';
+        this.page.title = 'Group List Into Sub-lists by Index';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fishybusiness.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+</section>
+
+
+
+<section class="related">
+    <h2>Related posts</h2>
+    <ul class="related-posts">
+        
+        <li>
+            <a href="/2020/05/12/psalm-130/">
+                Psalm 130
+                <small><time
+                        datetime="2020-05-12T00:00:00-05:00">12 May 2020</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/">
+                I Like Languages That Expect Me To Be a Great Programmer
+                <small><time
+                        datetime="2017-01-20T14:05:00-06:00">20 Jan 2017</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/">
+                Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior
+                <small><time
+                        datetime="2016-08-24T07:37:00-05:00">24 Aug 2016</time></small>
+            </a>
+        </li>
+        
+    </ul>
+    </aside>
+    
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <small>
+                &copy; <time datetime="2020-05-12T20:47:23-05:00">2020</time>. All
+                rights reserved.
+            </small>
+        </div>
+    </footer>
+
+    <script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-1380501-7', 'auto');
+	ga('send', 'pageview');
+</script>
+</body>
+
+</html>

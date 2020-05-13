@@ -1,0 +1,80 @@
+<h2 id="situation">Situation</h2>
+<p>The situation is pretty simple.  We have a project written with Web API 2.2
+that we have running with OWIN.  The API requires user authorization.  To
+accomplish that, we use the OWIN OAuth libraries.</p>
+
+<p>Upon until recently, the OAuth authorization server (the thing that takes in
+the user credentials and issues the token) and the API (the resource server) were
+hosted in the same site and web project.</p>
+
+<p>Integration testing was pretty easy at this point.  For the authorized calls,
+we simply wrote helper methods that logged a test user in through the authorization
+server (hosted along with the API in the OWIN test server), got a bearer token
+and then made the integration test calls.</p>
+
+<h2 id="problem">Problem</h2>
+<p>When we recently decided to split the authorization server and resource server
+code up into two separate code bases (so that they could be hosted separately)
+we ran into issues with the authorization and API calls no longer being possible within a
+single integration test.  The code to generate the bearer token was now no
+longer accessible in the test server for the API integration tests because the authorization
+server was now designed to be hosted separately.  We’d have
+to somehow generate the bearer token without making a call with the OWIN test
+server.</p>
+
+<h2 id="solution">Solution</h2>
+<p>The solution is to generate a valid bearer token in your test code and send it
+along with your test API call as you would have previous.  How to generate that
+valid bearer token though??  It turns out to be easier than I thought.</p>
+
+<p>How you use OWIN’s test server is beyond the scope of this blog post, but
+eventually you’ll have some code resembling this:</p>
+
+<p>var server = TestServer.Create<Startup>();</Startup></p>
+
+<p>You’ll have to use a overload of the <code class="highlighter-rouge">Create()</code> method to capture a reference
+to the server’s <code class="highlighter-rouge">IDataProtector</code>.  This interface defines what OWIN OAuth will
+use to encrypt a <code class="highlighter-rouge">ClaimsIdentity</code> into a valid bearer token.</p>
+
+<p>Update your server creation code like this:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">  <span class="kt">var</span> <span class="n">dataProtector</span><span class="p">;</span>
+  <span class="kt">var</span> <span class="n">server</span> <span class="p">=</span> <span class="n">TestServer</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">app</span> <span class="p">=&gt;</span>
+  <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">s</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Startup</span><span class="p">();</span>
+    <span class="n">s</span><span class="p">.</span><span class="nf">Configuration</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
+
+    <span class="n">dataProtector</span> <span class="p">=</span> <span class="n">app</span><span class="p">.</span><span class="nf">CreateDataProtector</span><span class="p">(</span>
+      <span class="k">typeof</span><span class="p">(</span><span class="n">OAuthBearerAuthenticationMiddleware</span><span class="p">).</span><span class="n">Namespace</span><span class="p">,</span>
+      <span class="s">"Access_Token"</span><span class="p">,</span> <span class="s">"v1"</span><span class="p">);</span>
+  <span class="p">});</span></code></pre></figure>
+
+<p>You have to get the <code class="highlighter-rouge">dataProtector</code> this way because it’s the same way that
+the OWIN OAuth libraries get it before trying to decrypt the bearer token.
+See the source for the OWIN OAuth code here:
+<a href="http://katanaproject.codeplex.com/SourceControl/latest#src/Microsoft.Owin.Security.OAuth/OAuthBearerAuthenticationMiddleware.cs">OAuthBearerAuthenticationMiddleware.cs</a></p>
+
+<p>Once you’ve “captured” the <code class="highlighter-rouge">dataProtector</code>, in your integration test (or in some
+helper code, probably) you can generate your <code class="highlighter-rouge">ClaimsIdentity</code> and then your
+bearer token with the <code class="highlighter-rouge">dataProtector</code>.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">  <span class="c1">// inside an integration test</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">server</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="c1">// create your valid identity any way you need to here</span>
+    <span class="n">ClaimsIdentity</span> <span class="n">identity</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ClaimsIdentity</span><span class="p">(</span><span class="k">new</span> <span class="nf">GenericIdentity</span><span class="p">(</span><span class="s">"username"</span><span class="p">));</span>
+
+    <span class="c1">// these classes are defined in the OWIN OAuth libraries.</span>
+    <span class="kt">var</span> <span class="n">properties</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthenticationProperties</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">ticket</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthenticationTicket</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">properties</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">format</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TicketDataFormat</span><span class="p">(</span><span class="n">dataProtector</span><span class="p">);</span>
+
+    <span class="kt">string</span> <span class="n">bearerToken</span> <span class="p">=</span> <span class="n">format</span><span class="p">.</span><span class="nf">Protect</span><span class="p">(</span><span class="n">ticket</span><span class="p">);</span>
+
+    <span class="c1">// ... call your API through the test server with the bearer token...</span>
+    <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="n">server</span><span class="p">.</span><span class="nf">CreateRequest</span><span class="p">(</span><span class="s">"/api/someendpoint"</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span> <span class="s">"Bearer "</span> <span class="p">+</span> <span class="n">bearerToken</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">GetAsync</span><span class="p">()</span>
+        <span class="p">.</span><span class="n">Result</span><span class="p">;</span>
+  <span class="p">}</span></code></pre></figure>
+

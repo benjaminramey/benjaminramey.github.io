@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>
+        
+        EPiServer 7: Cannot decrypt password &middot; Ben Ramey's Blog
+        
+    </title>
+
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="">
+    <link rel="icon" type="image/png" sizes="32x32" href="">
+    <link rel="icon" type="image/png" sizes="16x16" href="">
+    <link rel="manifest" href="">
+
+    <link rel="alternate" type="application/atom+xml" title="Ben Ramey's Blog" href="/atom.xml">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="EPiServer 7: Cannot decrypt password" />
+<meta name="author" content="Ben Ramey" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="EPiServer 7: Cannot decrypt password" />
+<meta property="og:description" content="EPiServer 7: Cannot decrypt password" />
+<link rel="canonical" href="https://www.benramey.com/2014/04/17/episerver-7-cannot-decrypt-password/" />
+<meta property="og:url" content="https://www.benramey.com/2014/04/17/episerver-7-cannot-decrypt-password/" />
+<meta property="og:site_name" content="Ben Ramey’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2014-04-17T00:00:00-05:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","dateModified":"2014-04-17T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.benramey.com/2014/04/17/episerver-7-cannot-decrypt-password/"},"url":"https://www.benramey.com/2014/04/17/episerver-7-cannot-decrypt-password/","author":{"@type":"Person","name":"Ben Ramey"},"headline":"EPiServer 7: Cannot decrypt password","description":"EPiServer 7: Cannot decrypt password","datePublished":"2014-04-17T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+<body>
+    <header>
+        <div class="container">
+            <div class="d-flex justify-content-between align-item-center">
+                <a href="/" class="d-flex justify-content-start align-items-center mr-2" title="Home">
+                    <img src="https://en.gravatar.com/userimage/738990/32d8e61848233a67f5e02dcc43be0ff8.jpeg"
+                        alt="Gravatar" />
+                    <span class="ml-2">Ben Ramey's Blog</span>
+                </a>
+                <div class="d-none d-sm-flex flex-column justify-content-around ml-2">
+                    <small>Scripture, programming problems, solutions and stories.</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main">
+        <div class="container d-flex justify-content-center">
+            
+            
+            
+            
+            
+            
+            
+            <a href="/archive/">Archive</a>
+            
+            
+            
+            
+            
+            
+            
+            <a href="/categories/">Categories</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <a href="/tags/">Tags</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <article class="post">
+    <h1 class="post-title">EPiServer 7: Cannot decrypt password</h1>
+    <div class="post-info d-flex justify-content-start">
+        <time datetime="2014-04-17T00:00:00-05:00" class="post-date">17 Apr 2014</time>
+        <nav class="post-tags">
+            
+            <a href="/tags/episerver">#episerver</a>
+            
+        </nav>
+        <nav class="post-categories">
+            <span>posted in:</span>
+            
+            <a href="/categories/programming">programming</a>
+            
+        </nav>
+    </div>
+    <p>##Problem
+I’ve been dealing with an issue in EPiServer 7 recently.  I got this error when trying to log into the admin back-end of the site.</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">Cannot decrypt password
+
+Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
+
+Exception Details: System.InvalidOperationException: Cannot decrypt password
+
+Source Error:
+
+An unhandled exception was generated during the execution of the current web request. Information regarding the origin and location of the exception can be identified using the exception stack trace below.
+
+Stack Trace:
+
+[InvalidOperationException: Cannot decrypt password]
+EPiServer.Common.Security.HMACPasswordProvider.DecryptPassword(Byte[] ciphertext) +60
+EPiServer.Common.Web.Authorization.Integrator.SynchronizeUser(MembershipUser membershipUser, String password, Boolean enableCreateNew) +1116
+System.Web.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute() +80
+System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously) +165</code></pre></figure>
+
+<p>##Scenario
+We originally installed the Relate+ site for our EPiServer installation. Through various bad decisions, we didn’t keep the custom code and templates we wrote separate from the Relate+ stuff. So, we inevitably created a mess where we did not need a ton of the Relate+ templates, page types, block types, etc but we could not longer easily pull our custom stuff out from the tangled mess.</p>
+
+<p>Well, we undertook the disentangling anyway (a good decision) and ended up with a much cleaner code base. This meant re-installing EPiServer for a clean (without Relate+) beginning. The database would remain the same to keep our content.</p>
+
+<p>We ran into this error when we got the new, cleaned-up site installed and running and then tried to log into the administration portion of the site.</p>
+
+<p>##Solution
+At first, I found this post online: http://world.episerver.com/Modules/Forum/Pages/Thread.aspx?id=77776 which suggested changing over to the multiplexing membership and role providers and described the new hashing mechanism in EPiServer 7.</p>
+
+<p>At first, this seemed to work. Yay! But, the joy didn’t last long. I soon got the error again even after using the multiplexing providers. I dug a little deeper into the issue.</p>
+
+<p>What I found was (in retrospect) pretty obvious. When we did the new, clean installation of EPiServer, it also created a new web.config with new attributes on the machineKey element. These properties are used with forms authentication to encrypt and decrypt information. Well, we didn’t make sure to keep the same values between the old install and the new install. So, when it tried to decrypt login information created with the old descryptionKey using the new decryptionKey, it obviously didn’t work.</p>
+
+<p>Luckily, our trusty Systems Admins always keep backups of stuff they replace. We just went into the old web.config file from the previous site, copied the entire <machineKey> element and overwrite it in the new web.config. After an app pool recycle, the login was working great.</machineKey></p>
+
+</article>
+
+<!-- Disqus comments -->
+
+<section class="comments">
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://www.benramey.com/2014/04/17/episerver-7-cannot-decrypt-password/';
+        this.page.identifier = '/2014/04/17/episerver-7-cannot-decrypt-password';
+        this.page.title = 'EPiServer 7: Cannot decrypt password';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fishybusiness.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+</section>
+
+
+
+<section class="related">
+    <h2>Related posts</h2>
+    <ul class="related-posts">
+        
+        <li>
+            <a href="/2020/05/12/psalm-130/">
+                Psalm 130
+                <small><time
+                        datetime="2020-05-12T00:00:00-05:00">12 May 2020</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/">
+                I Like Languages That Expect Me To Be a Great Programmer
+                <small><time
+                        datetime="2017-01-20T14:05:00-06:00">20 Jan 2017</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/">
+                Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior
+                <small><time
+                        datetime="2016-08-24T07:37:00-05:00">24 Aug 2016</time></small>
+            </a>
+        </li>
+        
+    </ul>
+    </aside>
+    
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <small>
+                &copy; <time datetime="2020-05-12T20:47:23-05:00">2020</time>. All
+                rights reserved.
+            </small>
+        </div>
+    </footer>
+
+    <script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-1380501-7', 'auto');
+	ga('send', 'pageview');
+</script>
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<p>##Problem
+We recently ran into a rather surprising issue with a Sitefinity 5.1 installation. We wanted a pretty simple feature: when searching and using Lucene, we wanted the values of any taxonomy fields to be indexed with Sitefinity’s Lucene back-end so that items could be searched by their attached taxonomy. This is apparently impossible with the basic installation because you can only search short text and long text fields.</p>
+
+<p>So, I began on a quest to implement this somehow and ran into another wall: the Sitefinity documentation on their search API is horrendously non-existent. We mostly had to rely on forum posts and decompiling Telerik assemblies to see how stuff worked. But, this did eventually lead to a solid solution.</p>
+
+<p>##Solution
+It took me about 13 hours of research to figure out what to do and then just about an hour to actually implement. So, the good news is that it’s a pretty simple solution!</p>
+
+<p>When you create a search index in Sitefinity’s back-end, you can add a comma-separated list of extra fields to index. Sitefinity indexes a standard set (like Title). But, if you create custom dynamic modules with other fields you want to index you have to add them in this Additional Fields box. Here here:</p>
+
+<p><img src="/public/images/2012-10-19-indexing-taxonomy-fields-for-search-in-sitefinity-51/addtionalfields.png" alt="Additional Fields" /></p>
+
+<p>Looking through the de-compiled code for Sitefinity’s SearchModule, I found that it registered a special outbound pipe that updates the Lucene indexes (not directly, but through Sitefinity’s abstraction, it appears) when you publish an item. It also registered various Translator classes with PipeTranslatorFactory.RegisterTranslator. Digging through the code in that SearchIndexOutboundPipe and the various translator classes it registered, I finally found that when the SearchIndexOutboundPipe runs, it reads that comma-separated list of additional fields from your index and ties them to the ConcatenationTranslator through some type of mapping. It looked like these translators were being used by the SearchModule to translate content values into index-able values for the Lucene indexing system.</p>
+
+<p>Turns out, I was right. With some more trial and error from that point on, I came up with this solution.</p>
+
+<p>Override ConcatenationTranslator
+First of all, you need to create a new class that inherits from ConcatenationTranslator. This is a public class in the Telerik.Sitefinity.Publishing.Translators namespace. I called my class CustomConcatenationTranslator. IN the base class, the Translate method turns an array of object values into a space-separated string. I’ll show the code in a minute, but the first thing you need to do after creating the class is register it with the pipeline. In Global.asax.cs, add these lines (around any other code you have there):</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_Start</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Bootstrapper</span><span class="p">.</span><span class="n">Initialized</span> <span class="p">+=</span> <span class="n">Bootstrapper_Initialized</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">private</span> <span class="k">void</span> <span class="nf">Bootstrapper_Initialized</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">Telerik</span><span class="p">.</span><span class="n">Sitefinity</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">ExecutedEventArgs</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">CommandName</span> <span class="p">==</span> <span class="s">"Bootstrapped"</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">PipeTranslatorFactory</span><span class="p">.</span><span class="nf">RegisterTranslator</span><span class="p">(</span><span class="k">new</span> <span class="nf">CustomConcatenationTranslator</span><span class="p">());</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>You don’t have to unregistered the existing ConcatenationTranslator. Your registration will replace it as long as you don’t rename the translator by overriding it’s Name property.</p>
+
+<p>What I wanted to do was check if the data being translated was a TrackedList<Guid> type. This is what your taxonomy fields are in code. Here is my code for the CustomConcatenationTranslator class.</Guid></p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CustomConcatenationTranslator</span> <span class="p">:</span> <span class="n">ConcatenationTranslator</span>
+<span class="p">{</span>
+  <span class="k">private</span> <span class="k">readonly</span> <span class="n">TaxonomyManager</span> <span class="n">_taxonomyManager</span><span class="p">;</span>
+
+  <span class="k">public</span> <span class="nf">CustomConcatenationTranslator</span><span class="p">()</span>
+  <span class="p">{</span>
+    <span class="n">_taxonomyManager</span> <span class="p">=</span> <span class="n">TaxonomyManager</span><span class="p">.</span><span class="nf">GetManager</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">public</span> <span class="k">override</span> <span class="kt">object</span> <span class="nf">Translate</span><span class="p">(</span><span class="kt">object</span><span class="p">[]</span> <span class="n">data</span><span class="p">,</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">translationSettings</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">Length</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">StringBuilder</span> <span class="n">concatedStr</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
+    <span class="nf">ConcatValues</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">concatedStr</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">concatedStr</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">IsTrackedList</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="kt">object</span> <span class="n">data</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">return</span> <span class="n">data</span> <span class="k">is</span> <span class="n">TrackedList</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;;</span>
+  <span class="p">}</span>
+
+  <span class="k">private</span> <span class="k">void</span> <span class="nf">ConcatValues</span><span class="p">(</span><span class="kt">object</span><span class="p">[]</span> <span class="n">data</span><span class="p">,</span> <span class="n">StringBuilder</span> <span class="n">concatedStr</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">data</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+    <span class="p">{</span>
+      <span class="kt">string</span> <span class="n">str</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">IsTrackedList</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+      <span class="p">{</span>
+        <span class="n">str</span> <span class="p">=</span> <span class="nf">TranslatedTaxonomies</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span>
+      <span class="p">{</span>
+        <span class="n">str</span> <span class="p">=</span> <span class="nf">GetString</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+      <span class="p">}</span>
+
+      <span class="n">concatedStr</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span> <span class="p">&lt;</span> <span class="n">data</span><span class="p">.</span><span class="n">Length</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="n">concatedStr</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="err">‘</span> <span class="err">‘</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">private</span> <span class="kt">string</span> <span class="nf">TranslatedTaxonomies</span><span class="p">(</span><span class="kt">object</span><span class="p">[]</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">taxNames</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="n">Guid</span> <span class="n">guid</span> <span class="k">in</span> <span class="p">((</span><span class="n">TrackedList</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;)</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="p">{</span>
+      <span class="kt">var</span> <span class="n">taxon</span> <span class="p">=</span> <span class="n">_taxonomyManager</span><span class="p">.</span><span class="nf">GetTaxon</span><span class="p">(</span><span class="n">guid</span><span class="p">);</span>
+      <span class="n">taxNames</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">taxon</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span> <span class="n">taxNames</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>It should be pretty simple to follow. Basically, if I find a data value is a TrackedList<Guid>, I get the Taxon items with that Guid ID, get the name of that Taxon and then concatenate those values, separated by a space. If the data object is anything other than a TrackedList<Guid>, I used the default ConcatenationTranslator behavior.</Guid></Guid></p>
+
+<p>Conclusion
+That’s really all you need to do. Just go into your Sitefinity back-end, re-index your search index and you can now search your content by any taxonomy it has attached to it.</p>

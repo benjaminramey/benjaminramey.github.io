@@ -1,0 +1,647 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>
+        
+        ANSI/UTF-8 Encoding Problem &middot; Ben Ramey's Blog
+        
+    </title>
+
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="">
+    <link rel="icon" type="image/png" sizes="32x32" href="">
+    <link rel="icon" type="image/png" sizes="16x16" href="">
+    <link rel="manifest" href="">
+
+    <link rel="alternate" type="application/atom+xml" title="Ben Ramey's Blog" href="/atom.xml">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="ANSI/UTF-8 Encoding Problem" />
+<meta name="author" content="Ben Ramey" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="ANSI/UTF-8 Encoding Problem" />
+<meta property="og:description" content="ANSI/UTF-8 Encoding Problem" />
+<link rel="canonical" href="https://www.benramey.com/2011/11/14/ansiutf-8-encoding-problem/" />
+<meta property="og:url" content="https://www.benramey.com/2011/11/14/ansiutf-8-encoding-problem/" />
+<meta property="og:site_name" content="Ben Ramey’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2011-11-14T00:00:00-06:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","dateModified":"2011-11-14T00:00:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.benramey.com/2011/11/14/ansiutf-8-encoding-problem/"},"url":"https://www.benramey.com/2011/11/14/ansiutf-8-encoding-problem/","author":{"@type":"Person","name":"Ben Ramey"},"headline":"ANSI/UTF-8 Encoding Problem","description":"ANSI/UTF-8 Encoding Problem","datePublished":"2011-11-14T00:00:00-06:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+<body>
+    <header>
+        <div class="container">
+            <div class="d-flex justify-content-between align-item-center">
+                <a href="/" class="d-flex justify-content-start align-items-center mr-2" title="Home">
+                    <img src="https://en.gravatar.com/userimage/738990/32d8e61848233a67f5e02dcc43be0ff8.jpeg"
+                        alt="Gravatar" />
+                    <span class="ml-2">Ben Ramey's Blog</span>
+                </a>
+                <div class="d-none d-sm-flex flex-column justify-content-around ml-2">
+                    <small>Scripture, programming problems, solutions and stories.</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main">
+        <div class="container d-flex justify-content-center">
+            
+            
+            
+            
+            
+            
+            
+            <a href="/archive/">Archive</a>
+            
+            
+            
+            
+            
+            
+            
+            <a href="/categories/">Categories</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <a href="/tags/">Tags</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <article class="post">
+    <h1 class="post-title">ANSI/UTF-8 Encoding Problem</h1>
+    <div class="post-info d-flex justify-content-start">
+        <time datetime="2011-11-14T00:00:00-06:00" class="post-date">14 Nov 2011</time>
+        <nav class="post-tags">
+            
+        </nav>
+        <nav class="post-categories">
+            <span>posted in:</span>
+            
+            <a href="/categories/programming">programming</a>
+            
+        </nav>
+    </div>
+    <p>##Problem
+I ran into a problem in a project I was working on recently.  The basics of the project were to take data out of a MySQL database and transform that data into an XML file schema for a
+<a href="http://day.com/day/en/products.html">Day CQ5 CMS</a>
+<a href="http://www.ibm.com/developerworks/java/library/j-jcr/">Java Content Repository (JCR)</a>.</p>
+
+<p>I kept running into an issue with certain text fields of user-entered data where I would get all these funky, special characters in the text.  I knew it had to be some kind of encoding issue where I wasn’t outputting or getting the data with the right character encoding.</p>
+
+<p>I don’t know much about character encoding, except that there is a difference between them!</p>
+
+<p>##Solution
+After some digging around and playing with Notepad++ (where I could switch the encoding of the text), I found at least a glimmer of hope.  When I had the character encoding set to ANSI in Notepad++, pasted in the troublesome text, and then switched the encoding to UTF-8, all of my problems disappeared.</p>
+
+<p>So, eventually, I came up with these few lines of code which convert the encoding of my text and fixed all of my problems.  Woohoo!</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">Encoding</span> <span class="n">targetEncoding</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="nf">GetEncoding</span><span class="p">(</span><span class="m">1252</span><span class="p">);</span>
+<span class="kt">byte</span><span class="p">[]</span> <span class="n">utf8Bytes</span> <span class="p">=</span> <span class="n">targetEncoding</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+<span class="kt">byte</span><span class="p">[]</span> <span class="n">ansiBytes</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="nf">Convert</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">,</span>
+<span class="n">targetEncoding</span><span class="p">,</span>
+<span class="n">utf8Bytes</span><span class="p">);</span>
+<span class="k">return</span> <span class="n">targetEncoding</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="n">ansiBytes</span><span class="p">);</span></code></pre></figure>
+
+<p>What this simple code does is first get the Encoding for the ANSI character encoding (1252 is ANSI, apparently). It then gets the bytes of the string with the ANSI encoding, converts them from the ANSI encoding to UTF-8 encoding and then gets the string with the ANSI encoding.</p>
+
+<p>So, quite honestly, I’m not 100% sure why this works. The Notepad++ experiment would seem to indicate the opposite: that I had to convert from ANSI to UTF-8. But, that only compounded the problem when I wrote it that way in code. When I reversed the conversion, it worked as I was hoping.</p>
+
+</article>
+
+<!-- Disqus comments -->
+
+<section class="comments">
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://www.benramey.com/2011/11/14/ansiutf-8-encoding-problem/';
+        this.page.identifier = '/2011/11/14/ansiutf-8-encoding-problem';
+        this.page.title = 'ANSI/UTF-8 Encoding Problem';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fishybusiness.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+</section>
+
+
+
+<section class="related">
+    <h2>Related posts</h2>
+    <ul class="related-posts">
+        
+        <li>
+            <a href="/2020/05/12/psalm-130/">
+                Psalm 130
+                <small><time
+                        datetime="2020-05-12T00:00:00-05:00">12 May 2020</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/">
+                I Like Languages That Expect Me To Be a Great Programmer
+                <small><time
+                        datetime="2017-01-20T14:05:00-06:00">20 Jan 2017</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/">
+                Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior
+                <small><time
+                        datetime="2016-08-24T07:37:00-05:00">24 Aug 2016</time></small>
+            </a>
+        </li>
+        
+    </ul>
+    </aside>
+    
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <small>
+                &copy; <time datetime="2020-05-12T20:47:23-05:00">2020</time>. All
+                rights reserved.
+            </small>
+        </div>
+    </footer>
+
+    <script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-1380501-7', 'auto');
+	ga('send', 'pageview');
+</script>
+</body>
+
+</html>

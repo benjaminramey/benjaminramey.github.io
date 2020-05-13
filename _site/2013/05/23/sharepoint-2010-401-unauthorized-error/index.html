@@ -1,0 +1,683 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>
+        
+        SharePoint 2010 401 Unauthorized Error &middot; Ben Ramey's Blog
+        
+    </title>
+
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="">
+    <link rel="icon" type="image/png" sizes="32x32" href="">
+    <link rel="icon" type="image/png" sizes="16x16" href="">
+    <link rel="manifest" href="">
+
+    <link rel="alternate" type="application/atom+xml" title="Ben Ramey's Blog" href="/atom.xml">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="SharePoint 2010 401 Unauthorized Error" />
+<meta name="author" content="Ben Ramey" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="SharePoint 2010 401 Unauthorized Error" />
+<meta property="og:description" content="SharePoint 2010 401 Unauthorized Error" />
+<link rel="canonical" href="https://www.benramey.com/2013/05/23/sharepoint-2010-401-unauthorized-error/" />
+<meta property="og:url" content="https://www.benramey.com/2013/05/23/sharepoint-2010-401-unauthorized-error/" />
+<meta property="og:site_name" content="Ben Ramey’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2013-05-23T00:00:00-05:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","dateModified":"2013-05-23T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.benramey.com/2013/05/23/sharepoint-2010-401-unauthorized-error/"},"url":"https://www.benramey.com/2013/05/23/sharepoint-2010-401-unauthorized-error/","author":{"@type":"Person","name":"Ben Ramey"},"headline":"SharePoint 2010 401 Unauthorized Error","description":"SharePoint 2010 401 Unauthorized Error","datePublished":"2013-05-23T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+<body>
+    <header>
+        <div class="container">
+            <div class="d-flex justify-content-between align-item-center">
+                <a href="/" class="d-flex justify-content-start align-items-center mr-2" title="Home">
+                    <img src="https://en.gravatar.com/userimage/738990/32d8e61848233a67f5e02dcc43be0ff8.jpeg"
+                        alt="Gravatar" />
+                    <span class="ml-2">Ben Ramey's Blog</span>
+                </a>
+                <div class="d-none d-sm-flex flex-column justify-content-around ml-2">
+                    <small>Scripture, programming problems, solutions and stories.</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main">
+        <div class="container d-flex justify-content-center">
+            
+            
+            
+            
+            
+            
+            
+            <a href="/archive/">Archive</a>
+            
+            
+            
+            
+            
+            
+            
+            <a href="/categories/">Categories</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <a href="/tags/">Tags</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <article class="post">
+    <h1 class="post-title">SharePoint 2010 401 Unauthorized Error</h1>
+    <div class="post-info d-flex justify-content-start">
+        <time datetime="2013-05-23T00:00:00-05:00" class="post-date">23 May 2013</time>
+        <nav class="post-tags">
+            
+            <a href="/tags/sharepoint">#sharepoint</a>
+            
+        </nav>
+        <nav class="post-categories">
+            <span>posted in:</span>
+            
+            <a href="/categories/programming">programming</a>
+            
+        </nav>
+    </div>
+    <p>There are many, many reasons why SharePoint will throw a 401 error.  Most of them are hard to track down and have absolutely no bearing on reality unless you’re a genius.  So, your only hope is to track down obscure registry updates (hacks), scour the internet for random things other people have found or just give up.  :-)</p>
+
+<p>I just about pulled my hair out yesterday trying to get to the bottom of a 401 Unauthorized error I kept getting for my anonymous access-enabled web application.  I’m not sure why, but I never tried debugging my application to see where the error was actually being thrown.  I assumed it was on the IIS level or some SharePoint level, so I never tried debugging.</p>
+
+<p>So, lesson #1 when getting 401 in SharePoint: debug your application.</p>
+
+<p>Lesson #2: apparently accessing the DefaultPage property of a PublishingWeb requires elevated privileges.  Here was my code:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">private</span> <span class="kt">string</span> <span class="nf">GetDefaultPageUrl</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(!</span><span class="n">PublishingWeb</span><span class="p">.</span><span class="nf">IsPublishingWeb</span><span class="p">(</span><span class="n">SPContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Web</span><span class="p">))</span>
+  <span class="p">{</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">PublishingWeb</span> <span class="n">web</span> <span class="p">=</span> <span class="n">PublishingWeb</span><span class="p">.</span><span class="nf">GetPublishingWeb</span><span class="p">(</span><span class="n">SPContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Web</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">web</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">web</span><span class="p">.</span><span class="n">DefaultPage</span> <span class="p">==</span> <span class="k">null</span> <span class="p">?</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span> <span class="p">:</span> <span class="n">web</span><span class="p">.</span><span class="n">DefaultPage</span><span class="p">.</span><span class="n">Url</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>That last line was throwing the 401. So, the solution was to wrap it in an SPSecurity.RunWithElevatedPrivileges call, like this:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">private</span> <span class="kt">string</span> <span class="nf">GetDefaultPageUrl</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+  <span class="n">SPSite</span> <span class="n">currentSite</span> <span class="p">=</span> <span class="n">SPContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Site</span><span class="p">;</span>
+  <span class="n">SPWeb</span> <span class="n">currentWeb</span> <span class="p">=</span> <span class="n">SPContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Web</span><span class="p">;</span>
+
+  <span class="n">SPSecurity</span><span class="p">.</span><span class="nf">RunWithElevatedPrivileges</span><span class="p">(</span>
+  <span class="p">()</span> <span class="p">=&gt;</span>
+  <span class="p">{</span>
+    <span class="c1">// reopen site &amp; web, otherwise defaultpage will throw an error</span>
+    <span class="k">using</span> <span class="p">(</span><span class="n">SPSite</span> <span class="n">site</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SPSite</span><span class="p">(</span><span class="n">currentSite</span><span class="p">.</span><span class="n">ID</span><span class="p">))</span>
+    <span class="k">using</span> <span class="p">(</span><span class="n">SPWeb</span> <span class="n">web</span> <span class="p">=</span> <span class="n">site</span><span class="p">.</span><span class="nf">OpenWeb</span><span class="p">(</span><span class="n">currentWeb</span><span class="p">.</span><span class="n">ID</span><span class="p">))</span>
+    <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(!</span><span class="n">PublishingWeb</span><span class="p">.</span><span class="nf">IsPublishingWeb</span><span class="p">(</span><span class="n">web</span><span class="p">))</span>
+      <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="n">PublishingWeb</span> <span class="n">pubWeb</span> <span class="p">=</span> <span class="n">PublishingWeb</span><span class="p">.</span><span class="nf">GetPublishingWeb</span><span class="p">(</span><span class="n">web</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">web</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="n">url</span> <span class="p">=</span> <span class="n">pubWeb</span><span class="p">.</span><span class="n">DefaultPage</span> <span class="p">==</span> <span class="k">null</span> <span class="p">?</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span> <span class="p">:</span> <span class="n">pubWeb</span><span class="p">.</span><span class="n">DefaultPage</span><span class="p">.</span><span class="n">Url</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="n">url</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Thanks to this post for the answer about re-opening the site and web inside the RunWithElevatedPrivileges code:
+<a href="http://henry-chong.com/2010/11/sharepoint-anonymous-access-and-publishing-web-default-page">http://henry-chong.com/2010/11/sharepoint-anonymous-access-and-publishing-web-default-page</a>.</p>
+
+</article>
+
+<!-- Disqus comments -->
+
+<section class="comments">
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://www.benramey.com/2013/05/23/sharepoint-2010-401-unauthorized-error/';
+        this.page.identifier = '/2013/05/23/sharepoint-2010-401-unauthorized-error';
+        this.page.title = 'SharePoint 2010 401 Unauthorized Error';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fishybusiness.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+</section>
+
+
+
+<section class="related">
+    <h2>Related posts</h2>
+    <ul class="related-posts">
+        
+        <li>
+            <a href="/2020/05/12/psalm-130/">
+                Psalm 130
+                <small><time
+                        datetime="2020-05-12T00:00:00-05:00">12 May 2020</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/">
+                I Like Languages That Expect Me To Be a Great Programmer
+                <small><time
+                        datetime="2017-01-20T14:05:00-06:00">20 Jan 2017</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/">
+                Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior
+                <small><time
+                        datetime="2016-08-24T07:37:00-05:00">24 Aug 2016</time></small>
+            </a>
+        </li>
+        
+    </ul>
+    </aside>
+    
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <small>
+                &copy; <time datetime="2020-05-12T20:47:23-05:00">2020</time>. All
+                rights reserved.
+            </small>
+        </div>
+    </footer>
+
+    <script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-1380501-7', 'auto');
+	ga('send', 'pageview');
+</script>
+</body>
+
+</html>

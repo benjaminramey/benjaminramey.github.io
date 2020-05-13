@@ -1,0 +1,74 @@
+<p>The reason you might want to subscribe to <code class="highlighter-rouge">IEvent</code> is pretty straightforward. I
+wanted to do it for the simple reason of wanting to be able to choose (based
+on configuration) whether I wanted to notify anyone of any event that
+could be published on my bus.</p>
+
+<p>In other words, whenever an event of any type was published, I wanted one particular
+endpoint to subscribe to that event and then decide whether it should do
+anything with it.</p>
+
+<p>I thought the code to do that should be pretty simple.  Since all published
+events <em>should</em> implement the <code class="highlighter-rouge">IEvent</code> interface and NServiceBus supports
+polymorphism in its message handling, creating a message handler that
+implemented <code class="highlighter-rouge">IHandleMessages&lt;IEvent&gt;</code> should be all I should have needed!</p>
+
+<p>I was testing this with only partial success and so I thought it was working.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class EventHandler : IHandleMessages&lt;IEvent&gt;
+{
+   public void Handle(IEvent message)
+   {
+     ...
+   }
+}
+</code></pre></div></div>
+
+<h2 id="my-partial-success">My Partial Success</h2>
+<p>The reason I had partial success was because I was also <em>explicitly</em> handling
+other events in the same endpoint on a special saga I had setup.  So, when
+the endpoint started up, it would subscribe to these events.  At first, I only
+wanted to send notifications for these events anyway, so it all seemed to be
+working.  My special <code class="highlighter-rouge">IEvent</code> would work because the <code class="highlighter-rouge">Saga</code> subscribed this same
+endpoint to those few events explicitly.</p>
+
+<h2 id="my-full-failure">My Full Failure</h2>
+<p>I realized I had only partially succeeded when I started wanting to send notifications
+for other events that were not in that <code class="highlighter-rouge">Saga</code>.  I dug into the issue for a few
+hours and finally began to wonder if NServiceBus (or maybe the RabbitMQ transport)
+was explicitly ignoring <code class="highlighter-rouge">IEvent</code> when it setup subscriptions.</p>
+
+<p>Sure enough, it does.</p>
+
+<p>To build a list of types to subscribe to, NServiceBus uses the <code class="highlighter-rouge">Conventions</code>
+class in the <code class="highlighter-rouge">NServiceBus.Core</code> namespace.  One of the checks that code does
+is to filter the list of potential types with the <code class="highlighter-rouge">IsEventType</code> method.  This
+method checks if the <code class="highlighter-rouge">Type</code> is in a Particular (NServiceBus) DLL.  See the
+code here: <a href="https://github.com/Particular/NServiceBus/blob/e4bc405509e3b9c3fc91e21a56333bb40ac54a60/src/NServiceBus.Core/Conventions.cs#L154">IsEventType</a></p>
+
+<h2 id="my-solution">My Solution</h2>
+<p>The solution is simple enough.  Instead of listening to <code class="highlighter-rouge">IEvent</code>, listen
+to a custom interface that you implement on all of your events.  This is probably
+more close to what you are trying to do anyway–listen to all events that your
+system produces.</p>
+
+<p>So, I simply created a marker interface called <code class="highlighter-rouge">ICustomEvent</code>.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public interface ICustomEvent : IEvent { }
+</code></pre></div></div>
+
+<p>Then, on all of my bus event classes, instead of implementing <code class="highlighter-rouge">IEvent</code> directly,
+I implemented <code class="highlighter-rouge">ICustomEvent</code>.</p>
+
+<p>My handler then looked like this.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class EventHandler : IHandleMessages&lt;ICustomEvent&gt;
+{
+   public void Handle(ICustomEvent message)
+   {
+     ...
+   }
+}
+</code></pre></div></div>
+
+<p>Now, the right subscriptions are all set up and my single handler gets
+every single event published by my entire bus.</p>

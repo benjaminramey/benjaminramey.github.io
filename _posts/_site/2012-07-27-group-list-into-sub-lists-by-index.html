@@ -1,0 +1,13 @@
+<p>##Problem
+Everyone once-in-a-while I need to take a flat list (or array, or whatever) of items and divide it up into chunks.  It doesn’t have to be in any real order, necessarily, it just has to be in groups of two, three or four or however many items.  Most recently, I needed this to divide up a list of blog items into chunks of four to display in sets of “pages” that a user would page through with Javascript.</p>
+
+<p>##Solution
+I found a great, compact solution on Stack Overflow here: <a href="http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq">http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq</a>.  Take a look at answer number one and make sure to pay attention to the warnings others gave about performance for large sets of items.  I’m working on a small set, so it’s not too important in my case.</p>
+
+<p>Here’s the code I used to set a Repeater DataSource:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">PodsRepeater</span><span class="p">.</span><span class="n">DataSource</span> <span class="p">=</span> <span class="n">Data</span><span class="p">.</span><span class="n">Items</span>
+  <span class="p">.</span><span class="nf">Select</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Index</span> <span class="p">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">Value</span> <span class="p">=</span> <span class="n">x</span> <span class="p">})</span>
+  <span class="p">.</span><span class="nf">GroupBy</span><span class="p">(</span><span class="n">obj</span> <span class="p">=&gt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">Index</span> <span class="p">/</span> <span class="m">4</span><span class="p">)</span>
+  <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">obj</span> <span class="p">=&gt;</span> <span class="n">obj</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">v</span> <span class="p">=&gt;</span> <span class="n">v</span><span class="p">.</span><span class="n">Value</span><span class="p">).</span><span class="nf">ToList</span><span class="p">());</span></code></pre></figure>
+

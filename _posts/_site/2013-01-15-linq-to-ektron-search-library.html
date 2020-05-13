@@ -1,0 +1,30 @@
+<p>I am currently working on a project at VML that will make use of Ektron’s 3-tier architecture. It will be an MVC 4.0 site that basically uses an existing Ektron site as a datasource. It pulls in various Ektron content and then feeds it into the MVC application (a mobile version of the Ektron site).</p>
+
+<p>I wanted to take time on this project to make everything “right”. I am using MVC as my presentation layer, I have a distinct business logic layer and underneath that I have a nice data layer. This data layer is what is interacting with Ektron. The data model for the application is defined separately through a set of interfaces that describe different data objects. The presentation and business logic layers know nothing about the concrete implementations of these interfaces. So, my project structure looks like this:</p>
+
+<ul>
+  <li>Project.Web – my MVC application</li>
+  <li>Project.Data – the set of interfaces that define my data model and repositories</li>
+  <li>Project.Data.Ektron – the implementation of the Project.Data interfaces with Ektron (data model and repositories)</li>
+  <li>Project.BusinessLayer – the service layer that sits on top of Project.Data.Ektron (with no direct knowledge of it)
+I tie it all neatly together with dependency injection using Autofac (that’s how my business layer doesn’t need to know about Project.Data.Ektron).</li>
+</ul>
+
+<p>I thought about a few designs for how my repositories would receive queries for data.  Of course, nothing beats LINQ for this purpose.  The problem is, Ektron doesn’t implement anything like LINQ-to-Ektron to query its data.  So, what to do?</p>
+
+<p>I really didn’t want to move away from LINQ.  Anything else was going to be too rigid and cumbersome to use.  I started looking into my own implementation of LINQ-to-Ektron.  Ektron already implements a LINQ-like expression tree search via it’s AdvancedSearchCriteria search API.  So, my thinking was to take LINQ queries and translate them into those AdvancedSearchCriteria expressions.</p>
+
+<p>As I started to look into what it took to create a LINQ QueryProvider, I was overwhelmed.  I read through the first few posts of Matt Warren’s “tutorial” here: <a href="http://blogs.msdn.com/b/mattwar/archive/2007/07/30/linq-building-an-iqueryable-provider-part-i.aspx">http://blogs.msdn.com/b/mattwar/archive/2007/07/30/linq-building-an-iqueryable-provider-part-i.aspx</a>.  I didn’t even understand half of what he was talking about, but I copied his code and started tinkering.  I gave up a couple of times, thinking this would take way too long to implement. But, I always came back to wanting to use LINQ for my repositories.  This meant I had to do some kind of LINQ-to-Ektron search translation and that meant I had do a LINQ query provider for it.</p>
+
+<p>I actually got to the point where I had a working query provider that successfully performed searches through Ektron.  It was pretty exciting.  Somewhere along the way, however, I discovered Remotion’s re-linq library and I knew I needed to rewrite my entire library.  re-linq does a great job of pre-parsing any LINQ expression into a more consistent format to translate into whatever you want to translate it into.  You still have to do the actual work of translating the query into something useful, but the gazillions of tiny tasks of parsing the query, evaluating evaluatable parts, etc are all taken care of for you.  In addition, it gives real structure to your query parsing code.</p>
+
+<p>What I ended up with, I decided to put on GitHub as an open-source project so that other Ektron developers (which I do NOT claim to be!) could benefit from it.  I’ve also created a NuGet package out of it to easily include in your own projects.</p>
+
+<p>I need users and contributors to beef it up and test it out.  So far, I’ve only had time to test it with the one project I developed it for (which is an Ektron 8.5 installation).  So, my domain of testing has been pretty limited.  I need it tested/expanded for 8.6 and for all sorts of different uses.</p>
+
+<p>Check out the library here:</p>
+
+<p>GitHub: <a href="https://github.com/benjaminramey/GoodlyFere.Ektron.Linq">https://github.com/benjaminramey/GoodlyFere.Ektron.Linq</a>
+NuGet: <a href="http://nuget.org/packages/GoodlyFere.Ektron.Linq">http://nuget.org/packages/GoodlyFere.Ektron.Linq</a></p>
+
+<p>PS A note on the name “Goodly Fere”.  Goodly Fere is the name given to Christ in a ballad by Ezra Pound.  Read it here: <a href="http://www.bartleby.com/265/295.html">http://www.bartleby.com/265/295.html</a>.  My faith in Christ defines everything I do and say (at least, it should–often I fall short of that ideal). Colossians 3:17 says to do everything in the name of the Lord Jesus.  That’s quite a standard!  After all, Paul started off that letter to the Colossians talking about how all of Creation was made by, through and for Christ.  I think Creation is a pretty high standard of quality.  I desire to reflect that standard of quality (as much as I can) in everything I do too–including writing code libraries.</p>

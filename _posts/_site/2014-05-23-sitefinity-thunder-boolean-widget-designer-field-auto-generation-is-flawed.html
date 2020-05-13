@@ -1,0 +1,19 @@
+<p>##Problem</p>
+
+<p>When you use Sitefinity Thunder (a great help, by the way) to generate a Widget Designer for an existing widget that has a boolean property, you get this javascript in the auto-generated javascript file (let’s say my boolean field is named HasSubMenu):</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="cm">/* RefreshUI HasSubMenu */</span>
+<span class="nx">jQuery</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get_hasSubMenu</span><span class="p">()).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">checked</span><span class="dl">"</span><span class="p">,</span> <span class="nx">controlData</span><span class="p">.</span><span class="nx">HasSubMenu</span><span class="p">);</span></code></pre></figure>
+
+<p>This code is in the refreshUI method.  It’s supposed to mark a checkbox as checked if HasSubMenu is true and not check it if it’s false.  The problem is, for some reason, HasSubMenu is a string in Javascript instead of a real boolean. So, HasSubMenu will be either “true” or “false”–both of which are true values in Javascript.  That is, because “true” and “false” are both non-empty strings, they evaluate to true when used as an expression.</p>
+
+<p>This means, no matter what you do with the checkbox, the next time you click “Edit” for this widget, the checkbox will be checked and your data is effectively corrupted.</p>
+
+<p>##Solution</p>
+
+<p>The solution is pretty simple.  Instead of using controlData.HasSubMenu for the expression by itself, update your Javascript so that you check if the string is “true” or not: controlData.HasSubMenu === “true”.  The line in the refreshUI method should now look like this:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="cm">/* RefreshUI HasSubMenu */</span>
+<span class="nx">jQuery</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">get_hasSubMenu</span><span class="p">()).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">checked</span><span class="dl">"</span><span class="p">,</span> <span class="nx">controlData</span><span class="p">.</span><span class="nx">HasSubMenu</span> <span class="o">===</span> <span class="dl">"</span><span class="s2">true</span><span class="dl">"</span><span class="p">);</span></code></pre></figure>
+
+<p>Now your checkbox will keep it’s value as you would expect.</p>

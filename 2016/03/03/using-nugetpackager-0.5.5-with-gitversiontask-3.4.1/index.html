@@ -1,0 +1,690 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>
+        
+        Using NuGetPackager 0.5.5 with GitVersionTask 3.4.1 &middot; Ben Ramey's Blog
+        
+    </title>
+
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="">
+    <link rel="icon" type="image/png" sizes="32x32" href="">
+    <link rel="icon" type="image/png" sizes="16x16" href="">
+    <link rel="manifest" href="">
+
+    <link rel="alternate" type="application/atom+xml" title="Ben Ramey's Blog" href="/atom.xml">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Using NuGetPackager 0.5.5 with GitVersionTask 3.4.1" />
+<meta name="author" content="Ben Ramey" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A quick fix to use NuGetPackager 0.5.5 with GitVersionTask 3.4.1" />
+<meta property="og:description" content="A quick fix to use NuGetPackager 0.5.5 with GitVersionTask 3.4.1" />
+<link rel="canonical" href="https://www.benramey.com/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/" />
+<meta property="og:url" content="https://www.benramey.com/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/" />
+<meta property="og:site_name" content="Ben Ramey’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2016-03-03T09:04:00-06:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","dateModified":"2016-03-03T09:04:00-06:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.benramey.com/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/"},"url":"https://www.benramey.com/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/","author":{"@type":"Person","name":"Ben Ramey"},"headline":"Using NuGetPackager 0.5.5 with GitVersionTask 3.4.1","description":"A quick fix to use NuGetPackager 0.5.5 with GitVersionTask 3.4.1","datePublished":"2016-03-03T09:04:00-06:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+<body>
+    <header>
+        <div class="container">
+            <div class="d-flex justify-content-between align-item-center">
+                <a href="/" class="d-flex justify-content-start align-items-center mr-2" title="Home">
+                    <img src="https://en.gravatar.com/userimage/738990/32d8e61848233a67f5e02dcc43be0ff8.jpeg"
+                        alt="Gravatar" />
+                    <span class="ml-2">Ben Ramey's Blog</span>
+                </a>
+                <div class="d-none d-sm-flex flex-column justify-content-around ml-2">
+                    <small>Scripture, programming problems, solutions and stories.</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main">
+        <div class="container d-flex justify-content-center">
+            
+            
+            
+            
+            
+            
+            
+            <a href="/archive/">Archive</a>
+            
+            
+            
+            
+            
+            
+            
+            <a href="/categories/">Categories</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <a href="/tags/">Tags</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <article class="post">
+    <h1 class="post-title">Using NuGetPackager 0.5.5 with GitVersionTask 3.4.1</h1>
+    <div class="post-info d-flex justify-content-start">
+        <time datetime="2016-03-03T09:04:00-06:00" class="post-date">03 Mar 2016</time>
+        <nav class="post-tags">
+            
+            <a href="/tags/nuget">#nuget</a>
+            
+            <a href="/tags/git">#git</a>
+            
+        </nav>
+        <nav class="post-categories">
+            <span>posted in:</span>
+            
+            <a href="/categories/programming">programming</a>
+            
+        </nav>
+    </div>
+    <p>I’m using both <a href="https://www.nuget.org/packages/NuGetPackager/">NuGetPackager</a>
+with <a href="https://www.nuget.org/packages/GitVersionTask/">GitVersionTask</a> on
+my project that provides EntityFramework persisters for NServiceBus:
+<a href="https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework">GoodlyFere.NServiceBus.EntityFramework</a>.</p>
+
+<p>NuGetPackager seems to work seamlessly with GitVersionTask 2.0.0.  However,
+GitVersionTask is up to version 3.4.1 and I just hate sitting at a version that
+far behind!</p>
+
+<p>So, I updated my NuGet package to the latest version of GitVersionTask.  That’s
+3.4.1 right now.  Too bad, so sad!  That caused this error:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The "CreatePackages" task was not given a value for the required parameter "Version".	1
+</code></pre></div></div>
+
+<h2 id="the-problem">The Problem</h2>
+<p>The problem turns out that NuGetPackager 0.5.5 is looking for a MSBuild property
+called “GfvNuGetVersion”.  See the code in the .targets file <a href="https://github.com/Particular/NuGetPackager/blob/0.5.6/src/NuGetPackager/NuGetPackager.targets#L5">here</a>.</p>
+
+<p>GitVersionTask 3.4.1 (somewhere in a release since 2.0.0) changed that property
+name to “GitVersion_NuGetVersion”.  See the code <a href="https://github.com/GitTools/GitVersion/blob/master/src/GitVersionTask/NugetAssets/GitVersionTask.targets#L68">here</a>.</p>
+
+<h2 id="the-solution">The Solution</h2>
+<p>So, how to fix this?  NuGetPackager will probably be updated some day, but for
+now you can just translate the property in your .csproj file before the
+CreatePackage task is called in NuGetPackager.</p>
+
+<p>Open up your .csproj file directly in some text editor like Notepad++.  Find
+these two lines at the bottom of the file:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;Import Project="..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"
+        Condition="Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')" /&gt;
+&lt;Import Project="..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"
+        Condition="Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')" /&gt;
+</code></pre></div></div>
+
+<p>Before those two lines, add a target and a property group.  The target will
+create a task that translates the new property to the new property.  The
+property group wil define a BuildDependsOn to call that target before the
+CreatePackages target is called.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;Target Name="TranslateNugetVersion"
+        Condition="'$(Configuration)' == 'Release'"&gt;
+    &lt;CreateProperty
+        Value="$(GitVersion_NuGetVersion)"&gt;
+        &lt;Output
+            TaskParameter="Value"
+            PropertyName="GfvNuGetVersion" /&gt;
+    &lt;/CreateProperty&gt;
+&lt;/Target&gt;
+&lt;PropertyGroup&gt;
+    &lt;BuildDependsOn&gt;
+        $(BuildDependsOn);
+        TranslateNugetVersion
+    &lt;/BuildDependsOn&gt;
+&lt;/PropertyGroup&gt;
+&lt;Import Project="..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"
+        Condition="Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')" /&gt;
+&lt;Import Project="..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"
+        Condition="Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')" /&gt;
+</code></pre></div></div>
+
+<p>Now, when you build your project, everything should work great!</p>
+
+</article>
+
+<!-- Disqus comments -->
+
+<section class="comments">
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://www.benramey.com/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/';
+        this.page.identifier = '/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1';
+        this.page.title = 'Using NuGetPackager 0.5.5 with GitVersionTask 3.4.1';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fishybusiness.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+</section>
+
+
+
+<section class="related">
+    <h2>Related posts</h2>
+    <ul class="related-posts">
+        
+        <li>
+            <a href="/2020/05/12/psalm-130/">
+                Psalm 130
+                <small><time
+                        datetime="2020-05-12T00:00:00-05:00">12 May 2020</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/">
+                I Like Languages That Expect Me To Be a Great Programmer
+                <small><time
+                        datetime="2017-01-20T14:05:00-06:00">20 Jan 2017</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/">
+                Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior
+                <small><time
+                        datetime="2016-08-24T07:37:00-05:00">24 Aug 2016</time></small>
+            </a>
+        </li>
+        
+    </ul>
+    </aside>
+    
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <small>
+                &copy; <time datetime="2020-05-13T09:34:51-05:00">2020</time>. All
+                rights reserved.
+            </small>
+        </div>
+    </footer>
+
+    <script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-1380501-7', 'auto');
+	ga('send', 'pageview');
+</script>
+</body>
+
+</html>

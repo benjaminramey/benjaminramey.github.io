@@ -1,0 +1,634 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>
+        
+        Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button &middot; Ben Ramey's Blog
+        
+    </title>
+
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="">
+    <link rel="icon" type="image/png" sizes="32x32" href="">
+    <link rel="icon" type="image/png" sizes="16x16" href="">
+    <link rel="manifest" href="">
+
+    <link rel="alternate" type="application/atom+xml" title="Ben Ramey's Blog" href="/atom.xml">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button" />
+<meta name="author" content="Ben Ramey" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button" />
+<meta property="og:description" content="Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button" />
+<link rel="canonical" href="https://www.benramey.com/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button/" />
+<meta property="og:url" content="https://www.benramey.com/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button/" />
+<meta property="og:site_name" content="Ben Ramey’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2010-11-02T00:00:00-05:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","dateModified":"2010-11-02T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.benramey.com/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button/"},"url":"https://www.benramey.com/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button/","author":{"@type":"Person","name":"Ben Ramey"},"headline":"Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button","description":"Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button","datePublished":"2010-11-02T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+<body>
+    <header>
+        <div class="container">
+            <div class="d-flex justify-content-between align-item-center">
+                <a href="/" class="d-flex justify-content-start align-items-center mr-2" title="Home">
+                    <img src="https://en.gravatar.com/userimage/738990/32d8e61848233a67f5e02dcc43be0ff8.jpeg"
+                        alt="Gravatar" />
+                    <span class="ml-2">Ben Ramey's Blog</span>
+                </a>
+                <div class="d-none d-sm-flex flex-column justify-content-around ml-2">
+                    <small>Scripture, programming problems, solutions and stories.</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main">
+        <div class="container d-flex justify-content-center">
+            
+            
+            
+            
+            
+            
+            
+            <a href="/archive/">Archive</a>
+            
+            
+            
+            
+            
+            
+            
+            <a href="/categories/">Categories</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <a href="/tags/">Tags</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <article class="post">
+    <h1 class="post-title">Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button</h1>
+    <div class="post-info d-flex justify-content-start">
+        <time datetime="2010-11-02T00:00:00-05:00" class="post-date">02 Nov 2010</time>
+        <nav class="post-tags">
+            
+            <a href="/tags/sharepoint">#sharepoint</a>
+            
+        </nav>
+        <nav class="post-categories">
+            <span>posted in:</span>
+            
+            <a href="/categories/programming">programming</a>
+            
+        </nav>
+    </div>
+    <p>I finally figured out today how to add a button to the Central Admin site’s ribbon for the WebApplicationsList page and have it behave like the other ribbon buttons on this page. The problem wasn’t so much adding the button–that part was easy. The problem was getting the button to behave like the other buttons. That is, getting it to enable and disable when a web application was selected from the list.</p>
+
+<p>It was pretty easy to find the methods for the new SharePoint 2010 javascript API to see if a list item is selected in a list and then make decisions based on that. The SP.UI.ListOperation.Selection methods are great for that. However, the WebApplicationList (http:///_admin/WebApplicationList.aspx) page list in the Central Administration site is not a list and so these methods don’t work.</p>
+
+<p>I had to do some digging in the SharePoint 2010 javacript files to find what I was looking for. I found what I was looking for in the C:\Program Files\Common Files\Microsoft Shared\Web Server Extensions\14\TEMPLATE\LAYOUTS\SP.UI.Admin.debug.js file. This is the debug version of the SP.UI.Admin.js file (so it’s possible to read it) that gets included on these pages. It includes a set of methods beginning with “SP.UI.Admin.WebApplicationPageComponent” that are used for the WebApplicationsList page.</p>
+
+<p>What you want is the SP.UI.Admin.WebApplicationPageComponent.get_selectedItem method. This method returns an object containing information about the selected web application on the page.</p>
+
+<p>Here is my final CustomAction XML for the button that enables the button when a web application is selected from the list and then opens up a dialog window when the button is clicked, passing the web application ID to the page that opens in the dialog box.</p>
+
+</article>
+
+<!-- Disqus comments -->
+
+<section class="comments">
+    <h2>Comments</h2>
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://www.benramey.com/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button/';
+        this.page.identifier = '/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button';
+        this.page.title = 'Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fishybusiness.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+</section>
+
+
+
+<section class="related">
+    <h2>Related posts</h2>
+    <ul class="related-posts">
+        
+        <li>
+            <a href="/2020/05/12/psalm-130/">
+                Psalm 130
+                <small><time
+                        datetime="2020-05-12T00:00:00-05:00">12 May 2020</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/">
+                I Like Languages That Expect Me To Be a Great Programmer
+                <small><time
+                        datetime="2017-01-20T14:05:00-06:00">20 Jan 2017</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/">
+                Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior
+                <small><time
+                        datetime="2016-08-24T07:37:00-05:00">24 Aug 2016</time></small>
+            </a>
+        </li>
+        
+    </ul>
+    </aside>
+    
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <small>
+                &copy; <time datetime="2020-05-13T09:34:51-05:00">2020</time>. All
+                rights reserved.
+            </small>
+        </div>
+    </footer>
+
+    <script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-1380501-7', 'auto');
+	ga('send', 'pageview');
+</script>
+</body>
+
+</html>

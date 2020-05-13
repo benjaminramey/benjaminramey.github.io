@@ -1,8 +1,0 @@
-<p>I find myself often having to sanitize file names and paths because I’m creating files from some kind of user input that I’m unsure about.  I found this handy way of doing this in one line today:</p>
-
-<figure class="highlight"><pre><code class="language-text" data-lang="text">fileName = Path.GetInvalidFileNameChars().Aggregate(fileName, (name, c) =&gt; name.Replace(c, ‘_’));</code></pre></figure>
-
-<p>Note that the same goes for paths. The only thing that changes is the static method you use from Path:</p>
-
-<figure class="highlight"><pre><code class="language-text" data-lang="text">filePath = Path.GetInvalidPathChars().Aggregate(filePath , (name, c) =&gt; name.Replace(c, ‘_’));</code></pre></figure>
-

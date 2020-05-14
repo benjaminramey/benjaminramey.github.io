@@ -553,8 +553,7 @@ far behind!</p>
 <p>So, I updated my NuGet package to the latest version of GitVersionTask.  That’s
 3.4.1 right now.  Too bad, so sad!  That caused this error:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The "CreatePackages" task was not given a value for the required parameter "Version".	1
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">The "CreatePackages" task was not given a value for the required parameter "Version".	1</code></pre></figure>
 
 <h2 id="the-problem">The Problem</h2>
 <p>The problem turns out that NuGetPackager 0.5.5 is looking for a MSBuild property
@@ -668,7 +667,7 @@ CreatePackages target is called.</p>
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T10:25:51-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T10:28:22-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

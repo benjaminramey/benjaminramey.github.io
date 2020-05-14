@@ -4,7 +4,7 @@
  <title>Ben Ramey's Blog</title>
  <link href="/atom.xml" rel="self"/>
  <link href="https://www.benramey.com/"/>
- <updated>2020-05-14T10:19:00-05:00</updated>
+ <updated>2020-05-14T10:25:51-05:00</updated>
  <id>https://www.benramey.com</id>
  <author>
    <name>Ben Ramey</name>
@@ -456,37 +456,35 @@ CreatePackage task is called in NuGetPackager.&lt;/p&gt;
 &lt;p&gt;Open up your .csproj file directly in some text editor like Notepad++.  Find
 these two lines at the bottom of the file:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Import Project=&quot;..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets&quot;
-        Condition=&quot;Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')&quot; /&amp;gt;
-&amp;lt;Import Project=&quot;..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets&quot;
-        Condition=&quot;Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')&quot; /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;Import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Project=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets&quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;Condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;Import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Project=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets&quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;Condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Before those two lines, add a target and a property group.  The target will
 create a task that translates the new property to the new property.  The
 property group wil define a BuildDependsOn to call that target before the
 CreatePackages target is called.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;lt;Target Name=&quot;TranslateNugetVersion&quot;
-        Condition=&quot;'$(Configuration)' == 'Release'&quot;&amp;gt;
-    &amp;lt;CreateProperty
-        Value=&quot;$(GitVersion_NuGetVersion)&quot;&amp;gt;
-        &amp;lt;Output
-            TaskParameter=&quot;Value&quot;
-            PropertyName=&quot;GfvNuGetVersion&quot; /&amp;gt;
-    &amp;lt;/CreateProperty&amp;gt;
-&amp;lt;/Target&amp;gt;
-&amp;lt;PropertyGroup&amp;gt;
-    &amp;lt;BuildDependsOn&amp;gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;Target&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;TranslateNugetVersion&quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;Condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;'$(Configuration)' == 'Release'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;CreateProperty&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;Value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;$(GitVersion_NuGetVersion)&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;nt&quot;&gt;&amp;lt;Output&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;TaskParameter=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Value&quot;&lt;/span&gt;
+            &lt;span class=&quot;na&quot;&gt;PropertyName=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;GfvNuGetVersion&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/CreateProperty&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/Target&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;PropertyGroup&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;BuildDependsOn&amp;gt;&lt;/span&gt;
         $(BuildDependsOn);
         TranslateNugetVersion
-    &amp;lt;/BuildDependsOn&amp;gt;
-&amp;lt;/PropertyGroup&amp;gt;
-&amp;lt;Import Project=&quot;..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets&quot;
-        Condition=&quot;Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')&quot; /&amp;gt;
-&amp;lt;Import Project=&quot;..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets&quot;
-        Condition=&quot;Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')&quot; /&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/BuildDependsOn&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/PropertyGroup&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;Import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Project=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets&quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;Condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;Import&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Project=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets&quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;Condition=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Now, when you build your project, everything should work great!&lt;/p&gt;
 </content>

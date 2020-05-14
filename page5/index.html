@@ -562,37 +562,35 @@ CreatePackage task is called in NuGetPackager.</p>
 <p>Open up your .csproj file directly in some text editor like Notepad++.  Find
 these two lines at the bottom of the file:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;Import Project="..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"
-        Condition="Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')" /&gt;
-&lt;Import Project="..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"
-        Condition="Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')" /&gt;
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"</span>
+        <span class="na">Condition=</span><span class="s">"Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"</span>
+        <span class="na">Condition=</span><span class="s">"Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')"</span> <span class="nt">/&gt;</span></code></pre></figure>
 
 <p>Before those two lines, add a target and a property group.  The target will
 create a task that translates the new property to the new property.  The
 property group wil define a BuildDependsOn to call that target before the
 CreatePackages target is called.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;Target Name="TranslateNugetVersion"
-        Condition="'$(Configuration)' == 'Release'"&gt;
-    &lt;CreateProperty
-        Value="$(GitVersion_NuGetVersion)"&gt;
-        &lt;Output
-            TaskParameter="Value"
-            PropertyName="GfvNuGetVersion" /&gt;
-    &lt;/CreateProperty&gt;
-&lt;/Target&gt;
-&lt;PropertyGroup&gt;
-    &lt;BuildDependsOn&gt;
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;Target</span> <span class="na">Name=</span><span class="s">"TranslateNugetVersion"</span>
+        <span class="na">Condition=</span><span class="s">"'$(Configuration)' == 'Release'"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;CreateProperty</span>
+        <span class="na">Value=</span><span class="s">"$(GitVersion_NuGetVersion)"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;Output</span>
+            <span class="na">TaskParameter=</span><span class="s">"Value"</span>
+            <span class="na">PropertyName=</span><span class="s">"GfvNuGetVersion"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/CreateProperty&gt;</span>
+<span class="nt">&lt;/Target&gt;</span>
+<span class="nt">&lt;PropertyGroup&gt;</span>
+    <span class="nt">&lt;BuildDependsOn&gt;</span>
         $(BuildDependsOn);
         TranslateNugetVersion
-    &lt;/BuildDependsOn&gt;
-&lt;/PropertyGroup&gt;
-&lt;Import Project="..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"
-        Condition="Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')" /&gt;
-&lt;Import Project="..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"
-        Condition="Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')" /&gt;
-</code></pre></div></div>
+    <span class="nt">&lt;/BuildDependsOn&gt;</span>
+<span class="nt">&lt;/PropertyGroup&gt;</span>
+<span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"</span>
+        <span class="na">Condition=</span><span class="s">"Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"</span>
+        <span class="na">Condition=</span><span class="s">"Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')"</span> <span class="nt">/&gt;</span></code></pre></figure>
 
 <p>Now, when you build your project, everything should work great!</p>
 
@@ -615,7 +613,7 @@ CreatePackages target is called.</p>
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T10:19:00-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T10:25:51-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

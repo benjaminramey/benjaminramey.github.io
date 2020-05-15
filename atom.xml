@@ -4,7 +4,7 @@
  <title>Ben Ramey's Blog</title>
  <link href="/atom.xml" rel="self"/>
  <link href="https://www.benramey.com/"/>
- <updated>2020-05-14T10:28:22-05:00</updated>
+ <updated>2020-05-14T20:40:16-05:00</updated>
  <id>https://www.benramey.com</id>
  <author>
    <name>Ben Ramey</name>
@@ -510,14 +510,13 @@ implemented &lt;code class=&quot;highlighter-rouge&quot;&gt;IHandleMessages&amp;
 
 &lt;p&gt;I was testing this with only partial success and so I thought it was working.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public class EventHandler : IHandleMessages&amp;lt;IEvent&amp;gt;
-{
-   public void Handle(IEvent message)
-   {
-     ...
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EventHandler&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IHandleMessages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IEvent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h2 id=&quot;my-partial-success&quot;&gt;My Partial Success&lt;/h2&gt;
 &lt;p&gt;The reason I had partial success was because I was also &lt;em&gt;explicitly&lt;/em&gt; handling
@@ -549,22 +548,20 @@ system produces.&lt;/p&gt;
 
 &lt;p&gt;So, I simply created a marker interface called &lt;code class=&quot;highlighter-rouge&quot;&gt;ICustomEvent&lt;/code&gt;.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public interface ICustomEvent : IEvent { }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;ICustomEvent&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IEvent&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Then, on all of my bus event classes, instead of implementing &lt;code class=&quot;highlighter-rouge&quot;&gt;IEvent&lt;/code&gt; directly,
 I implemented &lt;code class=&quot;highlighter-rouge&quot;&gt;ICustomEvent&lt;/code&gt;.&lt;/p&gt;
 
 &lt;p&gt;My handler then looked like this.&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;public class EventHandler : IHandleMessages&amp;lt;ICustomEvent&amp;gt;
-{
-   public void Handle(ICustomEvent message)
-   {
-     ...
-   }
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;EventHandler&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IHandleMessages&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ICustomEvent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Handle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ICustomEvent&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+     &lt;span class=&quot;p&quot;&gt;...&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Now, the right subscriptions are all set up and my single handler gets
 every single event published by my entire bus.&lt;/p&gt;
@@ -601,11 +598,10 @@ or removing a configuration file.”&lt;/p&gt;
 &lt;p&gt;Oops.  Guess I should have read the documentation more closely the first time around!  The easiest way to
 do this is as follows (start a command prompt as administrator):&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&amp;gt; cd &quot;C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.6.0\sbin&quot;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;&amp;gt; cd &quot;C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.6.0\sbin&quot;
 &amp;gt; .\rabbitmq-service.bat remove
 &amp;gt; .\rabbitmq-service.bat install
-&amp;gt; .\rabbitmq-service.bat start
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&amp;gt; .\rabbitmq-service.bat start&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;p&gt;Of course, The path you cd into will depend on the version of RabbitMQ you have installed.&lt;/p&gt;
 </content>
@@ -688,8 +684,7 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
 
 &lt;p&gt;I tried several methods I found online. Most of them were based on creating my own custom RoleProvider and querying AD to iterate through the user’s groups (treating them like roles) and seeing if one of them matched my AD group I was looking for. However, I could never get it to work. Each code example I found eventually gave me this AD error when I iterated through the current user’s AD groups:&lt;/p&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The specified directory service attribute or value does not exist.
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;The specified directory service attribute or value does not exist.&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
 &lt;h2 id=&quot;the-solution&quot;&gt;The Solution&lt;/h2&gt;
 
@@ -894,17 +889,17 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
   &lt;p&gt;[9/25/14 update] See Hardy’s comments below for necessary updates to my steps when using Sitefinity 7.1 and up.  Thanks, Hardy!&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;##Scenario&lt;/p&gt;
+&lt;h2 id=&quot;scenario&quot;&gt;Scenario&lt;/h2&gt;
 
 &lt;p&gt;I am designing a fairly simple widget in Sitefinity (version 6.2, but this probably applies to other versions as well) that will display a simple FAQ list.  The FAQ list has two major parts: 1) a “table of contents” type ordered-list at the top that lists each question and links to the answer further down the page, and 2) the list of questions with the answers below them.&lt;/p&gt;
 
-&lt;p&gt;##Approach&lt;/p&gt;
+&lt;h2 id=&quot;approach&quot;&gt;Approach&lt;/h2&gt;
 
 &lt;p&gt;I wanted to create a simple Sitefinity list that would contain the FAQ content (questions and answers).  The default fields for a Sitefinity list are Title and Content which are really all I needed to collect a Question and Answer for a FAQ item.&lt;/p&gt;
 
 &lt;p&gt;So, my widget, after being placed on a page, would only need to allow a content author to simply select the FAQ list they had created earlier.  The widget would then find the list, collect the items in the list and display them.&lt;/p&gt;
 
-&lt;p&gt;##Solution&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
 
 &lt;p&gt;My solution would involved a widget designer control and a customized FlatSelector field.  Here’s an overview with details below.&lt;/p&gt;
 
@@ -918,24 +913,24 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
   &lt;li&gt;Update the widget designer Javascript to choose the list ID&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;###Details
-For some reason, Sitefinity widget designer documentation is really hard for me to find.  Maybe I’m the only one.  Maybe Sitefinity needs to put some more dollars toward good documentation!  Anyway, after some searching and some trial and error, I found this page giving me an idea of how I should accomplish what I was trying to do: &lt;a href=&quot;http://www.sitefinity.com/documentation/documentationarticles/change-your-dynamic-content-selector-to-choose-from-generic-content&quot;&gt;Sitefinity article&lt;/a&gt;&lt;/p&gt;
+&lt;h3 id=&quot;details&quot;&gt;Details&lt;/h3&gt;
+&lt;p&gt;For some reason, Sitefinity widget designer documentation is really hard for me to find.  Maybe I’m the only one.  Maybe Sitefinity needs to put some more dollars toward good documentation!  Anyway, after some searching and some trial and error, I found this page giving me an idea of how I should accomplish what I was trying to do: &lt;a href=&quot;http://www.sitefinity.com/documentation/documentationarticles/change-your-dynamic-content-selector-to-choose-from-generic-content&quot;&gt;Sitefinity article&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;To summarize, it tells you how to create a widget designer with Sitefinity Thunder and then change the generated control to point to some of the generic content types (like Lists).  However, it didn’t have all the details I needed.  I had to troubleshoot and that’s why I’m writing this post.&lt;/p&gt;
 
-&lt;p&gt;####Step 1: Create the Widget
-Below are the details for how I setup my MVC widget.  Translate the various tasks for the same effect if you prefer a WebForms widget.&lt;/p&gt;
+&lt;h4 id=&quot;step-1-create-the-widget&quot;&gt;Step 1: Create the Widget&lt;/h4&gt;
+&lt;p&gt;Below are the details for how I setup my MVC widget.  Translate the various tasks for the same effect if you prefer a WebForms widget.&lt;/p&gt;
 
 &lt;p&gt;Using Sitefinity Thunder, create your widget.  Don’t create the designer at this time.  I like using MVC widgets but there’s no reason this won’t work with a WebForms widget.  I called my widget “FAQList”.&lt;/p&gt;
 
-&lt;p&gt;#####Step 1.1: Update controller properties
-Remove whatever properties Thunder automatically adds on the MVC controller and add your own List property of type Guid.&lt;/p&gt;
+&lt;h5 id=&quot;step-11-update-controller-properties&quot;&gt;Step 1.1: Update controller properties&lt;/h5&gt;
+&lt;p&gt;Remove whatever properties Thunder automatically adds on the MVC controller and add your own List property of type Guid.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Category&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Widget Properties&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)]&lt;/span&gt;
 &lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Guid&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;List&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;#####Step 1.2: Update widget view model
-I added a simple POCO to describe each FAQ item (containing a question and answer) and then added a list of these POCOs as the only property on my view model.&lt;/p&gt;
+&lt;h5 id=&quot;step-12-update-widget-view-model&quot;&gt;Step 1.2: Update widget view model&lt;/h5&gt;
+&lt;p&gt;I added a simple POCO to describe each FAQ item (containing a question and answer) and then added a list of these POCOs as the only property on my view model.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;FAQListModel&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -948,8 +943,8 @@ I added a simple POCO to describe each FAQ item (containing a question and answe
 	&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Question&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;set&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;#####Step 1.3: Update Index action
-Update the Index action to use the List property to access the content-author-chosen list, pull the items and stick them in the model.&lt;/p&gt;
+&lt;h5 id=&quot;step-13-update-index-action&quot;&gt;Step 1.3: Update Index action&lt;/h5&gt;
+&lt;p&gt;Update the Index action to use the List property to access the content-author-chosen list, pull the items and stick them in the model.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;k&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ActionResult&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Index&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
@@ -973,41 +968,41 @@ Update the Index action to use the List property to access the content-author-ch
 	&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;View&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Default&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;model&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
 &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;####Step 2: Create widget designer/public
-Once your widget is created, you can create your widget designer.  Using Thunder, create a widget designer for an existing widget. Name your widget designer.  I use the name of the widget and append “Designer”.&lt;/p&gt;
+&lt;h4 id=&quot;step-2-create-widget-designerpublic&quot;&gt;Step 2: Create widget designer/public&lt;/h4&gt;
+&lt;p&gt;Once your widget is created, you can create your widget designer.  Using Thunder, create a widget designer for an existing widget. Name your widget designer.  I use the name of the widget and append “Designer”.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-naming.png&quot; alt=&quot;FAQItemDesigner widget designer naming&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-naming.png&quot; alt=&quot;FAQItemDesigner widget designer naming&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Click “Next” on the next screen. Choose your FAQItemController from the list on the next screen.&lt;/p&gt;
 
-&lt;p&gt;#####Step 2.1: Choose widget designer fields
-Next, choose the List property from your controller and set it up as follows.  Especially note two things.  First, choose the DynamicContentSelector.  Second, update the “Select the content type for the selector” to ‘Telerik.Sitefinity.Lists.Model.List’.  Click on “Add”.&lt;/p&gt;
+&lt;h5 id=&quot;step-21-choose-widget-designer-fields&quot;&gt;Step 2.1: Choose widget designer fields&lt;/h5&gt;
+&lt;p&gt;Next, choose the List property from your controller and set it up as follows.  Especially note two things.  First, choose the DynamicContentSelector.  Second, update the “Select the content type for the selector” to ‘Telerik.Sitefinity.Lists.Model.List’.  Click on “Add”.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-fields1.png&quot; alt=&quot;Create a widget designer&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-fields1.png&quot; alt=&quot;Create a widget designer&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;#####Step 2.2: Update generated widget designer files
-In the generated .ascx file, update the ‘ServiceUrl’ property on the FlatSelector control to ‘/Sitefinity/Services/Lists/ListService.svc/?managerType=&amp;amp;providerName=&amp;amp;itemType=Telerik.Sitefinity.Lists.Model.List&amp;amp;provider=&amp;amp;sortExpression=LastModified%20DESC&amp;amp;skip=0&amp;amp;take=50’.&lt;/p&gt;
+&lt;h5 id=&quot;step-22-update-generated-widget-designer-files&quot;&gt;Step 2.2: Update generated widget designer files&lt;/h5&gt;
+&lt;p&gt;In the generated .ascx file, update the ‘ServiceUrl’ property on the FlatSelector control to ‘/Sitefinity/Services/Lists/ListService.svc/?managerType=&amp;amp;providerName=&amp;amp;itemType=Telerik.Sitefinity.Lists.Model.List&amp;amp;provider=&amp;amp;sortExpression=LastModified%20DESC&amp;amp;skip=0&amp;amp;take=50’.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png&quot; alt=&quot;Service URL 1&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png&quot; alt=&quot;Service URL 1&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;In the generated .cs file, remove line 135 that sets the ConstantFilter property to ‘Visible=true’.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-removeline135.png&quot; alt=&quot;FAQItemDesigner remove line 135&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-removeline135.png&quot; alt=&quot;FAQItemDesigner remove line 135&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Finally, in the generated .js file, change the property that is used as the value of the selected list from ‘OriginalContentId’ to ‘Id’.  This code can be found in the ‘_ListDoneSelecting’ method.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-changejsfile.png&quot; alt=&quot;FAQItemDesigner update js file&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-changejsfile.png&quot; alt=&quot;FAQItemDesigner update js file&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;At this point, you should be done!  Build your project, plop your new widget on a page and test it out!  Here’s what mine looks like.&lt;/p&gt;
 
 &lt;p&gt;The edit dialog:
-&lt;img src=&quot;/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-editscreen.png&quot; alt=&quot;FAQItemDesigner edit screen&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-editscreen.png&quot; alt=&quot;FAQItemDesigner edit screen&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The list select screen:
-&lt;img src=&quot;/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectscreen.png&quot; alt=&quot;FAQItemDesigner select screen&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectscreen.png&quot; alt=&quot;FAQItemDesigner select screen&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The selected item screen:
-&lt;img src=&quot;/public/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectedscreen.png&quot; alt=&quot;FAQItemDesigner selected screen&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectedscreen.png&quot; alt=&quot;FAQItemDesigner selected screen&quot; /&gt;&lt;/p&gt;
 
 </content>
  </entry>
@@ -1762,7 +1757,7 @@ It took me about 13 hours of research to figure out what to do and then just abo
 
 &lt;p&gt;When you create a search index in Sitefinity’s back-end, you can add a comma-separated list of extra fields to index. Sitefinity indexes a standard set (like Title). But, if you create custom dynamic modules with other fields you want to index you have to add them in this Additional Fields box. Here here:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/2012-10-19-indexing-taxonomy-fields-for-search-in-sitefinity-51/addtionalfields.png&quot; alt=&quot;Additional Fields&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/2012-10-19-indexing-taxonomy-fields-for-search-in-sitefinity-51/addtionalfields.png&quot; alt=&quot;Additional Fields&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Looking through the de-compiled code for Sitefinity’s SearchModule, I found that it registered a special outbound pipe that updates the Lucene indexes (not directly, but through Sitefinity’s abstraction, it appears) when you publish an item. It also registered various Translator classes with PipeTranslatorFactory.RegisterTranslator. Digging through the code in that SearchIndexOutboundPipe and the various translator classes it registered, I finally found that when the SearchIndexOutboundPipe runs, it reads that comma-separated list of additional fields from your index and ties them to the ConcatenationTranslator through some type of mapping. It looked like these translators were being used by the SearchModule to translate content values into index-able values for the Lucene indexing system.&lt;/p&gt;
 
@@ -2131,7 +2126,7 @@ The next section you need is the system.webServer/httpErrors section. I never kn
 &lt;p&gt;##Problem
 My problem was this: how do I retrieve the available options for a Choices field in a dynamic module (built with the Module Builder). Honestly, I’m not sure it really matters. That is, I don’t think Sitefinity validates the value of a Choices field against what is technically a “valid” option. I think I read somewhere that it can store any option. However, I wanted to present a drop-down to users that had values that were essentially controlled by the available choices for this field. Here’s the dialog I’m talking about:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/2012-10-05-retrieve-dynamic-module-choice-field-value-options-in-sitefinity/choices_dialog.png&quot; alt=&quot;Choices field choice options&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/2012-10-05-retrieve-dynamic-module-choice-field-value-options-in-sitefinity/choices_dialog.png&quot; alt=&quot;Choices field choice options&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;##Solution
 Finding a way to retrieve this options through the Sitefinity API (which, in all other respects I’ve investigated so far is really good) was impossible. I started decompiling Sitefinity DLLs to see how it was done and still didn’t really get anywhere. All I could see was the choices being picked up from a config file.&lt;/p&gt;
@@ -2476,15 +2471,15 @@ The solution is easy enough.  Just add some validation to the field that will �
 &lt;ol&gt;
   &lt;li&gt;
     &lt;p&gt;Open up the template in the tree navigation and click on the MultiList field you want to limit
-&lt;img src=&quot;/public/images/2012-06-12-limit-selected-items-on-sitecore-multilist-field/sitecore_template_property_nav.png&quot; alt=&quot;sitecore_template_property_nav&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/images/2012-06-12-limit-selected-items-on-sitecore-multilist-field/sitecore_template_property_nav.png&quot; alt=&quot;sitecore_template_property_nav&quot; /&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Scroll down to the Validation field and enter this: ^({[^}]+}|?){0,5}$.  This regular expression simply makes sure you have between 0 and 5 GUIDs in the value of the MultiList, effectively limiting the number of items you select in the list.  The {0,5} is the range.  So, change the 0 to limit the lower bound and change the 5 to limit the upper bound.
-&lt;img src=&quot;/public/images/2012-06-12-limit-selected-items-on-sitecore-multilist-field/sitecore_template_validation_field.png&quot; alt=&quot;sitecore_template_validation_field&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/images/2012-06-12-limit-selected-items-on-sitecore-multilist-field/sitecore_template_validation_field.png&quot; alt=&quot;sitecore_template_validation_field&quot; /&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
     &lt;p&gt;Enter an appropriate message that explains why the validation failed in the ValidationText field.
-&lt;img src=&quot;/public/images/2012-06-12-limit-selected-items-on-sitecore-multilist-field/sitecore_template_validationtext_field.png&quot; alt=&quot;sitecore_template_validationtext_field&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;/assets/images/2012-06-12-limit-selected-items-on-sitecore-multilist-field/sitecore_template_validationtext_field.png&quot; alt=&quot;sitecore_template_validationtext_field&quot; /&gt;&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
 </content>
@@ -2521,11 +2516,11 @@ The solution is easy enough.  Just add some validation to the field that will �
 
 &lt;p&gt;The first step, of course, is to find an icon.  There are billions of free ones out there on the web.  This is mine.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/2012-03-15-change-the-color-of-an-icon-with-gimp/icon-phone-blue.png&quot; alt=&quot;Blue phone icon&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/2012-03-15-change-the-color-of-an-icon-with-gimp/icon-phone-blue.png&quot; alt=&quot;Blue phone icon&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;I love it.  It’s just what I need–but what a terrible color!  I need something else.  It’s a PNG and when I open it in Gimp, here’s what it looks like.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/2012-03-15-change-the-color-of-an-icon-with-gimp/original_in_gimp-300x236.png&quot; alt=&quot;Original in Gimp&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/2012-03-15-change-the-color-of-an-icon-with-gimp/original_in_gimp-300x236.png&quot; alt=&quot;Original in Gimp&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You can see the edges have been blended into a white background which would work great if I only ever put it on a white background.  Well, I just might be doing that, but I’m too much of a perfectionist to use it like that.  So, let’s get to work.&lt;/p&gt;
 
@@ -2533,7 +2528,7 @@ The solution is easy enough.  Just add some validation to the field that will �
 
 &lt;p&gt;Add a new layer to the image by selecting Layer &amp;gt; New Layer.  Call it “color”.  Make sure it’s on top of the “Background” layer.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/2012-03-15-change-the-color-of-an-icon-with-gimp/color_layer-149x300.png&quot; alt=&quot;Adding a color layer&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/2012-03-15-change-the-color-of-an-icon-with-gimp/color_layer-149x300.png&quot; alt=&quot;Adding a color layer&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Fill this new layer with the color you want to change the icon to.  I’m using this lovely puke color (not my choice!): #afbd0a.&lt;/p&gt;
 
@@ -2545,17 +2540,17 @@ The solution is easy enough.  Just add some validation to the field that will �
 
 &lt;p&gt;Now, invert the image by selecting  Colors &amp;gt; Invert.  Next, create another layer called “mask” and fill it with black.  Move this layer below the “Background” layer.  Your layers should look like the image below.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/2012-03-15-change-the-color-of-an-icon-with-gimp/mask_layer-209x300.png&quot; alt=&quot;Creating the mask layer&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/2012-03-15-change-the-color-of-an-icon-with-gimp/mask_layer-209x300.png&quot; alt=&quot;Creating the mask layer&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Right-click on the “Background” layer and select “Merge down”.  Now you should have something similar to the image below.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/2012-03-15-change-the-color-of-an-icon-with-gimp/after_merge_down-300x156.png&quot; alt=&quot;After merging down&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/2012-03-15-change-the-color-of-an-icon-with-gimp/after_merge_down-300x156.png&quot; alt=&quot;After merging down&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;4-adjust-the-curves&quot;&gt;4. Adjust the curves&lt;/h2&gt;
 
 &lt;p&gt;Now, with the “mask” layer selected, select Colors &amp;gt; Curves.  In the dialog, drag the very middle of the line straight up to the top-center of the graph.  Gimp should look like the screenshot below.  Click “OK”.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/2012-03-15-change-the-color-of-an-icon-with-gimp/curves-300x189.png&quot; alt=&quot;Adjusting the curves&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/2012-03-15-change-the-color-of-an-icon-with-gimp/curves-300x189.png&quot; alt=&quot;Adjusting the curves&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;5-create-a-layer-mask-on-the-color-layer&quot;&gt;5. Create a layer mask on the “color” layer&lt;/h2&gt;
 
@@ -2569,7 +2564,7 @@ The solution is easy enough.  Just add some validation to the field that will �
 
 &lt;p&gt;Now hide your “mask” layer and show your “color” layer.  Perfect!&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/public/images/2012-03-15-change-the-color-of-an-icon-with-gimp/done-300x163.png&quot; alt=&quot;Completed image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/assets/images/2012-03-15-change-the-color-of-an-icon-with-gimp/done-300x163.png&quot; alt=&quot;Completed image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;You now have a new icon with a completely different color, but with the nice blending at the edges and perfect shape of the original icon.  Don’t believe me?  Well, test it!  Select your “mask” layer and delete everything on it.  Fill it with any background color you want and see how it looks.  Make sure to show your “mask” layer again by click on the eye button.&lt;/p&gt;
 

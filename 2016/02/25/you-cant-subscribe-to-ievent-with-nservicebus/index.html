@@ -557,14 +557,13 @@ implemented <code class="highlighter-rouge">IHandleMessages&lt;IEvent&gt;</code>
 
 <p>I was testing this with only partial success and so I thought it was working.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class EventHandler : IHandleMessages&lt;IEvent&gt;
-{
-   public void Handle(IEvent message)
-   {
-     ...
-   }
-}
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">EventHandler</span> <span class="p">:</span> <span class="n">IHandleMessages</span><span class="p">&lt;</span><span class="n">IEvent</span><span class="p">&gt;</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">void</span> <span class="nf">Handle</span><span class="p">(</span><span class="n">IEvent</span> <span class="n">message</span><span class="p">)</span>
+   <span class="p">{</span>
+     <span class="p">...</span>
+   <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
 <h2 id="my-partial-success">My Partial Success</h2>
 <p>The reason I had partial success was because I was also <em>explicitly</em> handling
@@ -596,22 +595,20 @@ system produces.</p>
 
 <p>So, I simply created a marker interface called <code class="highlighter-rouge">ICustomEvent</code>.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public interface ICustomEvent : IEvent { }
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">interface</span> <span class="nc">ICustomEvent</span> <span class="p">:</span> <span class="n">IEvent</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
 
 <p>Then, on all of my bus event classes, instead of implementing <code class="highlighter-rouge">IEvent</code> directly,
 I implemented <code class="highlighter-rouge">ICustomEvent</code>.</p>
 
 <p>My handler then looked like this.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public class EventHandler : IHandleMessages&lt;ICustomEvent&gt;
-{
-   public void Handle(ICustomEvent message)
-   {
-     ...
-   }
-}
-</code></pre></div></div>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">EventHandler</span> <span class="p">:</span> <span class="n">IHandleMessages</span><span class="p">&lt;</span><span class="n">ICustomEvent</span><span class="p">&gt;</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">void</span> <span class="nf">Handle</span><span class="p">(</span><span class="n">ICustomEvent</span> <span class="n">message</span><span class="p">)</span>
+   <span class="p">{</span>
+     <span class="p">...</span>
+   <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
 <p>Now, the right subscriptions are all set up and my single handler gets
 every single event published by my entire bus.</p>
@@ -681,7 +678,7 @@ every single event published by my entire bus.</p>
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T10:28:22-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T20:40:16-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

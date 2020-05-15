@@ -532,8 +532,8 @@
 
         <time datetime="2013-03-15T00:00:00-05:00" class="post-date">15 Mar 2013</time>
 
-        <p>##Problem
-I’m currently working on a project to import data into an existing Ektron 8.5 SP3 installation. It is pulling existing product data from a database, transforming it into the smart form XML we need and then shoving that data into the Ektron installation.  In addition to creating content items, the import tool also updates metadata and taxonomy fields.</p>
+        <h2 id="problem">Problem</h2>
+<p>I’m currently working on a project to import data into an existing Ektron 8.5 SP3 installation. It is pulling existing product data from a database, transforming it into the smart form XML we need and then shoving that data into the Ektron installation.  In addition to creating content items, the import tool also updates metadata and taxonomy fields.</p>
 
 <p>The update the taxonomy fields, I use the TaxonomyManager to get the taxonomy by name, then set the taxonomy IDs on TaxonomyItemData objects.  This import tool isn’t running inside of an Ektron installation–it’s a standalone tool–so it takes advantage of Ektron 8.5’s 3-tier setup.  This means the TaxonomyManager calls are going over the wire via the WCF services.</p>
 
@@ -541,8 +541,8 @@ I’m currently working on a project to import data into an existing Ektron 8.5 
 
 <p>This was pretty confusing to me because I couldn’t believe that Ektron would release a major version like 8.5, touting their 3-tier capabilities, without having tested one of the major content managers liket he TaxonomyManager.</p>
 
-<p>##Solution
-Whatever the case may be, I started snooping around on the net for others having experienced this issue.  As usual though (also a mystery), I couldn’t find any info on it.  Why does there seem to be so little content on the net about Ektron??</p>
+<h2 id="solution">Solution</h2>
+<p>Whatever the case may be, I started snooping around on the net for others having experienced this issue.  As usual though (also a mystery), I couldn’t find any info on it.  Why does there seem to be so little content on the net about Ektron??</p>
 
 <p>I started snooping around with decompiling the Ektron.Cms.ObjectFactory DLL code where the ITaxonomyManager interface is defined.  Everything looked good–it had the same-named methods, but was using the OperationContract attribute which lets you define the action name.  The two GetList actions were defined with different names, so something wasn’t matching up with the error I was seeing in my import project.  You can see that the two GetList methods have different Action values, making it OK for WCF.</p>
 
@@ -583,7 +583,7 @@ Whatever the case may be, I started snooping around on the net for others having
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

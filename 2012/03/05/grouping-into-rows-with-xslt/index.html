@@ -611,8 +611,8 @@
 
 <p>Easy as pie! To change the number of pods in a row, update all of the “position() mod 3″s by replacing 3 with however many pods you want in a row. Then also make sure to update the xsl:apply-templates select attribute inside PodRow to be “position() &lt; n-1″ where n is the number of Pods in a row.</p>
 
-<p>##Identifying the last cell of every row
-I needed another feature from my XSLT though. I needed every last pod in each row to have a special CSS class. This meant determining which pod was the last one in each row whether the row was full or not. This made the XSLT significantly more complicated, but not overwhelmingly so.</p>
+<h2 id="identifying-the-last-cell-of-every-row">Identifying the last cell of every row</h2>
+<p>I needed another feature from my XSLT though. I needed every last pod in each row to have a special CSS class. This meant determining which pod was the last one in each row whether the row was full or not. This made the XSLT significantly more complicated, but not overwhelmingly so.</p>
 
 <p>I needed my HTML to look like this (notice the additional “last” class):</p>
 
@@ -755,7 +755,7 @@ I needed another feature from my XSLT though. I needed every last pod in each ro
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

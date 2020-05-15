@@ -539,15 +539,15 @@
             
         </nav>
     </div>
-    <p>##Problem
-Today I nearly tore my hair out trying to get set the selected items (having a list of GUIDs) on the PagesSelector control in Sitefinity through the Javascript API to the control.</p>
+    <h2 id="problem">Problem</h2>
+<p>Today I nearly tore my hair out trying to get set the selected items (having a list of GUIDs) on the PagesSelector control in Sitefinity through the Javascript API to the control.</p>
 
 <p>You are supposed to be able to use the set_selectedItemIds method to do this, but it doesn’t work. Nothing happens after you call this method.</p>
 
 <p>After doing some debugging through Sitefinity’s javascript, I found a bug which, when fixed, causes the set_selectedItemIds method to work as expected.</p>
 
-<p>##Solution
-I am using a WidgetDesigner in which I have the PagesSelector control. My goal is pretty simple: I want the content editors to be able to select a set of pages for which to show links in the footer of their website. When they edit the footer widget, the PagesSelector should show up, let them choose pages (showing the currently selected ones) and let them save those selections.</p>
+<h2 id="solution">Solution</h2>
+<p>I am using a WidgetDesigner in which I have the PagesSelector control. My goal is pretty simple: I want the content editors to be able to select a set of pages for which to show links in the footer of their website. When they edit the footer widget, the PagesSelector should show up, let them choose pages (showing the currently selected ones) and let them save those selections.</p>
 
 <p>Everything works fine. Except, once I save a selection in the PagesSelector, on subsequent edits, the currently selected items would not show up, as described above.</p>
 
@@ -706,7 +706,7 @@ I am using a WidgetDesigner in which I have the PagesSelector control. My goal i
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

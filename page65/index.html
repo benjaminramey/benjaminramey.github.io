@@ -532,11 +532,11 @@
 
         <time datetime="2010-12-10T00:00:00-06:00" class="post-date">10 Dec 2010</time>
 
-        <p>##Problem
-Despite everything looking OK (no duplicate SPWebConfigModifications for your web application), your SPWebConfigModifications are adding duplicate elements to your web.config file.</p>
+        <h2 id="problem">Problem</h2>
+<p>Despite everything looking OK (no duplicate SPWebConfigModifications for your web application), your SPWebConfigModifications are adding duplicate elements to your web.config file.</p>
 
-<p>##Solution (at least one possible one)
-I ran into this problem today and discovered that in the Name property of the SPWebConfigModification I was not wrapping an attribute value in single quotes.  Since the actual Value property of the SPWebConfigModification had quotes around the attribute value, whenever the SPWebConfigModification was applied, it could not find the existing element and therefore would add a second, duplicate element.</p>
+<h2 id="solution-at-least-one-possible-one">Solution (at least one possible one)</h2>
+<p>I ran into this problem today and discovered that in the Name property of the SPWebConfigModification I was not wrapping an attribute value in single quotes.  Since the actual Value property of the SPWebConfigModification had quotes around the attribute value, whenever the SPWebConfigModification was applied, it could not find the existing element and therefore would add a second, duplicate element.</p>
 
 <p>In other words, this is wrong for the SPWebConfigModification Name: “add[@name=valueOfAttribute]“.</p>
 
@@ -561,7 +561,7 @@ I ran into this problem today and discovered that in the Name property of the SP
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

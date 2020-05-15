@@ -4,7 +4,7 @@
  <title>Ben Ramey's Blog</title>
  <link href="/atom.xml" rel="self"/>
  <link href="https://www.benramey.com/"/>
- <updated>2020-05-14T20:47:05-05:00</updated>
+ <updated>2020-05-14T21:16:11-05:00</updated>
  <id>https://www.benramey.com</id>
  <author>
    <name>Ben Ramey</name>
@@ -1451,8 +1451,8 @@ After some further issues I encountered (unrelated to the OWSSVR.dll error, but 
    <link href="https://www.benramey.com/2013/03/15/taxonomymanager-wcf-error-in-ektron-8-5-3-tier-setup/"/>
    <updated>2013-03-15T00:00:00-05:00</updated>
    <id>https://www.benramey.com/2013/03/15/taxonomymanager-wcf-error-in-ektron-8-5-3-tier-setup</id>
-   <content type="html">&lt;p&gt;##Problem
-I’m currently working on a project to import data into an existing Ektron 8.5 SP3 installation. It is pulling existing product data from a database, transforming it into the smart form XML we need and then shoving that data into the Ektron installation.  In addition to creating content items, the import tool also updates metadata and taxonomy fields.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;I’m currently working on a project to import data into an existing Ektron 8.5 SP3 installation. It is pulling existing product data from a database, transforming it into the smart form XML we need and then shoving that data into the Ektron installation.  In addition to creating content items, the import tool also updates metadata and taxonomy fields.&lt;/p&gt;
 
 &lt;p&gt;The update the taxonomy fields, I use the TaxonomyManager to get the taxonomy by name, then set the taxonomy IDs on TaxonomyItemData objects.  This import tool isn’t running inside of an Ektron installation–it’s a standalone tool–so it takes advantage of Ektron 8.5’s 3-tier setup.  This means the TaxonomyManager calls are going over the wire via the WCF services.&lt;/p&gt;
 
@@ -1460,8 +1460,8 @@ I’m currently working on a project to import data into an existing Ektron 8.5 
 
 &lt;p&gt;This was pretty confusing to me because I couldn’t believe that Ektron would release a major version like 8.5, touting their 3-tier capabilities, without having tested one of the major content managers liket he TaxonomyManager.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-Whatever the case may be, I started snooping around on the net for others having experienced this issue.  As usual though (also a mystery), I couldn’t find any info on it.  Why does there seem to be so little content on the net about Ektron??&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;Whatever the case may be, I started snooping around on the net for others having experienced this issue.  As usual though (also a mystery), I couldn’t find any info on it.  Why does there seem to be so little content on the net about Ektron??&lt;/p&gt;
 
 &lt;p&gt;I started snooping around with decompiling the Ektron.Cms.ObjectFactory DLL code where the ITaxonomyManager interface is defined.  Everything looked good–it had the same-named methods, but was using the OperationContract attribute which lets you define the action name.  The two GetList actions were defined with different names, so something wasn’t matching up with the error I was seeing in my import project.  You can see that the two GetList methods have different Action values, making it OK for WCF.&lt;/p&gt;
 
@@ -1492,7 +1492,7 @@ Whatever the case may be, I started snooping around on the net for others having
    <id>https://www.benramey.com/2013/03/15/ektron-paths</id>
    <content type="html">&lt;p&gt;For future reference, here is how you have to construct paths for finding Ektron content items, folders and taxonomy items.&lt;/p&gt;
 
-&lt;p&gt;##FolderManager and ContentManager&lt;/p&gt;
+&lt;h2 id=&quot;foldermanager-and-contentmanager&quot;&gt;FolderManager and ContentManager&lt;/h2&gt;
 
 &lt;p&gt;Use forward slashes (/)
 Do NOT include an initial slash
@@ -1511,7 +1511,7 @@ Given this code:&lt;/p&gt;
 
 &lt;p&gt;Then the “folderPath” variable needs to be in this format: “folderName1/folderName2/”.  The same would apply for finding all the content in a folder via the contents’ path.&lt;/p&gt;
 
-&lt;p&gt;##TaxonomyManager&lt;/p&gt;
+&lt;h2 id=&quot;taxonomymanager&quot;&gt;TaxonomyManager&lt;/h2&gt;
 
 &lt;p&gt;Use backslashes ()
 DO use an initial slash
@@ -1640,15 +1640,15 @@ NuGet: &lt;a href=&quot;http://nuget.org/packages/GoodlyFere.Ektron.Linq&quot;&g
    <link href="https://www.benramey.com/2012/10/25/setting-selected-items-on-sitefinity-5-1-pagesselector-in-javascript/"/>
    <updated>2012-10-25T00:00:00-05:00</updated>
    <id>https://www.benramey.com/2012/10/25/setting-selected-items-on-sitefinity-5-1-pagesselector-in-javascript</id>
-   <content type="html">&lt;p&gt;##Problem
-Today I nearly tore my hair out trying to get set the selected items (having a list of GUIDs) on the PagesSelector control in Sitefinity through the Javascript API to the control.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;Today I nearly tore my hair out trying to get set the selected items (having a list of GUIDs) on the PagesSelector control in Sitefinity through the Javascript API to the control.&lt;/p&gt;
 
 &lt;p&gt;You are supposed to be able to use the set_selectedItemIds method to do this, but it doesn’t work. Nothing happens after you call this method.&lt;/p&gt;
 
 &lt;p&gt;After doing some debugging through Sitefinity’s javascript, I found a bug which, when fixed, causes the set_selectedItemIds method to work as expected.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-I am using a WidgetDesigner in which I have the PagesSelector control. My goal is pretty simple: I want the content editors to be able to select a set of pages for which to show links in the footer of their website. When they edit the footer widget, the PagesSelector should show up, let them choose pages (showing the currently selected ones) and let them save those selections.&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;I am using a WidgetDesigner in which I have the PagesSelector control. My goal is pretty simple: I want the content editors to be able to select a set of pages for which to show links in the footer of their website. When they edit the footer widget, the PagesSelector should show up, let them choose pages (showing the currently selected ones) and let them save those selections.&lt;/p&gt;
 
 &lt;p&gt;Everything works fine. Except, once I save a selection in the PagesSelector, on subsequent edits, the currently selected items would not show up, as described above.&lt;/p&gt;
 
@@ -1749,13 +1749,13 @@ I am using a WidgetDesigner in which I have the PagesSelector control. My goal i
    <link href="https://www.benramey.com/2012/10/19/indexing-taxonomy-fields-for-search-in-sitefinity-51/"/>
    <updated>2012-10-19T00:00:00-05:00</updated>
    <id>https://www.benramey.com/2012/10/19/indexing-taxonomy-fields-for-search-in-sitefinity-51</id>
-   <content type="html">&lt;p&gt;##Problem
-We recently ran into a rather surprising issue with a Sitefinity 5.1 installation. We wanted a pretty simple feature: when searching and using Lucene, we wanted the values of any taxonomy fields to be indexed with Sitefinity’s Lucene back-end so that items could be searched by their attached taxonomy. This is apparently impossible with the basic installation because you can only search short text and long text fields.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;We recently ran into a rather surprising issue with a Sitefinity 5.1 installation. We wanted a pretty simple feature: when searching and using Lucene, we wanted the values of any taxonomy fields to be indexed with Sitefinity’s Lucene back-end so that items could be searched by their attached taxonomy. This is apparently impossible with the basic installation because you can only search short text and long text fields.&lt;/p&gt;
 
 &lt;p&gt;So, I began on a quest to implement this somehow and ran into another wall: the Sitefinity documentation on their search API is horrendously non-existent. We mostly had to rely on forum posts and decompiling Telerik assemblies to see how stuff worked. But, this did eventually lead to a solid solution.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-It took me about 13 hours of research to figure out what to do and then just about an hour to actually implement. So, the good news is that it’s a pretty simple solution!&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;It took me about 13 hours of research to figure out what to do and then just about an hour to actually implement. So, the good news is that it’s a pretty simple solution!&lt;/p&gt;
 
 &lt;p&gt;When you create a search index in Sitefinity’s back-end, you can add a comma-separated list of extra fields to index. Sitefinity indexes a standard set (like Title). But, if you create custom dynamic modules with other fields you want to index you have to add them in this Additional Fields box. Here here:&lt;/p&gt;
 
@@ -1848,8 +1848,8 @@ First of all, you need to create a new class that inherits from ConcatenationTra
 
 &lt;p&gt;It should be pretty simple to follow. Basically, if I find a data value is a TrackedList&lt;Guid&gt;, I get the Taxon items with that Guid ID, get the name of that Taxon and then concatenate those values, separated by a space. If the data object is anything other than a TrackedList&lt;Guid&gt;, I used the default ConcatenationTranslator behavior.&lt;/Guid&gt;&lt;/Guid&gt;&lt;/p&gt;
 
-&lt;p&gt;Conclusion
-That’s really all you need to do. Just go into your Sitefinity back-end, re-index your search index and you can now search your content by any taxonomy it has attached to it.&lt;/p&gt;
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+&lt;p&gt;That’s really all you need to do. Just go into your Sitefinity back-end, re-index your search index and you can now search your content by any taxonomy it has attached to it.&lt;/p&gt;
 </content>
  </entry>
  
@@ -1862,15 +1862,15 @@ That’s really all you need to do. Just go into your Sitefinity back-end, re-in
 
 &lt;p&gt;You have to setup the error pages in two places in the application’s web.config to cover all of your bases.&lt;/p&gt;
 
-&lt;p&gt;##system.web/customErrors
-You have to setup your error pages in the system.web/customErrors section of your web.config to cover calls to non-existent *.aspx pages (and probably other ASP.NET-handled pages as well). My customErrors section looks like this. It will be expanded to cover other error codes.&lt;/p&gt;
+&lt;h2 id=&quot;systemwebcustomerrors&quot;&gt;system.web/customErrors&lt;/h2&gt;
+&lt;p&gt;You have to setup your error pages in the system.web/customErrors section of your web.config to cover calls to non-existent *.aspx pages (and probably other ASP.NET-handled pages as well). My customErrors section looks like this. It will be expanded to cover other error codes.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;customErrors&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;mode=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;On&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;redirectMode=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ResponseRewrite&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
   &lt;span class=&quot;nt&quot;&gt;&amp;lt;error&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;statusCode=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;404&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;redirect=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;~/Static/404.htm&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;/customErrors&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;##system.webServer/httpErrors
-The next section you need is the system.webServer/httpErrors section. I never knew this section exists, but it corresponds to the Errors panel in IIS Manager 7.5 for your website. This section covers request for non-existing folders and static files (like /bogusFolder or /bogusFile.htm). Mine looks like this and it will likewise be expanded for other error codes.&lt;/p&gt;
+&lt;h2 id=&quot;systemwebserverhttperrors&quot;&gt;system.webServer/httpErrors&lt;/h2&gt;
+&lt;p&gt;The next section you need is the system.webServer/httpErrors section. I never knew this section exists, but it corresponds to the Errors panel in IIS Manager 7.5 for your website. This section covers request for non-existing folders and static files (like /bogusFolder or /bogusFile.htm). Mine looks like this and it will likewise be expanded for other error codes.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;httpErrors&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;errorMode=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Custom&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;defaultResponseMode=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;File&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
   &lt;span class=&quot;nt&quot;&gt;&amp;lt;remove&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;statusCode=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;404&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
@@ -2125,13 +2125,13 @@ The next section you need is the system.webServer/httpErrors section. I never kn
 
 &lt;p&gt;As with all software though, you will inevitably run into things you can’t do so easily (or, at least, as easily as you think you should be able to). I ran into one of those issues yesterday and finally hacked my way to a solution this morning.&lt;/p&gt;
 
-&lt;p&gt;##Problem
-My problem was this: how do I retrieve the available options for a Choices field in a dynamic module (built with the Module Builder). Honestly, I’m not sure it really matters. That is, I don’t think Sitefinity validates the value of a Choices field against what is technically a “valid” option. I think I read somewhere that it can store any option. However, I wanted to present a drop-down to users that had values that were essentially controlled by the available choices for this field. Here’s the dialog I’m talking about:&lt;/p&gt;
+&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;My problem was this: how do I retrieve the available options for a Choices field in a dynamic module (built with the Module Builder). Honestly, I’m not sure it really matters. That is, I don’t think Sitefinity validates the value of a Choices field against what is technically a “valid” option. I think I read somewhere that it can store any option. However, I wanted to present a drop-down to users that had values that were essentially controlled by the available choices for this field. Here’s the dialog I’m talking about:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;/assets/images/2012-10-05-retrieve-dynamic-module-choice-field-value-options-in-sitefinity/choices_dialog.png&quot; alt=&quot;Choices field choice options&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;##Solution
-Finding a way to retrieve this options through the Sitefinity API (which, in all other respects I’ve investigated so far is really good) was impossible. I started decompiling Sitefinity DLLs to see how it was done and still didn’t really get anywhere. All I could see was the choices being picked up from a config file.&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;Finding a way to retrieve this options through the Sitefinity API (which, in all other respects I’ve investigated so far is really good) was impossible. I started decompiling Sitefinity DLLs to see how it was done and still didn’t really get anywhere. All I could see was the choices being picked up from a config file.&lt;/p&gt;
 
 &lt;p&gt;As I read more, I realized this was a bigger clue than I initially thought. The dynamic module information is stored in the App_Data/Sitefinity/Configuration directory in the DynamicModulesConfig.config file. Lo and behold, the options were stored in there–in no less than three places too. Sitefinity has the Config.Get interface for it’s configuration files. However, to get the DynamicModulesConfig.config information, I would have had to call something like Config.Get(). But, the DynamicModulesConfig (in Telerik.Sitefinity.DynamicModules.Configuration) is an internal class. So, I couldn’t do that. I decided upon a “get config file and parse the xml” approach.&lt;/p&gt;
 
@@ -2340,8 +2340,8 @@ Great post but I did run into the same issue you were experiencing today. You ca
    <link href="https://www.benramey.com/2012/08/09/rendering-must-have-placeholder-chrome-as-its-parent-got-rendering-instead/"/>
    <updated>2012-08-09T00:00:00-05:00</updated>
    <id>https://www.benramey.com/2012/08/09/rendering-must-have-placeholder-chrome-as-its-parent-got-rendering-instead</id>
-   <content type="html">&lt;p&gt;##Problem
-I got the error message (in my Firebug console) in the Sitecore Page Editor on a page where I had a nested sublayout.  I had a basic two-column layout for the main sublayout of the page.  Then, in the right column, I had another sublayout that further divided up the right column as I needed.  Here is what the nested sublayout looked like:&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;I got the error message (in my Firebug console) in the Sitecore Page Editor on a page where I had a nested sublayout.  I had a basic two-column layout for the main sublayout of the page.  Then, in the right column, I had another sublayout that further divided up the right column as I needed.  Here is what the nested sublayout looked like:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;sc:Placeholder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;runat=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;server&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;blogRightColumnTop&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
 
@@ -2355,8 +2355,8 @@ I got the error message (in my Firebug console) in the Sitecore Page Editor on a
 
 &lt;p&gt;This was a Javascript error that was preventing the Page Editor from fully loading the editor buttons for the edit frames I had on the page.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-The error message (surprise, surprise) was a little mystifying, but it gave me enough of a clue to think that there was some type of nesting issue.  I noticed that I had a sc:Placeholder element at the top of my nested sub-layout with nothing wrapping it.  Perhaps this was the issue?  I tried this edit to my nested sub-layout:&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;The error message (surprise, surprise) was a little mystifying, but it gave me enough of a clue to think that there was some type of nesting issue.  I noticed that I had a sc:Placeholder element at the top of my nested sub-layout with nothing wrapping it.  Perhaps this was the issue?  I tried this edit to my nested sub-layout:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-html&quot; data-lang=&quot;html&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;div&amp;gt;&lt;/span&gt;
   &lt;span class=&quot;nt&quot;&gt;&amp;lt;sc:Placeholder&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;runat=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;server&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;Key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;blogRightColumnTop&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
@@ -2379,11 +2379,11 @@ The error message (surprise, surprise) was a little mystifying, but it gave me e
    <link href="https://www.benramey.com/2012/07/27/group-list-into-sub-lists-by-index/"/>
    <updated>2012-07-27T00:00:00-05:00</updated>
    <id>https://www.benramey.com/2012/07/27/group-list-into-sub-lists-by-index</id>
-   <content type="html">&lt;p&gt;##Problem
-Everyone once-in-a-while I need to take a flat list (or array, or whatever) of items and divide it up into chunks.  It doesn’t have to be in any real order, necessarily, it just has to be in groups of two, three or four or however many items.  Most recently, I needed this to divide up a list of blog items into chunks of four to display in sets of “pages” that a user would page through with Javascript.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;Everyone once-in-a-while I need to take a flat list (or array, or whatever) of items and divide it up into chunks.  It doesn’t have to be in any real order, necessarily, it just has to be in groups of two, three or four or however many items.  Most recently, I needed this to divide up a list of blog items into chunks of four to display in sets of “pages” that a user would page through with Javascript.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-I found a great, compact solution on Stack Overflow here: &lt;a href=&quot;http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq&quot;&gt;http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq&lt;/a&gt;.  Take a look at answer number one and make sure to pay attention to the warnings others gave about performance for large sets of items.  I’m working on a small set, so it’s not too important in my case.&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;I found a great, compact solution on Stack Overflow here: &lt;a href=&quot;http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq&quot;&gt;http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq&lt;/a&gt;.  Take a look at answer number one and make sure to pay attention to the warnings others gave about performance for large sets of items.  I’m working on a small set, so it’s not too important in my case.&lt;/p&gt;
 
 &lt;p&gt;Here’s the code I used to set a Repeater DataSource:&lt;/p&gt;
 
@@ -2400,11 +2400,11 @@ I found a great, compact solution on Stack Overflow here: &lt;a href=&quot;http:
    <link href="https://www.benramey.com/2012/07/25/nested-user-controls-not-rendering/"/>
    <updated>2012-07-25T00:00:00-05:00</updated>
    <id>https://www.benramey.com/2012/07/25/nested-user-controls-not-rendering</id>
-   <content type="html">&lt;p&gt;##Problem
-I got caught today in a stupid problem.  But, it wasn’t obvious (at least to me) at first what was causing it.  I was doing something simple: nesting one UserControl inside of another.  But, the nested UserControl wasn’t showing up.  I couldn’t, for the life of me, figure out what I had done wrong.  If I didn’t nest the control, it worked fine.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;I got caught today in a stupid problem.  But, it wasn’t obvious (at least to me) at first what was causing it.  I was doing something simple: nesting one UserControl inside of another.  But, the nested UserControl wasn’t showing up.  I couldn’t, for the life of me, figure out what I had done wrong.  If I didn’t nest the control, it worked fine.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-The solution was just correctly a stupid oversight on my part.  I use ReSharper, so what I would do is just type the control prefix, colon then the name of the control and ReSharper would give me the suggestion to add the right Register tag.  Well, ReSharper looks at it like a WebControl, not a UserControl.  So, the Register tag is adds looks like this:&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;The solution was just correctly a stupid oversight on my part.  I use ReSharper, so what I would do is just type the control prefix, colon then the name of the control and ReSharper would give me the suggestion to add the right Register tag.  Well, ReSharper looks at it like a WebControl, not a UserControl.  So, the Register tag is adds looks like this:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;%&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;@&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Register&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TagPrefix&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ogden&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Namespace&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Ogden.Web.controls&quot;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Assembly&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Ogden.Web&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;%&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
@@ -2464,11 +2464,11 @@ The solution was just correctly a stupid oversight on my part.  I use ReSharper,
    <link href="https://www.benramey.com/2012/06/12/limit-selected-items-on-sitecore-multilist-field/"/>
    <updated>2012-06-12T00:00:00-05:00</updated>
    <id>https://www.benramey.com/2012/06/12/limit-selected-items-on-sitecore-multilist-field</id>
-   <content type="html">&lt;p&gt;##Problem
-You want to limit the number of items a user can choose for a multilist field in a data template in sitecore.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;You want to limit the number of items a user can choose for a multilist field in a data template in sitecore.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-The solution is easy enough.  Just add some validation to the field that will “count” the number of GUIDs in the raw value of the MultiList field.&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;The solution is easy enough.  Just add some validation to the field that will “count” the number of GUIDs in the raw value of the MultiList field.&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;
@@ -2660,8 +2660,8 @@ The solution is easy enough.  Just add some validation to the field that will �
 
 &lt;p&gt;Easy as pie! To change the number of pods in a row, update all of the “position() mod 3″s by replacing 3 with however many pods you want in a row. Then also make sure to update the xsl:apply-templates select attribute inside PodRow to be “position() &amp;lt; n-1″ where n is the number of Pods in a row.&lt;/p&gt;
 
-&lt;p&gt;##Identifying the last cell of every row
-I needed another feature from my XSLT though. I needed every last pod in each row to have a special CSS class. This meant determining which pod was the last one in each row whether the row was full or not. This made the XSLT significantly more complicated, but not overwhelmingly so.&lt;/p&gt;
+&lt;h2 id=&quot;identifying-the-last-cell-of-every-row&quot;&gt;Identifying the last cell of every row&lt;/h2&gt;
+&lt;p&gt;I needed another feature from my XSLT though. I needed every last pod in each row to have a special CSS class. This meant determining which pod was the last one in each row whether the row was full or not. This made the XSLT significantly more complicated, but not overwhelmingly so.&lt;/p&gt;
 
 &lt;p&gt;I needed my HTML to look like this (notice the additional “last” class):&lt;/p&gt;
 
@@ -2746,15 +2746,15 @@ I needed another feature from my XSLT though. I needed every last pod in each ro
    <link href="https://www.benramey.com/2012/02/27/ektron-license-key-update/"/>
    <updated>2012-02-27T00:00:00-06:00</updated>
    <id>https://www.benramey.com/2012/02/27/ektron-license-key-update</id>
-   <content type="html">&lt;p&gt;##Problem
-We use a temporary license key with our Ektron development website here at work. Because it’s temporary, we have to update it every-so-often. That happened today.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;We use a temporary license key with our Ektron development website here at work. Because it’s temporary, we have to update it every-so-often. That happened today.&lt;/p&gt;
 
 &lt;p&gt;I got the new key and copy-pasted it into the right License Key field under Configuration / Settings. I clicked on “Save” and thought I was done. When I tried to log back in with my regular account (the way you are notified of the license expiration is a license violation error when you try log in) and it still gave me the license violation error. So, I logged back in with the built-in account (which lets you log in with limited features so that you can update the license key) and found out that I had copy-pasted the license key wrong. It was missing part of the domain name.&lt;/p&gt;
 
 &lt;p&gt;Naturally, I tried simply updating the license key domain name, but Ektron threw a Javascript error which prevented me from saving the page saying that I had updated the license key in a way that would make it invalid. What?! I tried re-pasting the key in, thinking I had it wrong still. I didn’t work.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-Turns out this has to be an Ektron bug. I ended up trying something random: I changed the last number of the license key to something arbitrary (along with making my domain name change) and it updated fine. Strange, I know…but this IS Ektron.&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;Turns out this has to be an Ektron bug. I ended up trying something random: I changed the last number of the license key to something arbitrary (along with making my domain name change) and it updated fine. Strange, I know…but this IS Ektron.&lt;/p&gt;
 
 &lt;p&gt;Of course, that is an invalid key, so once the page saved, I changed that last digit back to the original digit from the valid license key and it let me save it and I could log in again.&lt;/p&gt;
 </content>
@@ -2802,8 +2802,8 @@ Turns out this has to be an Ektron bug. I ended up trying something random: I ch
 
 &lt;p&gt;So, on to the solution!&lt;/p&gt;
 
-&lt;p&gt;##Step One: Create a new player template
-This part is easy.  Actually, all the parts are easy.  You just need to know what to do.&lt;/p&gt;
+&lt;h2 id=&quot;step-one-create-a-new-player-template&quot;&gt;Step One: Create a new player template&lt;/h2&gt;
+&lt;p&gt;This part is easy.  Actually, all the parts are easy.  You just need to know what to do.&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;Under the Publishing tab in your Brightcove Studio, click on All Templates in the left sidebar.&lt;/li&gt;
@@ -2826,8 +2826,8 @@ This part is easy.  Actually, all the parts are easy.  You just need to know wha
 
 &lt;p&gt;That’s it for the template!  You’re done with Step One.&lt;/p&gt;
 
-&lt;p&gt;##Step Two: Add Your Logo
-I figured out step one all on my own pretty quickly.  I figured out step two all on my own too, but it look a lot longer!&lt;/p&gt;
+&lt;h2 id=&quot;step-two-add-your-logo&quot;&gt;Step Two: Add Your Logo&lt;/h2&gt;
+&lt;p&gt;I figured out step one all on my own pretty quickly.  I figured out step two all on my own too, but it look a lot longer!&lt;/p&gt;
 
 &lt;ol&gt;
   &lt;li&gt;Under the Publishing tab (you’re probably already there), click on All Players in the left sidebar&lt;/li&gt;
@@ -2878,11 +2878,11 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
    <link href="https://www.benramey.com/2011/12/01/blank-sharepoint-site-problem/"/>
    <updated>2011-12-01T00:00:00-06:00</updated>
    <id>https://www.benramey.com/2011/12/01/blank-sharepoint-site-problem</id>
-   <content type="html">&lt;p&gt;##Problem
-A SharePoint site renders completely blank in the browser. It shows up immediately without any “processing” time and when looking at the HTML source for the page, it is completely blank–no HTML tags whatsoever.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;A SharePoint site renders completely blank in the browser. It shows up immediately without any “processing” time and when looking at the HTML source for the page, it is completely blank–no HTML tags whatsoever.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-In my case, the web.config file for the SharePoint application had duplicate entries in the system.webServer/handlers and system.webServer/modules elements. Once I removed those, the site rendered as expected.&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;In my case, the web.config file for the SharePoint application had duplicate entries in the system.webServer/handlers and system.webServer/modules elements. Once I removed those, the site rendered as expected.&lt;/p&gt;
 </content>
  </entry>
  
@@ -2891,13 +2891,13 @@ In my case, the web.config file for the SharePoint application had duplicate ent
    <link href="https://www.benramey.com/2011/11/21/jquery-tools-overlay-v1-2-5-bug/"/>
    <updated>2011-11-21T00:00:00-06:00</updated>
    <id>https://www.benramey.com/2011/11/21/jquery-tools-overlay-v1-2-5-bug</id>
-   <content type="html">&lt;p&gt;##Problem
-I noticed a bug in the jQuery Tools library today, specifically in version 1.2.5 and the Overlay plugin. I should say, I’m assuming it’s a bug. This is an existing website I am working on where I am not in a position to upgrade the jQuery Tools library to the latest version (1.2.6 is out, it looks like) and I don’t know how much of the problem may be due to how existing code is possibly interfering with the library.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;I noticed a bug in the jQuery Tools library today, specifically in version 1.2.5 and the Overlay plugin. I should say, I’m assuming it’s a bug. This is an existing website I am working on where I am not in a position to upgrade the jQuery Tools library to the latest version (1.2.6 is out, it looks like) and I don’t know how much of the problem may be due to how existing code is possibly interfering with the library.&lt;/p&gt;
 
 &lt;p&gt;In any case, the bug showed up when I had an existing overlay showing and wanted to show another overlay. By default, the library allows one overlay at a time. This was fine with me as I needed to close the existing overlay before showing the new one. The library handles this automatically. However, when the second overlay was displayed, the mask would not display and the z-index was not set, so it showed up behind other content.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-While it’s somewhat of a hack, the best solution I found was to simply remove the div that Overlay creates with id “exposeMask” before I display the second overlay.&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;While it’s somewhat of a hack, the best solution I found was to simply remove the div that Overlay creates with id “exposeMask” before I display the second overlay.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;$(“#exposeMask”).remove();&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
@@ -2910,8 +2910,8 @@ While it’s somewhat of a hack, the best solution I found was to simply remove 
    <link href="https://www.benramey.com/2011/11/14/ansiutf-8-encoding-problem/"/>
    <updated>2011-11-14T00:00:00-06:00</updated>
    <id>https://www.benramey.com/2011/11/14/ansiutf-8-encoding-problem</id>
-   <content type="html">&lt;p&gt;##Problem
-I ran into a problem in a project I was working on recently.  The basics of the project were to take data out of a MySQL database and transform that data into an XML file schema for a
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;I ran into a problem in a project I was working on recently.  The basics of the project were to take data out of a MySQL database and transform that data into an XML file schema for a
 &lt;a href=&quot;http://day.com/day/en/products.html&quot;&gt;Day CQ5 CMS&lt;/a&gt;
 &lt;a href=&quot;http://www.ibm.com/developerworks/java/library/j-jcr/&quot;&gt;Java Content Repository (JCR)&lt;/a&gt;.&lt;/p&gt;
 
@@ -2919,8 +2919,8 @@ I ran into a problem in a project I was working on recently.  The basics of the 
 
 &lt;p&gt;I don’t know much about character encoding, except that there is a difference between them!&lt;/p&gt;
 
-&lt;p&gt;##Solution
-After some digging around and playing with Notepad++ (where I could switch the encoding of the text), I found at least a glimmer of hope.  When I had the character encoding set to ANSI in Notepad++, pasted in the troublesome text, and then switched the encoding to UTF-8, all of my problems disappeared.&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;After some digging around and playing with Notepad++ (where I could switch the encoding of the text), I found at least a glimmer of hope.  When I had the character encoding set to ANSI in Notepad++, pasted in the troublesome text, and then switched the encoding to UTF-8, all of my problems disappeared.&lt;/p&gt;
 
 &lt;p&gt;So, eventually, I came up with these few lines of code which convert the encoding of my text and fixed all of my problems.  Woohoo!&lt;/p&gt;
 
@@ -3008,11 +3008,11 @@ After some digging around and playing with Notepad++ (where I could switch the e
    <link href="https://www.benramey.com/2010/12/10/duplicating-spwebconfigmodifications/"/>
    <updated>2010-12-10T00:00:00-06:00</updated>
    <id>https://www.benramey.com/2010/12/10/duplicating-spwebconfigmodifications</id>
-   <content type="html">&lt;p&gt;##Problem
-Despite everything looking OK (no duplicate SPWebConfigModifications for your web application), your SPWebConfigModifications are adding duplicate elements to your web.config file.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;Despite everything looking OK (no duplicate SPWebConfigModifications for your web application), your SPWebConfigModifications are adding duplicate elements to your web.config file.&lt;/p&gt;
 
-&lt;p&gt;##Solution (at least one possible one)
-I ran into this problem today and discovered that in the Name property of the SPWebConfigModification I was not wrapping an attribute value in single quotes.  Since the actual Value property of the SPWebConfigModification had quotes around the attribute value, whenever the SPWebConfigModification was applied, it could not find the existing element and therefore would add a second, duplicate element.&lt;/p&gt;
+&lt;h2 id=&quot;solution-at-least-one-possible-one&quot;&gt;Solution (at least one possible one)&lt;/h2&gt;
+&lt;p&gt;I ran into this problem today and discovered that in the Name property of the SPWebConfigModification I was not wrapping an attribute value in single quotes.  Since the actual Value property of the SPWebConfigModification had quotes around the attribute value, whenever the SPWebConfigModification was applied, it could not find the existing element and therefore would add a second, duplicate element.&lt;/p&gt;
 
 &lt;p&gt;In other words, this is wrong for the SPWebConfigModification Name: “add[@name=valueOfAttribute]“.&lt;/p&gt;
 

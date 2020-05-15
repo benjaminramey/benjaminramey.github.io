@@ -539,8 +539,8 @@
             
         </nav>
     </div>
-    <p>##Problem
-I got the error message (in my Firebug console) in the Sitecore Page Editor on a page where I had a nested sublayout.  I had a basic two-column layout for the main sublayout of the page.  Then, in the right column, I had another sublayout that further divided up the right column as I needed.  Here is what the nested sublayout looked like:</p>
+    <h2 id="problem">Problem</h2>
+<p>I got the error message (in my Firebug console) in the Sitecore Page Editor on a page where I had a nested sublayout.  I had a basic two-column layout for the main sublayout of the page.  Then, in the right column, I had another sublayout that further divided up the right column as I needed.  Here is what the nested sublayout looked like:</p>
 
 <figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;sc:Placeholder</span> <span class="na">runat=</span><span class="s">"server"</span> <span class="na">Key=</span><span class="s">"blogRightColumnTop"</span><span class="nt">/&gt;</span>
 
@@ -554,8 +554,8 @@ I got the error message (in my Firebug console) in the Sitecore Page Editor on a
 
 <p>This was a Javascript error that was preventing the Page Editor from fully loading the editor buttons for the edit frames I had on the page.</p>
 
-<p>##Solution
-The error message (surprise, surprise) was a little mystifying, but it gave me enough of a clue to think that there was some type of nesting issue.  I noticed that I had a sc:Placeholder element at the top of my nested sub-layout with nothing wrapping it.  Perhaps this was the issue?  I tried this edit to my nested sub-layout:</p>
+<h2 id="solution">Solution</h2>
+<p>The error message (surprise, surprise) was a little mystifying, but it gave me enough of a clue to think that there was some type of nesting issue.  I noticed that I had a sc:Placeholder element at the top of my nested sub-layout with nothing wrapping it.  Perhaps this was the issue?  I tried this edit to my nested sub-layout:</p>
 
 <figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div&gt;</span>
   <span class="nt">&lt;sc:Placeholder</span> <span class="na">runat=</span><span class="s">"server"</span> <span class="na">Key=</span><span class="s">"blogRightColumnTop"</span><span class="nt">/&gt;</span>
@@ -636,7 +636,7 @@ The error message (surprise, surprise) was a little mystifying, but it gave me e
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

@@ -543,13 +543,13 @@
 
 <p>As with all software though, you will inevitably run into things you can’t do so easily (or, at least, as easily as you think you should be able to). I ran into one of those issues yesterday and finally hacked my way to a solution this morning.</p>
 
-<p>##Problem
-My problem was this: how do I retrieve the available options for a Choices field in a dynamic module (built with the Module Builder). Honestly, I’m not sure it really matters. That is, I don’t think Sitefinity validates the value of a Choices field against what is technically a “valid” option. I think I read somewhere that it can store any option. However, I wanted to present a drop-down to users that had values that were essentially controlled by the available choices for this field. Here’s the dialog I’m talking about:</p>
+<h2 id="problem">Problem</h2>
+<p>My problem was this: how do I retrieve the available options for a Choices field in a dynamic module (built with the Module Builder). Honestly, I’m not sure it really matters. That is, I don’t think Sitefinity validates the value of a Choices field against what is technically a “valid” option. I think I read somewhere that it can store any option. However, I wanted to present a drop-down to users that had values that were essentially controlled by the available choices for this field. Here’s the dialog I’m talking about:</p>
 
 <p><img src="/assets/images/2012-10-05-retrieve-dynamic-module-choice-field-value-options-in-sitefinity/choices_dialog.png" alt="Choices field choice options" /></p>
 
-<p>##Solution
-Finding a way to retrieve this options through the Sitefinity API (which, in all other respects I’ve investigated so far is really good) was impossible. I started decompiling Sitefinity DLLs to see how it was done and still didn’t really get anywhere. All I could see was the choices being picked up from a config file.</p>
+<h2 id="solution">Solution</h2>
+<p>Finding a way to retrieve this options through the Sitefinity API (which, in all other respects I’ve investigated so far is really good) was impossible. I started decompiling Sitefinity DLLs to see how it was done and still didn’t really get anywhere. All I could see was the choices being picked up from a config file.</p>
 
 <p>As I read more, I realized this was a bigger clue than I initially thought. The dynamic module information is stored in the App_Data/Sitefinity/Configuration directory in the DynamicModulesConfig.config file. Lo and behold, the options were stored in there–in no less than three places too. Sitefinity has the Config.Get interface for it’s configuration files. However, to get the DynamicModulesConfig.config information, I would have had to call something like Config.Get(). But, the DynamicModulesConfig (in Telerik.Sitefinity.DynamicModules.Configuration) is an internal class. So, I couldn’t do that. I decided upon a “get config file and parse the xml” approach.</p>
 
@@ -698,7 +698,7 @@ Finding a way to retrieve this options through the Sitefinity API (which, in all
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

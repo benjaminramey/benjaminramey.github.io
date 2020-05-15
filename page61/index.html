@@ -532,13 +532,13 @@
 
         <time datetime="2011-11-21T00:00:00-06:00" class="post-date">21 Nov 2011</time>
 
-        <p>##Problem
-I noticed a bug in the jQuery Tools library today, specifically in version 1.2.5 and the Overlay plugin. I should say, I’m assuming it’s a bug. This is an existing website I am working on where I am not in a position to upgrade the jQuery Tools library to the latest version (1.2.6 is out, it looks like) and I don’t know how much of the problem may be due to how existing code is possibly interfering with the library.</p>
+        <h2 id="problem">Problem</h2>
+<p>I noticed a bug in the jQuery Tools library today, specifically in version 1.2.5 and the Overlay plugin. I should say, I’m assuming it’s a bug. This is an existing website I am working on where I am not in a position to upgrade the jQuery Tools library to the latest version (1.2.6 is out, it looks like) and I don’t know how much of the problem may be due to how existing code is possibly interfering with the library.</p>
 
 <p>In any case, the bug showed up when I had an existing overlay showing and wanted to show another overlay. By default, the library allows one overlay at a time. This was fine with me as I needed to close the existing overlay before showing the new one. The library handles this automatically. However, when the second overlay was displayed, the mask would not display and the z-index was not set, so it showed up behind other content.</p>
 
-<p>##Solution
-While it’s somewhat of a hack, the best solution I found was to simply remove the div that Overlay creates with id “exposeMask” before I display the second overlay.</p>
+<h2 id="solution">Solution</h2>
+<p>While it’s somewhat of a hack, the best solution I found was to simply remove the div that Overlay creates with id “exposeMask” before I display the second overlay.</p>
 
 <figure class="highlight"><pre><code class="language-text" data-lang="text">$(“#exposeMask”).remove();</code></pre></figure>
 
@@ -563,7 +563,7 @@ While it’s somewhat of a hack, the best solution I found was to simply remove 
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

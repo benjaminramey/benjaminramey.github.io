@@ -539,11 +539,11 @@
             
         </nav>
     </div>
-    <p>##Problem
-I got caught today in a stupid problem.  But, it wasn’t obvious (at least to me) at first what was causing it.  I was doing something simple: nesting one UserControl inside of another.  But, the nested UserControl wasn’t showing up.  I couldn’t, for the life of me, figure out what I had done wrong.  If I didn’t nest the control, it worked fine.</p>
+    <h2 id="problem">Problem</h2>
+<p>I got caught today in a stupid problem.  But, it wasn’t obvious (at least to me) at first what was causing it.  I was doing something simple: nesting one UserControl inside of another.  But, the nested UserControl wasn’t showing up.  I couldn’t, for the life of me, figure out what I had done wrong.  If I didn’t nest the control, it worked fine.</p>
 
-<p>##Solution
-The solution was just correctly a stupid oversight on my part.  I use ReSharper, so what I would do is just type the control prefix, colon then the name of the control and ReSharper would give me the suggestion to add the right Register tag.  Well, ReSharper looks at it like a WebControl, not a UserControl.  So, the Register tag is adds looks like this:</p>
+<h2 id="solution">Solution</h2>
+<p>The solution was just correctly a stupid oversight on my part.  I use ReSharper, so what I would do is just type the control prefix, colon then the name of the control and ReSharper would give me the suggestion to add the right Register tag.  Well, ReSharper looks at it like a WebControl, not a UserControl.  So, the Register tag is adds looks like this:</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="p">&lt;%</span><span class="err">@</span> <span class="n">Register</span> <span class="n">TagPrefix</span><span class="p">=</span><span class="s">"ogden"</span> <span class="n">Namespace</span><span class="p">=</span><span class="s">"Ogden.Web.controls"</span> <span class="n">Assembly</span><span class="p">=</span><span class="s">"Ogden.Web"</span> <span class="p">%&gt;</span></code></pre></figure>
 
@@ -618,7 +618,7 @@ The solution was just correctly a stupid oversight on my part.  I use ReSharper,
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

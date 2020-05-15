@@ -542,8 +542,9 @@
         </nav>
     </div>
     <h2 id="update-1132016">Update 1/13/2016</h2>
-<p>This code (much refactored and improved) is now available as a <a href="http://www.nuget.org/packages/GoodlyFere.NServiceBus.EntityFramework">NuGet package</a>.
-Please see documentation and the code over at the <a href="https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework">GitHub repository</a>.</p>
+<p>This code (much refactored and improved) is now available as a <a href="http://www.nuget.org/packages/GoodlyFere.NServiceBus.EntityFramework">NuGet package</a>.</p>
+
+<p>Please see documentation and the code over at the <a href="https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework">GitHub repository</a>.</p>
 
 <h2 id="summary">Summary</h2>
 <p>NServiceBus is easily configurable to use NHibernate, RavenDB or in-memory persistence. RavenDB is built in and is the default. You can configure it to use in-memory persistence. You can install a NuGet package to use NHibernate which opens the door to many data stores.</p>
@@ -562,59 +563,60 @@ Please see documentation and the code over at the <a href="https://github.com/be
 
 <p>Actually, this solution isn’t tied specifically to EntityFramework.  I have EF abstracted away through an IDataContext interface which the persisters use.</p>
 
-<p>##IDataContext
+<h2 id="idatacontext">IDataContext</h2>
 <script src="https://gist.github.com/benjaminramey/9421173.js" type="text/javascript">
-</script></p>
+</script>
 
-<p>##BaseDataContext
+<h2 id="basedatacontext">BaseDataContext</h2>
 <script src="https://gist.github.com/benjaminramey/9421291.js">
-</script></p>
+</script>
 
-<p>##EFDataContext
+<h2 id="efdatacontext">EFDataContext</h2>
 <script src="https://gist.github.com/benjaminramey/9421303.js">
-</script></p>
+</script>
 
-<p>##IRepository
+<h2 id="irepository">IRepository</h2>
 <script src="https://gist.github.com/benjaminramey/9421272.js">
-</script></p>
+</script>
 
-<p>##EFRepository
-Not every method is implemented because I didn’t need them all on this project. Using TDD, I only implemented methods as I needed them.
+<h2 id="efrepository">EFRepository</h2>
+<p>Not every method is implemented because I didn’t need them all on this project. Using TDD, I only implemented methods as I needed them.
 <script src="https://gist.github.com/benjaminramey/9421323.js">
 </script></p>
 
-<p>##EFDbContext
-This is the project-specific EntityFramework DbContext.
+<h2 id="efdbcontext">EFDbContext</h2>
+<p>This is the project-specific EntityFramework DbContext.
 <script src="https://gist.github.com/benjaminramey/9421353.js">
 </script></p>
 
-<p>##EFSagaPersister
+<h2 id="efsagapersister">EFSagaPersister</h2>
 <script src="https://gist.github.com/benjaminramey/9421364.js">
-</script></p>
+</script>
 
-<p>##EFSubscriptionPersister
+<h2 id="efsubscriptionpersister">EFSubscriptionPersister</h2>
 <script src="https://gist.github.com/benjaminramey/9421372.js">
-</script></p>
+</script>
 
-<p>##EFTimeoutPersister
+<h2 id="eftimeoutpersister">EFTimeoutPersister</h2>
 <script src="https://gist.github.com/benjaminramey/9421383.js">
-</script></p>
+</script>
 
-<p>##TimeoutDataEntity
+<h2 id="timeoutdataentity">TimeoutDataEntity</h2>
 <script src="https://gist.github.com/benjaminramey/9421403.js">
-</script></p>
+</script>
 
-<p>##Subscription
+<h2 id="subscription">Subscription</h2>
 <script src="https://gist.github.com/benjaminramey/9421461.js">
-</script></p>
+</script>
 
-<p>##SagaData
+<h2 id="sagadata">SagaData</h2>
 <script src="https://gist.github.com/benjaminramey/9421470.js">
-</script></p>
+</script>
 
-<p>##Criteria classes
+<h2 id="criteria-classes">Criteria classes</h2>
 <script src="https://gist.github.com/benjaminramey/9421428.js">
-</script></p>
+</script>
+
 
 </article>
 
@@ -681,7 +683,7 @@ This is the project-specific EntityFramework DbContext.
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:40:16-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

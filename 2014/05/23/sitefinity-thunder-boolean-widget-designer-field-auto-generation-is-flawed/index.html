@@ -539,7 +539,7 @@
             
         </nav>
     </div>
-    <p>##Problem</p>
+    <h2 id="problem">Problem</h2>
 
 <p>When you use Sitefinity Thunder (a great help, by the way) to generate a Widget Designer for an existing widget that has a boolean property, you get this javascript in the auto-generated javascript file (let’s say my boolean field is named HasSubMenu):</p>
 
@@ -550,7 +550,7 @@
 
 <p>This means, no matter what you do with the checkbox, the next time you click “Edit” for this widget, the checkbox will be checked and your data is effectively corrupted.</p>
 
-<p>##Solution</p>
+<h2 id="solution">Solution</h2>
 
 <p>The solution is pretty simple.  Instead of using controlData.HasSubMenu for the expression by itself, update your Javascript so that you check if the string is “true” or not: controlData.HasSubMenu === “true”.  The line in the refreshUI method should now look like this:</p>
 
@@ -624,7 +624,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:40:16-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

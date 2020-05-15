@@ -539,8 +539,8 @@
             
         </nav>
     </div>
-    <p>##Problem
-I’ve been dealing with an issue in EPiServer 7 recently.  I got this error when trying to log into the admin back-end of the site.</p>
+    <h2 id="problem">Problem</h2>
+<p>I’ve been dealing with an issue in EPiServer 7 recently.  I got this error when trying to log into the admin back-end of the site.</p>
 
 <figure class="highlight"><pre><code class="language-text" data-lang="text">Cannot decrypt password
 
@@ -560,15 +560,15 @@ EPiServer.Common.Web.Authorization.Integrator.SynchronizeUser(MembershipUser mem
 System.Web.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute() +80
 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously) +165</code></pre></figure>
 
-<p>##Scenario
-We originally installed the Relate+ site for our EPiServer installation. Through various bad decisions, we didn’t keep the custom code and templates we wrote separate from the Relate+ stuff. So, we inevitably created a mess where we did not need a ton of the Relate+ templates, page types, block types, etc but we could not longer easily pull our custom stuff out from the tangled mess.</p>
+<h2 id="scenario">Scenario</h2>
+<p>We originally installed the Relate+ site for our EPiServer installation. Through various bad decisions, we didn’t keep the custom code and templates we wrote separate from the Relate+ stuff. So, we inevitably created a mess where we did not need a ton of the Relate+ templates, page types, block types, etc but we could not longer easily pull our custom stuff out from the tangled mess.</p>
 
 <p>Well, we undertook the disentangling anyway (a good decision) and ended up with a much cleaner code base. This meant re-installing EPiServer for a clean (without Relate+) beginning. The database would remain the same to keep our content.</p>
 
 <p>We ran into this error when we got the new, cleaned-up site installed and running and then tried to log into the administration portion of the site.</p>
 
-<p>##Solution
-At first, I found this post online: http://world.episerver.com/Modules/Forum/Pages/Thread.aspx?id=77776 which suggested changing over to the multiplexing membership and role providers and described the new hashing mechanism in EPiServer 7.</p>
+<h2 id="solution">Solution</h2>
+<p>At first, I found this post online: http://world.episerver.com/Modules/Forum/Pages/Thread.aspx?id=77776 which suggested changing over to the multiplexing membership and role providers and described the new hashing mechanism in EPiServer 7.</p>
 
 <p>At first, this seemed to work. Yay! But, the joy didn’t last long. I soon got the error again even after using the multiplexing providers. I dug a little deeper into the issue.</p>
 
@@ -641,7 +641,7 @@ At first, I found this post online: http://world.episerver.com/Modules/Forum/Pag
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T20:40:16-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-14T20:47:05-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

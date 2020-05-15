@@ -4,7 +4,7 @@
  <title>Ben Ramey's Blog</title>
  <link href="/atom.xml" rel="self"/>
  <link href="https://www.benramey.com/"/>
- <updated>2020-05-14T20:40:16-05:00</updated>
+ <updated>2020-05-14T20:47:05-05:00</updated>
  <id>https://www.benramey.com</id>
  <author>
    <name>Ben Ramey</name>
@@ -858,7 +858,7 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
    <link href="https://www.benramey.com/2014/05/23/sitefinity-thunder-boolean-widget-designer-field-auto-generation-is-flawed/"/>
    <updated>2014-05-23T00:00:00-05:00</updated>
    <id>https://www.benramey.com/2014/05/23/sitefinity-thunder-boolean-widget-designer-field-auto-generation-is-flawed</id>
-   <content type="html">&lt;p&gt;##Problem&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 
 &lt;p&gt;When you use Sitefinity Thunder (a great help, by the way) to generate a Widget Designer for an existing widget that has a boolean property, you get this javascript in the auto-generated javascript file (let’s say my boolean field is named HasSubMenu):&lt;/p&gt;
 
@@ -869,7 +869,7 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
 
 &lt;p&gt;This means, no matter what you do with the checkbox, the next time you click “Edit” for this widget, the checkbox will be checked and your data is effectively corrupted.&lt;/p&gt;
 
-&lt;p&gt;##Solution&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
 
 &lt;p&gt;The solution is pretty simple.  Instead of using controlData.HasSubMenu for the expression by itself, update your Javascript so that you check if the string is “true” or not: controlData.HasSubMenu === “true”.  The line in the refreshUI method should now look like this:&lt;/p&gt;
 
@@ -903,7 +903,7 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
 
 &lt;p&gt;My solution would involved a widget designer control and a customized FlatSelector field.  Here’s an overview with details below.&lt;/p&gt;
 
-&lt;p&gt;###Overview&lt;/p&gt;
+&lt;h3 id=&quot;overview&quot;&gt;Overview&lt;/h3&gt;
 &lt;ol&gt;
   &lt;li&gt;Create a Sitefinity MVC widget with a single “List” field that will contain the list GUID&lt;/li&gt;
   &lt;li&gt;Create a Sitefinity widget designer for this MVC widget with a single FlatSelector field&lt;/li&gt;
@@ -1012,8 +1012,8 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
    <link href="https://www.benramey.com/2014/04/17/episerver-7-cannot-decrypt-password/"/>
    <updated>2014-04-17T00:00:00-05:00</updated>
    <id>https://www.benramey.com/2014/04/17/episerver-7-cannot-decrypt-password</id>
-   <content type="html">&lt;p&gt;##Problem
-I’ve been dealing with an issue in EPiServer 7 recently.  I got this error when trying to log into the admin back-end of the site.&lt;/p&gt;
+   <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
+&lt;p&gt;I’ve been dealing with an issue in EPiServer 7 recently.  I got this error when trying to log into the admin back-end of the site.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;Cannot decrypt password
 
@@ -1033,15 +1033,15 @@ EPiServer.Common.Web.Authorization.Integrator.SynchronizeUser(MembershipUser mem
 System.Web.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute() +80
 System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp;amp; completedSynchronously) +165&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
 
-&lt;p&gt;##Scenario
-We originally installed the Relate+ site for our EPiServer installation. Through various bad decisions, we didn’t keep the custom code and templates we wrote separate from the Relate+ stuff. So, we inevitably created a mess where we did not need a ton of the Relate+ templates, page types, block types, etc but we could not longer easily pull our custom stuff out from the tangled mess.&lt;/p&gt;
+&lt;h2 id=&quot;scenario&quot;&gt;Scenario&lt;/h2&gt;
+&lt;p&gt;We originally installed the Relate+ site for our EPiServer installation. Through various bad decisions, we didn’t keep the custom code and templates we wrote separate from the Relate+ stuff. So, we inevitably created a mess where we did not need a ton of the Relate+ templates, page types, block types, etc but we could not longer easily pull our custom stuff out from the tangled mess.&lt;/p&gt;
 
 &lt;p&gt;Well, we undertook the disentangling anyway (a good decision) and ended up with a much cleaner code base. This meant re-installing EPiServer for a clean (without Relate+) beginning. The database would remain the same to keep our content.&lt;/p&gt;
 
 &lt;p&gt;We ran into this error when we got the new, cleaned-up site installed and running and then tried to log into the administration portion of the site.&lt;/p&gt;
 
-&lt;p&gt;##Solution
-At first, I found this post online: http://world.episerver.com/Modules/Forum/Pages/Thread.aspx?id=77776 which suggested changing over to the multiplexing membership and role providers and described the new hashing mechanism in EPiServer 7.&lt;/p&gt;
+&lt;h2 id=&quot;solution&quot;&gt;Solution&lt;/h2&gt;
+&lt;p&gt;At first, I found this post online: http://world.episerver.com/Modules/Forum/Pages/Thread.aspx?id=77776 which suggested changing over to the multiplexing membership and role providers and described the new hashing mechanism in EPiServer 7.&lt;/p&gt;
 
 &lt;p&gt;At first, this seemed to work. Yay! But, the joy didn’t last long. I soon got the error again even after using the multiplexing providers. I dug a little deeper into the issue.&lt;/p&gt;
 
@@ -1097,8 +1097,9 @@ at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp;amp; 
    <updated>2014-03-07T00:00:00-06:00</updated>
    <id>https://www.benramey.com/2014/03/07/nservicebus-with-entityframework-persisters</id>
    <content type="html">&lt;h2 id=&quot;update-1132016&quot;&gt;Update 1/13/2016&lt;/h2&gt;
-&lt;p&gt;This code (much refactored and improved) is now available as a &lt;a href=&quot;http://www.nuget.org/packages/GoodlyFere.NServiceBus.EntityFramework&quot;&gt;NuGet package&lt;/a&gt;.
-Please see documentation and the code over at the &lt;a href=&quot;https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework&quot;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;This code (much refactored and improved) is now available as a &lt;a href=&quot;http://www.nuget.org/packages/GoodlyFere.NServiceBus.EntityFramework&quot;&gt;NuGet package&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Please see documentation and the code over at the &lt;a href=&quot;https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework&quot;&gt;GitHub repository&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
 &lt;p&gt;NServiceBus is easily configurable to use NHibernate, RavenDB or in-memory persistence. RavenDB is built in and is the default. You can configure it to use in-memory persistence. You can install a NuGet package to use NHibernate which opens the door to many data stores.&lt;/p&gt;
@@ -1117,59 +1118,60 @@ Please see documentation and the code over at the &lt;a href=&quot;https://githu
 
 &lt;p&gt;Actually, this solution isn’t tied specifically to EntityFramework.  I have EF abstracted away through an IDataContext interface which the persisters use.&lt;/p&gt;
 
-&lt;p&gt;##IDataContext
+&lt;h2 id=&quot;idatacontext&quot;&gt;IDataContext&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421173.js&quot; type=&quot;text/javascript&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##BaseDataContext
+&lt;h2 id=&quot;basedatacontext&quot;&gt;BaseDataContext&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421291.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##EFDataContext
+&lt;h2 id=&quot;efdatacontext&quot;&gt;EFDataContext&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421303.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##IRepository
+&lt;h2 id=&quot;irepository&quot;&gt;IRepository&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421272.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##EFRepository
-Not every method is implemented because I didn’t need them all on this project. Using TDD, I only implemented methods as I needed them.
+&lt;h2 id=&quot;efrepository&quot;&gt;EFRepository&lt;/h2&gt;
+&lt;p&gt;Not every method is implemented because I didn’t need them all on this project. Using TDD, I only implemented methods as I needed them.
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421323.js&quot;&gt;
 &lt;/script&gt;&lt;/p&gt;
 
-&lt;p&gt;##EFDbContext
-This is the project-specific EntityFramework DbContext.
+&lt;h2 id=&quot;efdbcontext&quot;&gt;EFDbContext&lt;/h2&gt;
+&lt;p&gt;This is the project-specific EntityFramework DbContext.
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421353.js&quot;&gt;
 &lt;/script&gt;&lt;/p&gt;
 
-&lt;p&gt;##EFSagaPersister
+&lt;h2 id=&quot;efsagapersister&quot;&gt;EFSagaPersister&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421364.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##EFSubscriptionPersister
+&lt;h2 id=&quot;efsubscriptionpersister&quot;&gt;EFSubscriptionPersister&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421372.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##EFTimeoutPersister
+&lt;h2 id=&quot;eftimeoutpersister&quot;&gt;EFTimeoutPersister&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421383.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##TimeoutDataEntity
+&lt;h2 id=&quot;timeoutdataentity&quot;&gt;TimeoutDataEntity&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421403.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##Subscription
+&lt;h2 id=&quot;subscription&quot;&gt;Subscription&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421461.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##SagaData
+&lt;h2 id=&quot;sagadata&quot;&gt;SagaData&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421470.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
 
-&lt;p&gt;##Criteria classes
+&lt;h2 id=&quot;criteria-classes&quot;&gt;Criteria classes&lt;/h2&gt;
 &lt;script src=&quot;https://gist.github.com/benjaminramey/9421428.js&quot;&gt;
-&lt;/script&gt;&lt;/p&gt;
+&lt;/script&gt;
+
 </content>
  </entry>
  

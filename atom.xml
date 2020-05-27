@@ -3,9 +3,9 @@
 
  <title>Ben Ramey's Blog</title>
  <link href="/atom.xml" rel="self"/>
- <link href="https://www.benramey.com/"/>
- <updated>2020-05-27T14:48:33-05:00</updated>
- <id>https://www.benramey.com</id>
+ <link href="http://localhost:4000/"/>
+ <updated>2020-05-27T15:08:09-05:00</updated>
+ <id>http://localhost:4000</id>
  <author>
    <name>Ben Ramey</name>
    <email>benramey@fastmail.com</email>
@@ -14,9 +14,9 @@
  
  <entry>
    <title>Iterating All EPiServer Catalog MetaObjects</title>
-   <link href="https://www.benramey.com/2020/05/27/iterating-all-catalog-metaobjects/"/>
+   <link href="http://localhost:4000/2020/05/27/iterating-all-catalog-metaobjects/"/>
    <updated>2020-05-27T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2020/05/27/iterating-all-catalog-metaobjects</id>
+   <id>http://localhost:4000/2020/05/27/iterating-all-catalog-metaobjects</id>
    <content type="html">&lt;p&gt;If you’re maintaining an e-commerce-enabled site in EPiServer and you’re using the built-in catalog, then
 you have probably found the need to incorporate external data into the catalog, perhaps from various sources.&lt;/p&gt;
 
@@ -467,9 +467,9 @@ MetaObjects.  You easily use them in combination to iterate through the MetaObje
  
  <entry>
    <title>Psalm 130</title>
-   <link href="https://www.benramey.com/2020/05/12/psalm-130/"/>
+   <link href="http://localhost:4000/2020/05/12/psalm-130/"/>
    <updated>2020-05-12T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2020/05/12/psalm-130</id>
+   <id>http://localhost:4000/2020/05/12/psalm-130</id>
    <content type="html">&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;Psalm 130 records the thoughts of a believer who goes through a remarkable transformation: from the depths of despair to proclaiming hope in the Lord to his nation.&lt;/p&gt;
 
@@ -619,9 +619,9 @@ His thinking has been so transformed that, though we still have no indication th
  
  <entry>
    <title>I Like Languages That Expect Me To Be a Great Programmer</title>
-   <link href="https://www.benramey.com/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/"/>
+   <link href="http://localhost:4000/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/"/>
    <updated>2017-01-20T14:05:00-06:00</updated>
-   <id>https://www.benramey.com/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer</id>
+   <id>http://localhost:4000/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer</id>
    <content type="html">&lt;p&gt;A co-worker of mine recently turned me on to Uncle Bob’s blog.  Yup, that’s Uncle Bob Martin.&lt;/p&gt;
 
 &lt;p&gt;Here’s one of his latest posts that sparked a thought in me: &lt;a href=&quot;http://blog.cleancoder.com/uncle-bob/2017/01/11/TheDarkPath.html&quot;&gt;The Dark Path&lt;/a&gt;.&lt;/p&gt;
@@ -658,9 +658,9 @@ once I’m an expert, it lets me do amazing things.&lt;/p&gt;
  
  <entry>
    <title>Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior</title>
-   <link href="https://www.benramey.com/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/"/>
+   <link href="http://localhost:4000/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/"/>
    <updated>2016-08-24T07:37:00-05:00</updated>
-   <id>https://www.benramey.com/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection</id>
+   <id>http://localhost:4000/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection</id>
    <content type="html">&lt;p&gt;I finally got to the bottom of an issue today that came down to the way Castle.Windsor
 does property injection (injecting dependencies into public properties) when
 you are also using their TypedFactoryFacility.  It was a tough one to track down, so
@@ -788,9 +788,9 @@ as expected.&lt;/p&gt;
  
  <entry>
    <title>OWIN Integration Testing with OAuth Bearer Tokens</title>
-   <link href="https://www.benramey.com/2016/04/11/owin-oauth-integration-testing-with-bearer-token/"/>
+   <link href="http://localhost:4000/2016/04/11/owin-oauth-integration-testing-with-bearer-token/"/>
    <updated>2016-04-11T08:34:00-05:00</updated>
-   <id>https://www.benramey.com/2016/04/11/owin-oauth-integration-testing-with-bearer-token</id>
+   <id>http://localhost:4000/2016/04/11/owin-oauth-integration-testing-with-bearer-token</id>
    <content type="html">&lt;h2 id=&quot;situation&quot;&gt;Situation&lt;/h2&gt;
 &lt;p&gt;The situation is pretty simple.  We have a project written with Web API 2.2
 that we have running with OWIN.  The API requires user authorization.  To
@@ -876,9 +876,9 @@ bearer token with the &lt;code class=&quot;highlighter-rouge&quot;&gt;dataProtec
  
  <entry>
    <title>Using NuGetPackager 0.5.5 with GitVersionTask 3.4.1</title>
-   <link href="https://www.benramey.com/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/"/>
+   <link href="http://localhost:4000/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/"/>
    <updated>2016-03-03T09:04:00-06:00</updated>
-   <id>https://www.benramey.com/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1</id>
+   <id>http://localhost:4000/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1</id>
    <content type="html">&lt;p&gt;I’m using both &lt;a href=&quot;https://www.nuget.org/packages/NuGetPackager/&quot;&gt;NuGetPackager&lt;/a&gt;
 with &lt;a href=&quot;https://www.nuget.org/packages/GitVersionTask/&quot;&gt;GitVersionTask&lt;/a&gt; on
 my project that provides EntityFramework persisters for NServiceBus:
@@ -944,9 +944,9 @@ CreatePackages target is called.&lt;/p&gt;
  
  <entry>
    <title>You Can't Subscribe to IEvent with NServiceBus</title>
-   <link href="https://www.benramey.com/2016/02/25/you-cant-subscribe-to-ievent-with-nservicebus/"/>
+   <link href="http://localhost:4000/2016/02/25/you-cant-subscribe-to-ievent-with-nservicebus/"/>
    <updated>2016-02-25T09:56:00-06:00</updated>
-   <id>https://www.benramey.com/2016/02/25/you-cant-subscribe-to-ievent-with-nservicebus</id>
+   <id>http://localhost:4000/2016/02/25/you-cant-subscribe-to-ievent-with-nservicebus</id>
    <content type="html">&lt;p&gt;The reason you might want to subscribe to &lt;code class=&quot;highlighter-rouge&quot;&gt;IEvent&lt;/code&gt; is pretty straightforward. I
 wanted to do it for the simple reason of wanting to be able to choose (based
 on configuration) whether I wanted to notify anyone of any event that
@@ -1023,9 +1023,9 @@ every single event published by my entire bus.&lt;/p&gt;
  
  <entry>
    <title>Adding a RabbitMQ Configuration File When Running as a Windows Service</title>
-   <link href="https://www.benramey.com/2016/01/04/adding-a-rabbitmq-configuration-file-when-running-as-a-windows-service/"/>
+   <link href="http://localhost:4000/2016/01/04/adding-a-rabbitmq-configuration-file-when-running-as-a-windows-service/"/>
    <updated>2016-01-04T09:26:00-06:00</updated>
-   <id>https://www.benramey.com/2016/01/04/adding-a-rabbitmq-configuration-file-when-running-as-a-windows-service</id>
+   <id>http://localhost:4000/2016/01/04/adding-a-rabbitmq-configuration-file-when-running-as-a-windows-service</id>
    <content type="html">&lt;h2 id=&quot;a-little-context&quot;&gt;A little context&lt;/h2&gt;
 &lt;p&gt;I was having a hard time adding a rabbitmq.config file today.  I added it in the right location, restarted
 the RabbitMQ Windows service and the logs still showed that the configuration file was not found.&lt;/p&gt;
@@ -1062,9 +1062,9 @@ do this is as follows (start a command prompt as administrator):&lt;/p&gt;
  
  <entry>
    <title>Working with x.509 Certificates in .NET</title>
-   <link href="https://www.benramey.com/2015/12/02/working-with-x509-certificates-in-net/"/>
+   <link href="http://localhost:4000/2015/12/02/working-with-x509-certificates-in-net/"/>
    <updated>2015-12-02T10:35:00-06:00</updated>
-   <id>https://www.benramey.com/2015/12/02/working-with-x509-certificates-in-net</id>
+   <id>http://localhost:4000/2015/12/02/working-with-x509-certificates-in-net</id>
    <content type="html">&lt;p&gt;I found a lot of very helpful details about certificate storage and usage in Windows and
 .NET in this article.&lt;/p&gt;
 
@@ -1077,9 +1077,9 @@ certificates was very helpful in debugging some issues I’m currently having on
  
  <entry>
    <title>Permutations with Iterators in C#</title>
-   <link href="https://www.benramey.com/2015/09/03/permutations-with-iterators-in-csharp/"/>
+   <link href="http://localhost:4000/2015/09/03/permutations-with-iterators-in-csharp/"/>
    <updated>2015-09-03T07:27:00-05:00</updated>
-   <id>https://www.benramey.com/2015/09/03/permutations-with-iterators-in-csharp</id>
+   <id>http://localhost:4000/2015/09/03/permutations-with-iterators-in-csharp</id>
    <content type="html">&lt;p&gt;I recently ran across a need to generate all permutations of an array of objects
 in some unit testing I was doing.&lt;/p&gt;
 
@@ -1098,9 +1098,9 @@ them to the Saga in each order and test the resulting state.&lt;/p&gt;
  
  <entry>
    <title>Active Directory Authentication in ASP.NET MVC 5 with Forms Authentication and Group-Based Authorization</title>
-   <link href="https://www.benramey.com/2014/10/20/active-directory-authentication-in-asp-net-mvc-5-with-forms-authentication-and-group-based-authorization/"/>
+   <link href="http://localhost:4000/2014/10/20/active-directory-authentication-in-asp-net-mvc-5-with-forms-authentication-and-group-based-authorization/"/>
    <updated>2014-10-20T04:03:00-05:00</updated>
-   <id>https://www.benramey.com/2014/10/20/active-directory-authentication-in-asp-net-mvc-5-with-forms-authentication-and-group-based-authorization</id>
+   <id>http://localhost:4000/2014/10/20/active-directory-authentication-in-asp-net-mvc-5-with-forms-authentication-and-group-based-authorization</id>
    <content type="html">&lt;p&gt;I know that blog post title is sure a mouth-full, but it describes the whole problem I was trying to solve in a recent project.&lt;/p&gt;
 
 &lt;h2 id=&quot;the-project&quot;&gt;The Project&lt;/h2&gt;
@@ -1274,18 +1274,18 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
  
  <entry>
    <title>Apply Git Patches to SVN Repository</title>
-   <link href="https://www.benramey.com/2014/09/23/apply-git-patches-to-svn-repository/"/>
+   <link href="http://localhost:4000/2014/09/23/apply-git-patches-to-svn-repository/"/>
    <updated>2014-09-23T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2014/09/23/apply-git-patches-to-svn-repository</id>
+   <id>http://localhost:4000/2014/09/23/apply-git-patches-to-svn-repository</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://codeprairie.net/blogs/chrisortman/archive/2008/01/14/creating-subversion-patches-with-git.aspx&quot;&gt;Creating Subversion patches with Git&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>IE Date Parsing Doesn’t Work Like Chrome</title>
-   <link href="https://www.benramey.com/2014/06/05/ie-date-parsing-doesnt-work-like-chrome/"/>
+   <link href="http://localhost:4000/2014/06/05/ie-date-parsing-doesnt-work-like-chrome/"/>
    <updated>2014-06-05T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2014/06/05/ie-date-parsing-doesnt-work-like-chrome</id>
+   <id>http://localhost:4000/2014/06/05/ie-date-parsing-doesnt-work-like-chrome</id>
    <content type="html">&lt;p&gt;I noticed a goofy issue today while working with a jQuery countdown plugin.  This plugin allows you to set an “until” date so that you counter counts down to zero at a certain date and time.&lt;/p&gt;
 
 &lt;p&gt;I was setting the date like this:&lt;/p&gt;
@@ -1308,9 +1308,9 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
  
  <entry>
    <title>Sitefinity Thunder Boolean Widget Designer Field Auto-Generation is Flawed</title>
-   <link href="https://www.benramey.com/2014/05/23/sitefinity-thunder-boolean-widget-designer-field-auto-generation-is-flawed/"/>
+   <link href="http://localhost:4000/2014/05/23/sitefinity-thunder-boolean-widget-designer-field-auto-generation-is-flawed/"/>
    <updated>2014-05-23T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2014/05/23/sitefinity-thunder-boolean-widget-designer-field-auto-generation-is-flawed</id>
+   <id>http://localhost:4000/2014/05/23/sitefinity-thunder-boolean-widget-designer-field-auto-generation-is-flawed</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 
 &lt;p&gt;When you use Sitefinity Thunder (a great help, by the way) to generate a Widget Designer for an existing widget that has a boolean property, you get this javascript in the auto-generated javascript file (let’s say my boolean field is named HasSubMenu):&lt;/p&gt;
@@ -1335,9 +1335,9 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
  
  <entry>
    <title>Create a List Selector Field in a Widget Designer in Sitefinity 6.2</title>
-   <link href="https://www.benramey.com/2014/05/21/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/"/>
+   <link href="http://localhost:4000/2014/05/21/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/"/>
    <updated>2014-05-21T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2014/05/21/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2</id>
+   <id>http://localhost:4000/2014/05/21/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2</id>
    <content type="html">&lt;blockquote&gt;
   &lt;p&gt;[9/25/14 update] See Hardy’s comments below for necessary updates to my steps when using Sitefinity 7.1 and up.  Thanks, Hardy!&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -1462,9 +1462,9 @@ class to use as your membership provider.  Putting an &lt;code class=&quot;highl
  
  <entry>
    <title>EPiServer 7: Cannot decrypt password</title>
-   <link href="https://www.benramey.com/2014/04/17/episerver-7-cannot-decrypt-password/"/>
+   <link href="http://localhost:4000/2014/04/17/episerver-7-cannot-decrypt-password/"/>
    <updated>2014-04-17T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2014/04/17/episerver-7-cannot-decrypt-password</id>
+   <id>http://localhost:4000/2014/04/17/episerver-7-cannot-decrypt-password</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;I’ve been dealing with an issue in EPiServer 7 recently.  I got this error when trying to log into the admin back-end of the site.&lt;/p&gt;
 
@@ -1506,9 +1506,9 @@ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp;amp; com
  
  <entry>
    <title>EPiServer 7 “The file ‘/link/GUID.aspx’ does not exist.” Error</title>
-   <link href="https://www.benramey.com/2014/03/27/episerver-7-the-file-linkguid-aspx-does-not-exist-error/"/>
+   <link href="http://localhost:4000/2014/03/27/episerver-7-the-file-linkguid-aspx-does-not-exist-error/"/>
    <updated>2014-03-27T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2014/03/27/episerver-7-the-file-linkguid-aspx-does-not-exist-error</id>
+   <id>http://localhost:4000/2014/03/27/episerver-7-the-file-linkguid-aspx-does-not-exist-error</id>
    <content type="html">&lt;p&gt;I ran into the following error while working with an installation of EPiServer 7 this week. It took me a long time to finally figure out the solution.&lt;/p&gt;
 
 &lt;p&gt;First, here’s the error and stack trace:&lt;/p&gt;
@@ -1534,9 +1534,9 @@ at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp;amp; 
  
  <entry>
    <title>The Dumbest Code I Ever Wrote</title>
-   <link href="https://www.benramey.com/2014/03/21/the-dumbest-code-i-ever-wrote/"/>
+   <link href="http://localhost:4000/2014/03/21/the-dumbest-code-i-ever-wrote/"/>
    <updated>2014-03-21T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2014/03/21/the-dumbest-code-i-ever-wrote</id>
+   <id>http://localhost:4000/2014/03/21/the-dumbest-code-i-ever-wrote</id>
    <content type="html">&lt;p&gt;Here it is, folks: some of the dumbest code I’ve ever written and I just now noticed it.&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-csharp&quot; data-lang=&quot;csharp&quot;&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Concat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;attachment; filename=\&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Concat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pagePdf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;.pdf&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;\&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
@@ -1546,9 +1546,9 @@ at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp;amp; 
  
  <entry>
    <title>NServiceBus with EntityFramework Persisters</title>
-   <link href="https://www.benramey.com/2014/03/07/nservicebus-with-entityframework-persisters/"/>
+   <link href="http://localhost:4000/2014/03/07/nservicebus-with-entityframework-persisters/"/>
    <updated>2014-03-07T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2014/03/07/nservicebus-with-entityframework-persisters</id>
+   <id>http://localhost:4000/2014/03/07/nservicebus-with-entityframework-persisters</id>
    <content type="html">&lt;h2 id=&quot;update-1132016&quot;&gt;Update 1/13/2016&lt;/h2&gt;
 &lt;p&gt;This code (much refactored and improved) is now available as a &lt;a href=&quot;http://www.nuget.org/packages/GoodlyFere.NServiceBus.EntityFramework&quot;&gt;NuGet package&lt;/a&gt;.&lt;/p&gt;
 
@@ -1630,36 +1630,36 @@ at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp;amp; 
  
  <entry>
    <title>Better Gruntfiles</title>
-   <link href="https://www.benramey.com/2014/02/23/better-gruntfiles/"/>
+   <link href="http://localhost:4000/2014/02/23/better-gruntfiles/"/>
    <updated>2014-02-23T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2014/02/23/better-gruntfiles</id>
+   <id>http://localhost:4000/2014/02/23/better-gruntfiles</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.thomasboyt.com/2013/09/01/maintainable-grunt.html&quot;&gt;More maintainable Gruntfiles&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Installing SharePoint 2010 Language Packs on Windows 7</title>
-   <link href="https://www.benramey.com/2013/11/05/installing-sharepoint-2010-language-packs-on-windows-7/"/>
+   <link href="http://localhost:4000/2013/11/05/installing-sharepoint-2010-language-packs-on-windows-7/"/>
    <updated>2013-11-05T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2013/11/05/installing-sharepoint-2010-language-packs-on-windows-7</id>
+   <id>http://localhost:4000/2013/11/05/installing-sharepoint-2010-language-packs-on-windows-7</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://johnnyharbieh.wordpress.com/2010/04/08/installing-language-packs-on-windows-7-for-sharepoint-server-2010-rc/&quot;&gt;Installing Language Packs on Windows 7 for SharePoint Server 2010 RC&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>How Not to Validate Email Addresses</title>
-   <link href="https://www.benramey.com/2013/10/14/how-not-to-validate-email-addresses/"/>
+   <link href="http://localhost:4000/2013/10/14/how-not-to-validate-email-addresses/"/>
    <updated>2013-10-14T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/10/14/how-not-to-validate-email-addresses</id>
+   <id>http://localhost:4000/2013/10/14/how-not-to-validate-email-addresses</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://mdswanson.com/blog/2013/10/14/how-not-to-validate-email-addresses.html&quot;&gt;How Not to Validate Email Addresses&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>SharePoint 2010 Page Layout Button Javascript Error</title>
-   <link href="https://www.benramey.com/2013/09/25/sharepoint-2010-page-layout-button-javascript-error/"/>
+   <link href="http://localhost:4000/2013/09/25/sharepoint-2010-page-layout-button-javascript-error/"/>
    <updated>2013-09-25T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/09/25/sharepoint-2010-page-layout-button-javascript-error</id>
+   <id>http://localhost:4000/2013/09/25/sharepoint-2010-page-layout-button-javascript-error</id>
    <content type="html">&lt;p&gt;I ran across an issue today in SharePoint 2010 where the Page Layout button would not open. It would throw the following error in Internet Explorer:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-javascript&quot; data-lang=&quot;javascript&quot;&gt;&lt;span class=&quot;nx&quot;&gt;SCRIPT5007&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Unable&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;get&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;property&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;‘&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;nodeName&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;’&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;undefined&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;or&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;reference&lt;/span&gt;
@@ -1673,27 +1673,27 @@ at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp;amp; 
  
  <entry>
    <title>Querying a Lookup Field with CAML</title>
-   <link href="https://www.benramey.com/2013/07/15/querying-a-lookup-field-with-caml/"/>
+   <link href="http://localhost:4000/2013/07/15/querying-a-lookup-field-with-caml/"/>
    <updated>2013-07-15T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/07/15/querying-a-lookup-field-with-caml</id>
+   <id>http://localhost:4000/2013/07/15/querying-a-lookup-field-with-caml</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://forums.asp.net/t/1127580.aspx/1&quot;&gt;Caml Query with Lookup field&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Properly Setting Up SharePoint 2010 Search PDF Indexing</title>
-   <link href="https://www.benramey.com/2013/06/26/properly-setting-up-sharepoint-2010-search-pdf-indexing/"/>
+   <link href="http://localhost:4000/2013/06/26/properly-setting-up-sharepoint-2010-search-pdf-indexing/"/>
    <updated>2013-06-26T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/06/26/properly-setting-up-sharepoint-2010-search-pdf-indexing</id>
+   <id>http://localhost:4000/2013/06/26/properly-setting-up-sharepoint-2010-search-pdf-indexing</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://nickgrattan.wordpress.com/2010/06/14/adobe-pdf-ifilter-indexing-with-sharepoint%C2%A02010/&quot;&gt;Adobe PDF IFilter Indexing with SharePoint 2010&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Error on /_vti_bin/owssvr.dll?cs=65001 When Creating or Editing a SharePoint List View</title>
-   <link href="https://www.benramey.com/2013/06/13/error-on-_vti_binowssvr-dllcs65001-when-creating-or-editing-a-sharepoint-list-view/"/>
+   <link href="http://localhost:4000/2013/06/13/error-on-_vti_binowssvr-dllcs65001-when-creating-or-editing-a-sharepoint-list-view/"/>
    <updated>2013-06-13T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/06/13/error-on-_vti_binowssvr-dllcs65001-when-creating-or-editing-a-sharepoint-list-view</id>
+   <id>http://localhost:4000/2013/06/13/error-on-_vti_binowssvr-dllcs65001-when-creating-or-editing-a-sharepoint-list-view</id>
    <content type="html">&lt;blockquote&gt;
   &lt;p&gt;UPDATE (6/14/2013):
 After some further issues I encountered (unrelated to the OWSSVR.dll error, but on this module) I found out that the problem is with accessing query string parameters (at least). However, accessing the HttpRequest object’s Url property, for example, doesn’t cause this error.&lt;/p&gt;
@@ -1762,9 +1762,9 @@ After some further issues I encountered (unrelated to the OWSSVR.dll error, but 
  
  <entry>
    <title>SharePoint Unknown Error After Database Attach</title>
-   <link href="https://www.benramey.com/2013/06/06/sharepoint-unknown-error-after-database-attach/"/>
+   <link href="http://localhost:4000/2013/06/06/sharepoint-unknown-error-after-database-attach/"/>
    <updated>2013-06-06T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/06/06/sharepoint-unknown-error-after-database-attach</id>
+   <id>http://localhost:4000/2013/06/06/sharepoint-unknown-error-after-database-attach</id>
    <content type="html">&lt;p&gt;There are many reasons you might get one of those blank screens with just the text “An unknown error has occurred” when working with SharePoint.  Just search for it online and you’ll find many fixes.&lt;/p&gt;
 
 &lt;p&gt;I found another one last night.  One of our system admins setup a SharePoint web application for me for development purposes.  We attached a database from a backup of our client’s production content.  But, I couldn’t get to the site.  It gave me the unknown error screen.&lt;/p&gt;
@@ -1777,9 +1777,9 @@ After some further issues I encountered (unrelated to the OWSSVR.dll error, but 
  
  <entry>
    <title>SharePoint LINQ (SPMetal) in Anonymous User Context</title>
-   <link href="https://www.benramey.com/2013/05/23/sharepoint-linq-spmetal-in-anonymous-user-context/"/>
+   <link href="http://localhost:4000/2013/05/23/sharepoint-linq-spmetal-in-anonymous-user-context/"/>
    <updated>2013-05-23T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/05/23/sharepoint-linq-spmetal-in-anonymous-user-context</id>
+   <id>http://localhost:4000/2013/05/23/sharepoint-linq-spmetal-in-anonymous-user-context</id>
    <content type="html">&lt;p&gt;Refer to the links below to fix this issue of SPMetal LINQ queries failing in an anonymous user context in SharePoint 2010.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://blog.tylerholmes.com/2011/04/access-denied-with-linq-to-sharepoint.html&quot;&gt;Access Denied with LINQ-to-SharePoint&lt;/a&gt;&lt;/p&gt;
@@ -1790,9 +1790,9 @@ After some further issues I encountered (unrelated to the OWSSVR.dll error, but 
  
  <entry>
    <title>SharePoint 2010 401 Unauthorized Error</title>
-   <link href="https://www.benramey.com/2013/05/23/sharepoint-2010-401-unauthorized-error/"/>
+   <link href="http://localhost:4000/2013/05/23/sharepoint-2010-401-unauthorized-error/"/>
    <updated>2013-05-23T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/05/23/sharepoint-2010-401-unauthorized-error</id>
+   <id>http://localhost:4000/2013/05/23/sharepoint-2010-401-unauthorized-error</id>
    <content type="html">&lt;p&gt;There are many, many reasons why SharePoint will throw a 401 error.  Most of them are hard to track down and have absolutely no bearing on reality unless you’re a genius.  So, your only hope is to track down obscure registry updates (hacks), scour the internet for random things other people have found or just give up.  :-)&lt;/p&gt;
 
 &lt;p&gt;I just about pulled my hair out yesterday trying to get to the bottom of a 401 Unauthorized error I kept getting for my anonymous access-enabled web application.  I’m not sure why, but I never tried debugging my application to see where the error was actually being thrown.  I assumed it was on the IIS level or some SharePoint level, so I never tried debugging.&lt;/p&gt;
@@ -1856,9 +1856,9 @@ After some further issues I encountered (unrelated to the OWSSVR.dll error, but 
  
  <entry>
    <title>Sitecore Rocks and SharePoint Package Interference</title>
-   <link href="https://www.benramey.com/2013/05/08/sitecore-rocks-and-sharepoint-package-interference/"/>
+   <link href="http://localhost:4000/2013/05/08/sitecore-rocks-and-sharepoint-package-interference/"/>
    <updated>2013-05-08T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/05/08/sitecore-rocks-and-sharepoint-package-interference</id>
+   <id>http://localhost:4000/2013/05/08/sitecore-rocks-and-sharepoint-package-interference</id>
    <content type="html">&lt;p&gt;I ran into an interesting problem today while working in Visual Studio 2010 on a SharePoint 2010 project.&lt;/p&gt;
 
 &lt;p&gt;You are supposed to be able to open the Package.package files to edit the Features that are included and their order, etc.  However, when I double-clicked on the Package.package file to open it, I got a strange dialog box that said the document was already open, would I like to close it?  If I said “yes”, another “Package Connection” dialog box would open with all the IIS sites I had setup listed.  However, none of my SharePoint sites were listed and choosing any of the other sites just failed.&lt;/p&gt;
@@ -1869,18 +1869,18 @@ After some further issues I encountered (unrelated to the OWSSVR.dll error, but 
  
  <entry>
    <title>ASP.NET MVC 3.0 Redirect to Account/Login with Windows Authentication</title>
-   <link href="https://www.benramey.com/2013/04/23/asp-net-mvc-3-0-redirect-to-accountlogin-with-windows-authentication/"/>
+   <link href="http://localhost:4000/2013/04/23/asp-net-mvc-3-0-redirect-to-accountlogin-with-windows-authentication/"/>
    <updated>2013-04-23T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/04/23/asp-net-mvc-3-0-redirect-to-accountlogin-with-windows-authentication</id>
+   <id>http://localhost:4000/2013/04/23/asp-net-mvc-3-0-redirect-to-accountlogin-with-windows-authentication</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.benramey.com/2013/04/23/asp-net-mvc-3-0-redirect-to-accountlogin-with-windows-authentication/#&quot;&gt;ASP.NET MVC 3 Windows Authentication problem – redirects to Account/Login&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Ektron Html Encodes Certain Content Title Characters</title>
-   <link href="https://www.benramey.com/2013/03/20/ektron-html-encodes-certain-content-title-characters/"/>
+   <link href="http://localhost:4000/2013/03/20/ektron-html-encodes-certain-content-title-characters/"/>
    <updated>2013-03-20T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/03/20/ektron-html-encodes-certain-content-title-characters</id>
+   <id>http://localhost:4000/2013/03/20/ektron-html-encodes-certain-content-title-characters</id>
    <content type="html">&lt;p&gt;I found out today, while trying to search for certain content items in Ektron, that Ektron HTML encodes certain characters in content titles–but does not, apparently, HTML encode the entire title.&lt;/p&gt;
 
 &lt;p&gt;Here is a list of characters I’ve found so far that Ektron encodes in the title:&lt;/p&gt;
@@ -1901,9 +1901,9 @@ After some further issues I encountered (unrelated to the OWSSVR.dll error, but 
  
  <entry>
    <title>TaxonomyManager WCF Error in Ektron 8.5 3-tier Setup</title>
-   <link href="https://www.benramey.com/2013/03/15/taxonomymanager-wcf-error-in-ektron-8-5-3-tier-setup/"/>
+   <link href="http://localhost:4000/2013/03/15/taxonomymanager-wcf-error-in-ektron-8-5-3-tier-setup/"/>
    <updated>2013-03-15T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/03/15/taxonomymanager-wcf-error-in-ektron-8-5-3-tier-setup</id>
+   <id>http://localhost:4000/2013/03/15/taxonomymanager-wcf-error-in-ektron-8-5-3-tier-setup</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;I’m currently working on a project to import data into an existing Ektron 8.5 SP3 installation. It is pulling existing product data from a database, transforming it into the smart form XML we need and then shoving that data into the Ektron installation.  In addition to creating content items, the import tool also updates metadata and taxonomy fields.&lt;/p&gt;
 
@@ -1940,9 +1940,9 @@ After some further issues I encountered (unrelated to the OWSSVR.dll error, but 
  
  <entry>
    <title>Ektron Paths</title>
-   <link href="https://www.benramey.com/2013/03/15/ektron-paths/"/>
+   <link href="http://localhost:4000/2013/03/15/ektron-paths/"/>
    <updated>2013-03-15T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2013/03/15/ektron-paths</id>
+   <id>http://localhost:4000/2013/03/15/ektron-paths</id>
    <content type="html">&lt;p&gt;For future reference, here is how you have to construct paths for finding Ektron content items, folders and taxonomy items.&lt;/p&gt;
 
 &lt;h2 id=&quot;foldermanager-and-contentmanager&quot;&gt;FolderManager and ContentManager&lt;/h2&gt;
@@ -1981,9 +1981,9 @@ So, given this code:&lt;/p&gt;
  
  <entry>
    <title>Converting an Interface Expression to a Concrete Expression</title>
-   <link href="https://www.benramey.com/2013/01/23/converting-an-interface-expression-to-a-concrete-expression/"/>
+   <link href="http://localhost:4000/2013/01/23/converting-an-interface-expression-to-a-concrete-expression/"/>
    <updated>2013-01-23T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2013/01/23/converting-an-interface-expression-to-a-concrete-expression</id>
+   <id>http://localhost:4000/2013/01/23/converting-an-interface-expression-to-a-concrete-expression</id>
    <content type="html">&lt;p&gt;I had a case recently where I needed to convert a LINQ expression of the type of an interface and I needed to convert it to be based on a concrete implementation of that interface.  I came up with the  following solution, using an ExpressionVisitor and a simple helper method.&lt;/p&gt;
 
 &lt;p&gt;First, the helper method in a static class.&lt;/p&gt;
@@ -2052,9 +2052,9 @@ So, given this code:&lt;/p&gt;
  
  <entry>
    <title>LINQ to Ektron Search Library</title>
-   <link href="https://www.benramey.com/2013/01/15/linq-to-ektron-search-library/"/>
+   <link href="http://localhost:4000/2013/01/15/linq-to-ektron-search-library/"/>
    <updated>2013-01-15T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2013/01/15/linq-to-ektron-search-library</id>
+   <id>http://localhost:4000/2013/01/15/linq-to-ektron-search-library</id>
    <content type="html">&lt;p&gt;I am currently working on a project at VML that will make use of Ektron’s 3-tier architecture. It will be an MVC 4.0 site that basically uses an existing Ektron site as a datasource. It pulls in various Ektron content and then feeds it into the MVC application (a mobile version of the Ektron site).&lt;/p&gt;
 
 &lt;p&gt;I wanted to take time on this project to make everything “right”. I am using MVC as my presentation layer, I have a distinct business logic layer and underneath that I have a nice data layer. This data layer is what is interacting with Ektron. The data model for the application is defined separately through a set of interfaces that describe different data objects. The presentation and business logic layers know nothing about the concrete implementations of these interfaces. So, my project structure looks like this:&lt;/p&gt;
@@ -2090,9 +2090,9 @@ NuGet: &lt;a href=&quot;http://nuget.org/packages/GoodlyFere.Ektron.Linq&quot;&g
  
  <entry>
    <title>Setting Selected Items on Sitefinity 5.1 PagesSelector in Javascript</title>
-   <link href="https://www.benramey.com/2012/10/25/setting-selected-items-on-sitefinity-5-1-pagesselector-in-javascript/"/>
+   <link href="http://localhost:4000/2012/10/25/setting-selected-items-on-sitefinity-5-1-pagesselector-in-javascript/"/>
    <updated>2012-10-25T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/10/25/setting-selected-items-on-sitefinity-5-1-pagesselector-in-javascript</id>
+   <id>http://localhost:4000/2012/10/25/setting-selected-items-on-sitefinity-5-1-pagesselector-in-javascript</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;Today I nearly tore my hair out trying to get set the selected items (having a list of GUIDs) on the PagesSelector control in Sitefinity through the Javascript API to the control.&lt;/p&gt;
 
@@ -2199,9 +2199,9 @@ NuGet: &lt;a href=&quot;http://nuget.org/packages/GoodlyFere.Ektron.Linq&quot;&g
  
  <entry>
    <title>Indexing Taxonomy Fields For Search in Sitefinity 5.1</title>
-   <link href="https://www.benramey.com/2012/10/19/indexing-taxonomy-fields-for-search-in-sitefinity-51/"/>
+   <link href="http://localhost:4000/2012/10/19/indexing-taxonomy-fields-for-search-in-sitefinity-51/"/>
    <updated>2012-10-19T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/10/19/indexing-taxonomy-fields-for-search-in-sitefinity-51</id>
+   <id>http://localhost:4000/2012/10/19/indexing-taxonomy-fields-for-search-in-sitefinity-51</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;We recently ran into a rather surprising issue with a Sitefinity 5.1 installation. We wanted a pretty simple feature: when searching and using Lucene, we wanted the values of any taxonomy fields to be indexed with Sitefinity’s Lucene back-end so that items could be searched by their attached taxonomy. This is apparently impossible with the basic installation because you can only search short text and long text fields.&lt;/p&gt;
 
@@ -2308,9 +2308,9 @@ First of all, you need to create a new class that inherits from ConcatenationTra
  
  <entry>
    <title>Custom Error Pages with Sitefinity</title>
-   <link href="https://www.benramey.com/2012/10/12/custom-error-pages-with-sitefinity/"/>
+   <link href="http://localhost:4000/2012/10/12/custom-error-pages-with-sitefinity/"/>
    <updated>2012-10-12T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/10/12/custom-error-pages-with-sitefinity</id>
+   <id>http://localhost:4000/2012/10/12/custom-error-pages-with-sitefinity</id>
    <content type="html">&lt;p&gt;I had a considerably hard time today getting just a simple 404 error page (custom) to show up in all cases for a Sitefinity installation. It probably has nothing to do with Sitefinity and a lot more to do with my lack of experience doing this simple task. But, anyhow, here are my findings.&lt;/p&gt;
 
 &lt;p&gt;You have to setup the error pages in two places in the application’s web.config to cover all of your bases.&lt;/p&gt;
@@ -2338,9 +2338,9 @@ First of all, you need to create a new class that inherits from ConcatenationTra
  
  <entry>
    <title>Sitefinity Configuration File Changes When Creating and Activating a Dynamic Module</title>
-   <link href="https://www.benramey.com/2012/10/10/sitefinity-configuration-file-changes-when-creating-and-activating-a-dynamic-module/"/>
+   <link href="http://localhost:4000/2012/10/10/sitefinity-configuration-file-changes-when-creating-and-activating-a-dynamic-module/"/>
    <updated>2012-10-10T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/10/10/sitefinity-configuration-file-changes-when-creating-and-activating-a-dynamic-module</id>
+   <id>http://localhost:4000/2012/10/10/sitefinity-configuration-file-changes-when-creating-and-activating-a-dynamic-module</id>
    <content type="html">&lt;p&gt;After you create and activate a dynamic module with Module Builder in Sitefinity several configuration files are changes inside of App_Data/Sitefinity/Configuration.  Here’s a list of what is changed.&lt;/p&gt;
 
 &lt;h2 id=&quot;contentviewconfigconfig&quot;&gt;ContentViewConfig.config&lt;/h2&gt;
@@ -2571,9 +2571,9 @@ First of all, you need to create a new class that inherits from ConcatenationTra
  
  <entry>
    <title>Retrieve Dynamic Module Choice Field Value Options in Sitefinity</title>
-   <link href="https://www.benramey.com/2012/10/05/retrieve-dynamic-module-choice-field-value-options-in-sitefinity/"/>
+   <link href="http://localhost:4000/2012/10/05/retrieve-dynamic-module-choice-field-value-options-in-sitefinity/"/>
    <updated>2012-10-05T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/10/05/retrieve-dynamic-module-choice-field-value-options-in-sitefinity</id>
+   <id>http://localhost:4000/2012/10/05/retrieve-dynamic-module-choice-field-value-options-in-sitefinity</id>
    <content type="html">&lt;p&gt;I am testing out Sitefinity right now for an upcoming project. So far, I really like everything I see. It’s a great CMS and should fit out needs just perfectly (for pretty cheap too).&lt;/p&gt;
 
 &lt;p&gt;As with all software though, you will inevitably run into things you can’t do so easily (or, at least, as easily as you think you should be able to). I ran into one of those issues yesterday and finally hacked my way to a solution this morning.&lt;/p&gt;
@@ -2672,27 +2672,27 @@ First of all, you need to create a new class that inherits from ConcatenationTra
  
  <entry>
    <title>Check for a Publishing SPWeb or SPSite</title>
-   <link href="https://www.benramey.com/2012/09/28/check-for-a-publishing-spweb-or-spsite/"/>
+   <link href="http://localhost:4000/2012/09/28/check-for-a-publishing-spweb-or-spsite/"/>
    <updated>2012-09-28T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/09/28/check-for-a-publishing-spweb-or-spsite</id>
+   <id>http://localhost:4000/2012/09/28/check-for-a-publishing-spweb-or-spsite</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.dhirendrayadav.com/2011/09/checking-if-site-is-publishing-site.html&quot;&gt;Check for a Publishing SPWeb or SPSite&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Endless Authentication Prompts for SharePoint Site Collection</title>
-   <link href="https://www.benramey.com/2012/09/27/endless-authentication-prompts-for-sharepoint-site-collection/"/>
+   <link href="http://localhost:4000/2012/09/27/endless-authentication-prompts-for-sharepoint-site-collection/"/>
    <updated>2012-09-27T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/09/27/endless-authentication-prompts-for-sharepoint-site-collection</id>
+   <id>http://localhost:4000/2012/09/27/endless-authentication-prompts-for-sharepoint-site-collection</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.benramey.com/2012/09/27/endless-authentication-prompts-for-sharepoint-site-collection/#&quot;&gt;Fix for endless authentication prompts in SharePoint on localhost with host header&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Cannot remove file “master_page_name_here”. Error Code: 158</title>
-   <link href="https://www.benramey.com/2012/09/27/cannot-remove-file-error-code-158/"/>
+   <link href="http://localhost:4000/2012/09/27/cannot-remove-file-error-code-158/"/>
    <updated>2012-09-27T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/09/27/cannot-remove-file-error-code-158</id>
+   <id>http://localhost:4000/2012/09/27/cannot-remove-file-error-code-158</id>
    <content type="html">&lt;p&gt;UPDATE (9/19/2013):
   Please see Jeff’s comment below for a better solution to this issue using best-practices for iterating through a SPSite’s AllWebs collection.
   There are multiple places online that provide an answer to the error in the title of this post. The scenario is pretty simple: deleting a master page file previously deployed by a feature in the FeatureDeactivating method of a FeatureReceiver.&lt;/p&gt;
@@ -2759,27 +2759,27 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>SharePoint Page Layout Error: Only Content controls are allowed directly in a content page that contains Content controls</title>
-   <link href="https://www.benramey.com/2012/09/26/sharepoint-page-layout-error-only-content-controls-are-allowed-directly-in-a-content-page-that-contains-content-controls/"/>
+   <link href="http://localhost:4000/2012/09/26/sharepoint-page-layout-error-only-content-controls-are-allowed-directly-in-a-content-page-that-contains-content-controls/"/>
    <updated>2012-09-26T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/09/26/sharepoint-page-layout-error-only-content-controls-are-allowed-directly-in-a-content-page-that-contains-content-controls</id>
+   <id>http://localhost:4000/2012/09/26/sharepoint-page-layout-error-only-content-controls-are-allowed-directly-in-a-content-page-that-contains-content-controls</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.benramey.com/2012/09/26/sharepoint-page-layout-error-only-content-controls-are-allowed-directly-in-a-content-page-that-contains-content-controls/#&quot;&gt;SharePoint Page Layout Error: Only Content controls are allowed directly in a content page that contains Content controls&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Deploying SharePoint 2010 Page Layouts with Visual Studio 2010</title>
-   <link href="https://www.benramey.com/2012/09/26/deploying-sharepoint-2010-page-layouts-with-visual-studio-2010/"/>
+   <link href="http://localhost:4000/2012/09/26/deploying-sharepoint-2010-page-layouts-with-visual-studio-2010/"/>
    <updated>2012-09-26T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/09/26/deploying-sharepoint-2010-page-layouts-with-visual-studio-2010</id>
+   <id>http://localhost:4000/2012/09/26/deploying-sharepoint-2010-page-layouts-with-visual-studio-2010</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.benramey.com/2012/09/26/deploying-sharepoint-2010-page-layouts-with-visual-studio-2010/#&quot;&gt;Deploying SharePoint 2010 Page Layouts with Visual Studio 2010&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>'Specified method is not supported' error when deleting SharePoint site</title>
-   <link href="https://www.benramey.com/2012/09/25/specified-method-is-not-supported-error-when-deleting-sharepoint-site/"/>
+   <link href="http://localhost:4000/2012/09/25/specified-method-is-not-supported-error-when-deleting-sharepoint-site/"/>
    <updated>2012-09-25T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/09/25/specified-method-is-not-supported-error-when-deleting-sharepoint-site</id>
+   <id>http://localhost:4000/2012/09/25/specified-method-is-not-supported-error-when-deleting-sharepoint-site</id>
    <content type="html">&lt;p&gt;I was getting a “Specified method is not supported” error when I tried to delete some test sites in SharePoint 2010 today. I found a great link that gave several solutions to deletion errors. Issue #1 under this link is what I needed:&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://www.benramey.com/2012/09/25/specified-method-is-not-supported-error-when-deleting-sharepoint-site/#&quot;&gt;SharePoint 2010: Unable to delete site/web after SP1&lt;/a&gt;&lt;/p&gt;
@@ -2790,9 +2790,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Rendering must have placeholder chrome as its parent. Got ‘rendering’ instead</title>
-   <link href="https://www.benramey.com/2012/08/09/rendering-must-have-placeholder-chrome-as-its-parent-got-rendering-instead/"/>
+   <link href="http://localhost:4000/2012/08/09/rendering-must-have-placeholder-chrome-as-its-parent-got-rendering-instead/"/>
    <updated>2012-08-09T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/08/09/rendering-must-have-placeholder-chrome-as-its-parent-got-rendering-instead</id>
+   <id>http://localhost:4000/2012/08/09/rendering-must-have-placeholder-chrome-as-its-parent-got-rendering-instead</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;I got the error message (in my Firebug console) in the Sitecore Page Editor on a page where I had a nested sublayout.  I had a basic two-column layout for the main sublayout of the page.  Then, in the right column, I had another sublayout that further divided up the right column as I needed.  Here is what the nested sublayout looked like:&lt;/p&gt;
 
@@ -2829,9 +2829,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Group List Into Sub-lists by Index</title>
-   <link href="https://www.benramey.com/2012/07/27/group-list-into-sub-lists-by-index/"/>
+   <link href="http://localhost:4000/2012/07/27/group-list-into-sub-lists-by-index/"/>
    <updated>2012-07-27T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/07/27/group-list-into-sub-lists-by-index</id>
+   <id>http://localhost:4000/2012/07/27/group-list-into-sub-lists-by-index</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;Everyone once-in-a-while I need to take a flat list (or array, or whatever) of items and divide it up into chunks.  It doesn’t have to be in any real order, necessarily, it just has to be in groups of two, three or four or however many items.  Most recently, I needed this to divide up a list of blog items into chunks of four to display in sets of “pages” that a user would page through with Javascript.&lt;/p&gt;
 
@@ -2850,9 +2850,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Nested User Controls Not Rendering</title>
-   <link href="https://www.benramey.com/2012/07/25/nested-user-controls-not-rendering/"/>
+   <link href="http://localhost:4000/2012/07/25/nested-user-controls-not-rendering/"/>
    <updated>2012-07-25T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/07/25/nested-user-controls-not-rendering</id>
+   <id>http://localhost:4000/2012/07/25/nested-user-controls-not-rendering</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;I got caught today in a stupid problem.  But, it wasn’t obvious (at least to me) at first what was causing it.  I was doing something simple: nesting one UserControl inside of another.  But, the nested UserControl wasn’t showing up.  I couldn’t, for the life of me, figure out what I had done wrong.  If I didn’t nest the control, it worked fine.&lt;/p&gt;
 
@@ -2871,9 +2871,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Grace &amp; Me</title>
-   <link href="https://www.benramey.com/2012/07/19/grace-and-me/"/>
+   <link href="http://localhost:4000/2012/07/19/grace-and-me/"/>
    <updated>2012-07-19T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/07/19/grace-and-me</id>
+   <id>http://localhost:4000/2012/07/19/grace-and-me</id>
    <content type="html">&lt;p&gt;Our story really begins somewhere around the beginning of 2007.  That’s when Grace’s brother Nathan came down to Kansas City for a couple of Bible conferences that I (Ben) also happened to go to.  I barely remember meeting Nate, but he must have made an impression because we started to become good friends soon afterward.  On a whim one time as Nate and I were chatting on Facebook, he invited me up to a regular men’s Bible study in Colfax, WI led by Warren Henderson.  That’s eight hours away from Kansas City and so Nate never thought I’d actually say yes.  But, what Nate did not know was this was a tremendous answer to prayer for me.  I’d been praying that the Lord would bring some good, solid young men who were my age into my life.  This seemed like the perfect place to see that prayer answered.  Little did I know that it would some day lead to me marrying Nate’s sister!&lt;/p&gt;
 
 &lt;p&gt;Grace and I don’t really know for sure when we first met.  We have our first, real evidence of being in the same place at the same time at the 2008 Vessels of Honor conference in Parkville, MO.  But, it was probably a little before that, on a Sunday morning in Chippewa Falls, WI after one of those men’s Bible studies at the River Valley Christian Fellowship where Nathan, Grace and their family went to church.&lt;/p&gt;
@@ -2914,9 +2914,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Limit Selected Items on Sitecore Multilist Field</title>
-   <link href="https://www.benramey.com/2012/06/12/limit-selected-items-on-sitecore-multilist-field/"/>
+   <link href="http://localhost:4000/2012/06/12/limit-selected-items-on-sitecore-multilist-field/"/>
    <updated>2012-06-12T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/06/12/limit-selected-items-on-sitecore-multilist-field</id>
+   <id>http://localhost:4000/2012/06/12/limit-selected-items-on-sitecore-multilist-field</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;You want to limit the number of items a user can choose for a multilist field in a data template in sitecore.&lt;/p&gt;
 
@@ -2942,9 +2942,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Replacing newline characters in VB.NET strings</title>
-   <link href="https://www.benramey.com/2012/06/12/replacing-newline-characters-in-vb-net-strings/"/>
+   <link href="http://localhost:4000/2012/06/12/replacing-newline-characters-in-vb-net-strings/"/>
    <updated>2012-06-12T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/06/12/replacing-newline-characters-in-vb-net-strings</id>
+   <id>http://localhost:4000/2012/06/12/replacing-newline-characters-in-vb-net-strings</id>
    <content type="html">&lt;p&gt;I’m not very familiar (which I am actually very happy for!) with VB.NET and so I had a hard time figuring out how to trim newline characters from a string in a Reporting Services report I was working on.&lt;/p&gt;
 
 &lt;p&gt;Turns out none of the “regular” methods really work.  The Trim function only removes spaces and anything like Replace(“string”, “\n”, “”) didn’t work.&lt;/p&gt;
@@ -2960,9 +2960,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Change the color of an icon with Gimp</title>
-   <link href="https://www.benramey.com/2012/03/15/change-the-color-of-an-icon-with-gimp/"/>
+   <link href="http://localhost:4000/2012/03/15/change-the-color-of-an-icon-with-gimp/"/>
    <updated>2012-03-15T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2012/03/15/change-the-color-of-an-icon-with-gimp</id>
+   <id>http://localhost:4000/2012/03/15/change-the-color-of-an-icon-with-gimp</id>
    <content type="html">&lt;p&gt;Fairly often, I run across the perfect icon that I need for a website, but it’s just the wrong color.  I want to keep the nice blending to the background of the icon around the edges, the shape and everything that makes the icon look spiffy.  I just want the main color to be something else.&lt;/p&gt;
 
 &lt;p&gt;It took me a long time to figure out a good method (I’m no graphic designer!), but I eventually came a cross a really easy method that works well using trusty Gimp.  I’ll walk you through it.&lt;/p&gt;
@@ -3029,18 +3029,18 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Easy Way to Make Huge Maps with Google Maps</title>
-   <link href="https://www.benramey.com/2012/03/07/easy-way-to-make-huge-maps-with-google-maps/"/>
+   <link href="http://localhost:4000/2012/03/07/easy-way-to-make-huge-maps-with-google-maps/"/>
    <updated>2012-03-07T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2012/03/07/easy-way-to-make-huge-maps-with-google-maps</id>
+   <id>http://localhost:4000/2012/03/07/easy-way-to-make-huge-maps-with-google-maps</id>
    <content type="html">&lt;p&gt;&lt;a href=&quot;http://www.metacafe.com/watch/1073912/google_maps_hack_how_to_save_large_maps/&quot;&gt;Easy way to make huge maps with Google Maps&lt;/a&gt;&lt;/p&gt;
 </content>
  </entry>
  
  <entry>
    <title>Grouping into Rows with XSLT</title>
-   <link href="https://www.benramey.com/2012/03/05/grouping-into-rows-with-xslt/"/>
+   <link href="http://localhost:4000/2012/03/05/grouping-into-rows-with-xslt/"/>
    <updated>2012-03-05T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2012/03/05/grouping-into-rows-with-xslt</id>
+   <id>http://localhost:4000/2012/03/05/grouping-into-rows-with-xslt</id>
    <content type="html">&lt;p&gt;Let’s say you have a simple XML document that looks something like this:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-xml&quot; data-lang=&quot;xml&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;root&amp;gt;&lt;/span&gt;
@@ -3196,9 +3196,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Ektron License Key Update</title>
-   <link href="https://www.benramey.com/2012/02/27/ektron-license-key-update/"/>
+   <link href="http://localhost:4000/2012/02/27/ektron-license-key-update/"/>
    <updated>2012-02-27T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2012/02/27/ektron-license-key-update</id>
+   <id>http://localhost:4000/2012/02/27/ektron-license-key-update</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;We use a temporary license key with our Ektron development website here at work. Because it’s temporary, we have to update it every-so-often. That happened today.&lt;/p&gt;
 
@@ -3215,9 +3215,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Install SharePoint on Windows 7</title>
-   <link href="https://www.benramey.com/2012/02/03/install-sharepoint-on-windows-7/"/>
+   <link href="http://localhost:4000/2012/02/03/install-sharepoint-on-windows-7/"/>
    <updated>2012-02-03T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2012/02/03/install-sharepoint-on-windows-7</id>
+   <id>http://localhost:4000/2012/02/03/install-sharepoint-on-windows-7</id>
    <content type="html">&lt;p&gt;If you try to do a SharePoint 2010 installation on your client machine (that is, not a Windows Server OS) then you’ll get an error explaining that SharePoint 2010 can’t be installed on your operating system.&lt;/p&gt;
 
 &lt;p&gt;Never fear, CodeProject is here. Check out this helpful post to get it installed (it couldn’t be easier):&lt;/p&gt;
@@ -3236,9 +3236,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>How to Create a Brightcove Player Logo Overlay</title>
-   <link href="https://www.benramey.com/2012/02/03/how-to-create-a-brightcove-player-logo-overlay/"/>
+   <link href="http://localhost:4000/2012/02/03/how-to-create-a-brightcove-player-logo-overlay/"/>
    <updated>2012-02-03T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2012/02/03/how-to-create-a-brightcove-player-logo-overlay</id>
+   <id>http://localhost:4000/2012/02/03/how-to-create-a-brightcove-player-logo-overlay</id>
    <content type="html">&lt;p&gt;As simple as it ended up being, it took me quite a while to figure out how to correctly add a simple overlaying graphic to a Brightcove video player yesterday.  It involves a couple of steps which I did not find clearly laid out anywhere I looked.  So, I thought a nice little step-by-step blog post would be helpful to anyone else looking for the same thing.&lt;/p&gt;
 
 &lt;p&gt;First, Brightcove has a nice and easy method (I say that because it looks easy…I didn’t try this method) of adding logo overlays to an individual video.  You just:&lt;/p&gt;
@@ -3298,9 +3298,9 @@ Great post but I did run into the same issue you were experiencing today. You ca
  
  <entry>
    <title>Formatting multiple XML files at a time</title>
-   <link href="https://www.benramey.com/2011/12/14/formatting-multiple-xml-files-at-a-time/"/>
+   <link href="http://localhost:4000/2011/12/14/formatting-multiple-xml-files-at-a-time/"/>
    <updated>2011-12-14T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2011/12/14/formatting-multiple-xml-files-at-a-time</id>
+   <id>http://localhost:4000/2011/12/14/formatting-multiple-xml-files-at-a-time</id>
    <content type="html">&lt;p&gt;I recently had a situation where I needed to compare many XML files generated by a program of one version to the same set of XML files produced by a previous version of the same program. Unfortunately, the sets of XML files were formatted differently and so doing a file comparison with Beyond Compare (a GREAT file comparison tool, by the way) was going to be useless.&lt;/p&gt;
 
 &lt;p&gt;So, I started looking for a way to quickly format all the files in each set the same way with one program. I looked into using Notepad++ which has a great XML Tools plugin (look for it under Plugins &amp;gt; Plugin Manager). I tried combining the plugin’s formatting commands with a macro that would format the XML file, save it and close it. So, I could easily open the few hundred files I had to format in Notepad++ (one set at a time), then run the macro multiple times (Macro &amp;gt; Run a Macro Multiple Times…). This would run through each file until all were formatted and closed. However, after working with it for a while, I couldn’t get the Notepad++ macro system to actual perform the XML Tools plugin format command. The macro would successfully run, saving and closing the file. But, when I checked the files they had not been formatted. I worked with it for a while, but could not figure out what the matter was.&lt;/p&gt;
@@ -3328,9 +3328,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>Blank SharePoint Site Problem</title>
-   <link href="https://www.benramey.com/2011/12/01/blank-sharepoint-site-problem/"/>
+   <link href="http://localhost:4000/2011/12/01/blank-sharepoint-site-problem/"/>
    <updated>2011-12-01T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2011/12/01/blank-sharepoint-site-problem</id>
+   <id>http://localhost:4000/2011/12/01/blank-sharepoint-site-problem</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;A SharePoint site renders completely blank in the browser. It shows up immediately without any “processing” time and when looking at the HTML source for the page, it is completely blank–no HTML tags whatsoever.&lt;/p&gt;
 
@@ -3341,9 +3341,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>jQuery Tools Overlay v1.2.5 Bug</title>
-   <link href="https://www.benramey.com/2011/11/21/jquery-tools-overlay-v1-2-5-bug/"/>
+   <link href="http://localhost:4000/2011/11/21/jquery-tools-overlay-v1-2-5-bug/"/>
    <updated>2011-11-21T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2011/11/21/jquery-tools-overlay-v1-2-5-bug</id>
+   <id>http://localhost:4000/2011/11/21/jquery-tools-overlay-v1-2-5-bug</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;I noticed a bug in the jQuery Tools library today, specifically in version 1.2.5 and the Overlay plugin. I should say, I’m assuming it’s a bug. This is an existing website I am working on where I am not in a position to upgrade the jQuery Tools library to the latest version (1.2.6 is out, it looks like) and I don’t know how much of the problem may be due to how existing code is possibly interfering with the library.&lt;/p&gt;
 
@@ -3360,9 +3360,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>ANSI/UTF-8 Encoding Problem</title>
-   <link href="https://www.benramey.com/2011/11/14/ansiutf-8-encoding-problem/"/>
+   <link href="http://localhost:4000/2011/11/14/ansiutf-8-encoding-problem/"/>
    <updated>2011-11-14T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2011/11/14/ansiutf-8-encoding-problem</id>
+   <id>http://localhost:4000/2011/11/14/ansiutf-8-encoding-problem</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;I ran into a problem in a project I was working on recently.  The basics of the project were to take data out of a MySQL database and transform that data into an XML file schema for a
 &lt;a href=&quot;http://day.com/day/en/products.html&quot;&gt;Day CQ5 CMS&lt;/a&gt;
@@ -3392,9 +3392,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>File Name Sanitizer One-Liner</title>
-   <link href="https://www.benramey.com/2011/08/24/file-name-sanitizer-one-liner/"/>
+   <link href="http://localhost:4000/2011/08/24/file-name-sanitizer-one-liner/"/>
    <updated>2011-08-24T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2011/08/24/file-name-sanitizer-one-liner</id>
+   <id>http://localhost:4000/2011/08/24/file-name-sanitizer-one-liner</id>
    <content type="html">&lt;p&gt;I find myself often having to sanitize file names and paths because I’m creating files from some kind of user input that I’m unsure about.  I found this handy way of doing this in one line today:&lt;/p&gt;
 
 &lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;fileName = Path.GetInvalidFileNameChars().Aggregate(fileName, (name, c) =&amp;gt; name.Replace(c, ‘_’));&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
@@ -3408,9 +3408,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>Opening all SharePoint 2010 Documents in a new window</title>
-   <link href="https://www.benramey.com/2011/04/25/opening-all-sharepoint-2010-documents-in-a-new-window/"/>
+   <link href="http://localhost:4000/2011/04/25/opening-all-sharepoint-2010-documents-in-a-new-window/"/>
    <updated>2011-04-25T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2011/04/25/opening-all-sharepoint-2010-documents-in-a-new-window</id>
+   <id>http://localhost:4000/2011/04/25/opening-all-sharepoint-2010-documents-in-a-new-window</id>
    <content type="html">&lt;p&gt;We wanted an easy solution to open every document in a SharePoint from a document library in a new window.  This way, the user stays on the page he is originally on and the document (PDF, Word doc, Excel files–whatever) will open in a blank window.&lt;/p&gt;
 
 &lt;p&gt;I don’t know of any way to do this via a setting in SharePoint, but a little JavaScript employing jQuery does the job just perfectly.&lt;/p&gt;
@@ -3458,9 +3458,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>Duplicating SPWebConfigModifications</title>
-   <link href="https://www.benramey.com/2010/12/10/duplicating-spwebconfigmodifications/"/>
+   <link href="http://localhost:4000/2010/12/10/duplicating-spwebconfigmodifications/"/>
    <updated>2010-12-10T00:00:00-06:00</updated>
-   <id>https://www.benramey.com/2010/12/10/duplicating-spwebconfigmodifications</id>
+   <id>http://localhost:4000/2010/12/10/duplicating-spwebconfigmodifications</id>
    <content type="html">&lt;h2 id=&quot;problem&quot;&gt;Problem&lt;/h2&gt;
 &lt;p&gt;Despite everything looking OK (no duplicate SPWebConfigModifications for your web application), your SPWebConfigModifications are adding duplicate elements to your web.config file.&lt;/p&gt;
 
@@ -3475,9 +3475,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>Add SharePoint 2010 Central Admin Web Applications Page Ribbon Button</title>
-   <link href="https://www.benramey.com/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button/"/>
+   <link href="http://localhost:4000/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button/"/>
    <updated>2010-11-02T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button</id>
+   <id>http://localhost:4000/2010/11/02/add-sharepoint-2010-central-admin-web-applications-page-ribbon-button</id>
    <content type="html">&lt;p&gt;I finally figured out today how to add a button to the Central Admin site’s ribbon for the WebApplicationsList page and have it behave like the other ribbon buttons on this page. The problem wasn’t so much adding the button–that part was easy. The problem was getting the button to behave like the other buttons. That is, getting it to enable and disable when a web application was selected from the list.&lt;/p&gt;
 
 &lt;p&gt;It was pretty easy to find the methods for the new SharePoint 2010 javascript API to see if a list item is selected in a list and then make decisions based on that. The SP.UI.ListOperation.Selection methods are great for that. However, the WebApplicationList (http:///_admin/WebApplicationList.aspx) page list in the Central Administration site is not a list and so these methods don’t work.&lt;/p&gt;
@@ -3492,9 +3492,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>Cookie.Expires from ASP.NET Request Object Always DateTime.MinValue</title>
-   <link href="https://www.benramey.com/2010/10/12/cookie-expires-from-asp-net-request-object-always-datetime-minvalue/"/>
+   <link href="http://localhost:4000/2010/10/12/cookie-expires-from-asp-net-request-object-always-datetime-minvalue/"/>
    <updated>2010-10-12T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2010/10/12/cookie-expires-from-asp-net-request-object-always-datetime-minvalue</id>
+   <id>http://localhost:4000/2010/10/12/cookie-expires-from-asp-net-request-object-always-datetime-minvalue</id>
    <content type="html">&lt;p&gt;I’ve been working on a problem today involving cookies with one of our web applications.  The cookie is keeping track of a user’s authenticated session and it’s timing people out too soon.  So, I was checking the expiration time of the cookie coming in from the browser and it was returning 1/1/0001 12:00AM every time.  I thought this might be the source of my problem, but resetting the cookie and the expiration time did not help the next round-trip to the server.  The cookie still read the DateTime.MinValue time.&lt;/p&gt;
 
 &lt;p&gt;I found this article: &lt;a href=&quot;http://www.eggheadcafe.com/tutorials/aspnet/198ce250-59da-4388-89e5-fce33d725aa7/aspnet-cookies-faq.aspx&quot;&gt;http://www.eggheadcafe.com/tutorials/aspnet/198ce250-59da-4388-89e5-fce33d725aa7/aspnet-cookies-faq.aspx&lt;/a&gt;&lt;/p&gt;
@@ -3505,9 +3505,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>Error occurred in deployment step ‘Recycle IIS Application Pool’: The local SharePoint server is not available. Check that the server is running and connected to the SharePoint farm.</title>
-   <link href="https://www.benramey.com/2010/10/08/error-occurred-in-deployment-step-recycle-iis-application-pool-the-local-sharepoint-server-is-not-available-check-that-the-server-is-running-and-connected-to-the-sharepoint-farm/"/>
+   <link href="http://localhost:4000/2010/10/08/error-occurred-in-deployment-step-recycle-iis-application-pool-the-local-sharepoint-server-is-not-available-check-that-the-server-is-running-and-connected-to-the-sharepoint-farm/"/>
    <updated>2010-10-08T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2010/10/08/error-occurred-in-deployment-step-recycle-iis-application-pool-the-local-sharepoint-server-is-not-available-check-that-the-server-is-running-and-connected-to-the-sharepoint-farm</id>
+   <id>http://localhost:4000/2010/10/08/error-occurred-in-deployment-step-recycle-iis-application-pool-the-local-sharepoint-server-is-not-available-check-that-the-server-is-running-and-connected-to-the-sharepoint-farm</id>
    <content type="html">&lt;p&gt;I got the above error today while trying to deploy a SharePoint 2010 project in Visual Studio 2010.  Very frustrating!!&lt;/p&gt;
 
 &lt;p&gt;The answer turned out to be simple enough, though no clues are really provided in the error message (typical).  I had to add my user account to the db_owner role for the SharePoint_Admin database that the site I was deploying to was using.&lt;/p&gt;
@@ -3520,9 +3520,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>SharePoint 2007 to 2010 in-place upgrade serviceHostingEnvironment error</title>
-   <link href="https://www.benramey.com/2010/10/06/sharepoint-2007-to-2010-in-place-upgrade-servicehostingenvironment-error/"/>
+   <link href="http://localhost:4000/2010/10/06/sharepoint-2007-to-2010-in-place-upgrade-servicehostingenvironment-error/"/>
    <updated>2010-10-06T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2010/10/06/sharepoint-2007-to-2010-in-place-upgrade-servicehostingenvironment-error</id>
+   <id>http://localhost:4000/2010/10/06/sharepoint-2007-to-2010-in-place-upgrade-servicehostingenvironment-error</id>
    <content type="html">&lt;p&gt;I’m testing an in-place SharePoint 2007 to SharePoint 2010 upgrade today and I came across this odd error during the update process.&lt;/p&gt;
 
 &lt;p&gt;I successfully installed SharePoint 2010 and proceeded to run the configuration wizard which updates 2007 to 2010.  The configuration process would always fail with an error in the Central Administration web.config file.  Viewing the configuration log file (the configuration wizard provided the location of it) turned up the error.&lt;/p&gt;
@@ -3545,9 +3545,9 @@ indent-attributes:yes&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
  
  <entry>
    <title>Determine SharePoint MOSS 2007 Service Pack Version</title>
-   <link href="https://www.benramey.com/2010/10/06/determine-sharepoint-moss-2007-service-pack-version/"/>
+   <link href="http://localhost:4000/2010/10/06/determine-sharepoint-moss-2007-service-pack-version/"/>
    <updated>2010-10-06T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2010/10/06/determine-sharepoint-moss-2007-service-pack-version</id>
+   <id>http://localhost:4000/2010/10/06/determine-sharepoint-moss-2007-service-pack-version</id>
    <content type="html">&lt;p&gt;Determining the service pack that you have installed for a particular
 SharePoint 2007 installation turned out to be a surprisingly opaque process.
 I found this very clear and helpful blog post dealing with just this
@@ -3565,9 +3565,9 @@ determination:
  
  <entry>
    <title>Visual Studio Post Build Event to Copy DLLs</title>
-   <link href="https://www.benramey.com/2010/06/29/visual-studio-post-build-event-to-copy-dlls/"/>
+   <link href="http://localhost:4000/2010/06/29/visual-studio-post-build-event-to-copy-dlls/"/>
    <updated>2010-06-29T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2010/06/29/visual-studio-post-build-event-to-copy-dlls</id>
+   <id>http://localhost:4000/2010/06/29/visual-studio-post-build-event-to-copy-dlls</id>
    <content type="html">&lt;p&gt;While doing SharePoint development, we use a lot of pre- and post-build events in Visual Studio projects to do various things like build and deploy SharePoint solutions to our development environments, activate features automatically and other similar things to make the process of building solutions for SharePoint as automated as possible.&lt;/p&gt;
 
 &lt;p&gt;One helpful way I’ve been able to use post-build events is to copy the compiled DLLs for a given project to the inetpub directory for the SharePoint site I am currently working on. As I’m building a new feature or debugging an existing one, I like to build a lot of see my changes as I go. Well, building and deploying the entire SharePoint solution is a rather lengthy process it’s only really necessary if you’re changing ASPX pages or updating a feature XML file or something like that. If all I did was come C# code changes, that’s too much to wait through to see my changes. So, what I do is put a small post-build event in my projects that I’m working with that copies the DLLs for that project to my SharePoint site’s inetpub directory and I skip the whole SharePoint solution build and deployment step.&lt;/p&gt;
@@ -3589,9 +3589,9 @@ copy /y bin\debug\*.pdb C:\inetpub\wwwroot\wss\VirtualDirectories\{YOUR SHAREPOI
  
  <entry>
    <title>Vertical text with CSS</title>
-   <link href="https://www.benramey.com/2010/06/29/vertical-text-with-css/"/>
+   <link href="http://localhost:4000/2010/06/29/vertical-text-with-css/"/>
    <updated>2010-06-29T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2010/06/29/vertical-text-with-css</id>
+   <id>http://localhost:4000/2010/06/29/vertical-text-with-css</id>
    <content type="html">&lt;p&gt;I found a nice blog post today describing how to do vertical text with CSS. Instead of reposting his information, I’ll just give the link.&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;http://scottgale.com/blog/css-vertical-text/2010/03/01/&quot;&gt;http://scottgale.com/blog/css-vertical-text/2010/03/01/&lt;/a&gt;&lt;/p&gt;
@@ -3602,9 +3602,9 @@ copy /y bin\debug\*.pdb C:\inetpub\wwwroot\wss\VirtualDirectories\{YOUR SHAREPOI
  
  <entry>
    <title>Converting a Hexadecimal Color to a System.Drawing.Color Object</title>
-   <link href="https://www.benramey.com/2009/09/24/converting-a-hexadecimal-color-to-a-system-drawing-color-object/"/>
+   <link href="http://localhost:4000/2009/09/24/converting-a-hexadecimal-color-to-a-system-drawing-color-object/"/>
    <updated>2009-09-24T00:00:00-05:00</updated>
-   <id>https://www.benramey.com/2009/09/24/converting-a-hexadecimal-color-to-a-system-drawing-color-object</id>
+   <id>http://localhost:4000/2009/09/24/converting-a-hexadecimal-color-to-a-system-drawing-color-object</id>
    <content type="html">&lt;p&gt;I try to avoid setting styles in my code as much as possible. However, I ran across a case using a DevExpress PageControl control where there was no possible way to set a certain border by using CSS. This is because DevExpress wisely (read sarcasm) uses “border-color: #whatever !important” in the element’s style attribute. So, there is no way to override that style except by setting it on the control in code (or your aspx page).&lt;/p&gt;
 
 &lt;p&gt;The particular border I needed is the ContentStyle.Border border of the ASPxPageControl and I needed to set the BorderColor property which is a System.Drawing.Color object. There isn’t any straightforward way to get a Color object from a hexadecimal color using the Color object itself. You have to use the ColorTranslator (also in the System.Drawing namespace) which gives you a FromHtml method and returns the correct Color object.&lt;/p&gt;

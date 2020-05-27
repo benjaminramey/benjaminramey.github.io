@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,20 +533,93 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2013/05/08/sitecore-rocks-and-sharepoint-package-interference/">
-                Sitecore Rocks and SharePoint Package Interference
+            <a href="/2013/05/23/sharepoint-2010-401-unauthorized-error/">
+                SharePoint 2010 401 Unauthorized Error
             </a>
         </h1>
 
-        <time datetime="2013-05-08T00:00:00-05:00" class="post-date">08 May 2013</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2013-05-23T00:00:00-05:00" class="post-date">23 May 2013</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/sharepoint">#sharepoint</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>I ran into an interesting problem today while working in Visual Studio 2010 on a SharePoint 2010 project.</p>
+        <p>There are many, many reasons why SharePoint will throw a 401 error.  Most of them are hard to track down and have absolutely no bearing on reality unless you’re a genius.  So, your only hope is to track down obscure registry updates (hacks), scour the internet for random things other people have found or just give up.  :-)</p>
 
-<p>You are supposed to be able to open the Package.package files to edit the Features that are included and their order, etc.  However, when I double-clicked on the Package.package file to open it, I got a strange dialog box that said the document was already open, would I like to close it?  If I said “yes”, another “Package Connection” dialog box would open with all the IIS sites I had setup listed.  However, none of my SharePoint sites were listed and choosing any of the other sites just failed.</p>
+<p>I just about pulled my hair out yesterday trying to get to the bottom of a 401 Unauthorized error I kept getting for my anonymous access-enabled web application.  I’m not sure why, but I never tried debugging my application to see where the error was actually being thrown.  I assumed it was on the IIS level or some SharePoint level, so I never tried debugging.</p>
 
-<p>I have no idea why, honestly, but apparently Sitecore Rocks is causing this issue.  I had the Visual Studio extension enabled (I had worked on a Sitecore project a few months ago).  When I disabled it and restarted Visual Studio, everything worked as I expected when opening Package files.</p>
+<p>So, lesson #1 when getting 401 in SharePoint: debug your application.</p>
+
+<p>Lesson #2: apparently accessing the DefaultPage property of a PublishingWeb requires elevated privileges.  Here was my code:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">private</span> <span class="kt">string</span> <span class="nf">GetDefaultPageUrl</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(!</span><span class="n">PublishingWeb</span><span class="p">.</span><span class="nf">IsPublishingWeb</span><span class="p">(</span><span class="n">SPContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Web</span><span class="p">))</span>
+  <span class="p">{</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="n">PublishingWeb</span> <span class="n">web</span> <span class="p">=</span> <span class="n">PublishingWeb</span><span class="p">.</span><span class="nf">GetPublishingWeb</span><span class="p">(</span><span class="n">SPContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Web</span><span class="p">);</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">web</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="n">web</span><span class="p">.</span><span class="n">DefaultPage</span> <span class="p">==</span> <span class="k">null</span> <span class="p">?</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span> <span class="p">:</span> <span class="n">web</span><span class="p">.</span><span class="n">DefaultPage</span><span class="p">.</span><span class="n">Url</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>That last line was throwing the 401. So, the solution was to wrap it in an SPSecurity.RunWithElevatedPrivileges call, like this:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">private</span> <span class="kt">string</span> <span class="nf">GetDefaultPageUrl</span><span class="p">()</span>
+<span class="p">{</span>
+  <span class="kt">string</span> <span class="n">url</span> <span class="p">=</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+  <span class="n">SPSite</span> <span class="n">currentSite</span> <span class="p">=</span> <span class="n">SPContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Site</span><span class="p">;</span>
+  <span class="n">SPWeb</span> <span class="n">currentWeb</span> <span class="p">=</span> <span class="n">SPContext</span><span class="p">.</span><span class="n">Current</span><span class="p">.</span><span class="n">Web</span><span class="p">;</span>
+
+  <span class="n">SPSecurity</span><span class="p">.</span><span class="nf">RunWithElevatedPrivileges</span><span class="p">(</span>
+  <span class="p">()</span> <span class="p">=&gt;</span>
+  <span class="p">{</span>
+    <span class="c1">// reopen site &amp; web, otherwise defaultpage will throw an error</span>
+    <span class="k">using</span> <span class="p">(</span><span class="n">SPSite</span> <span class="n">site</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">SPSite</span><span class="p">(</span><span class="n">currentSite</span><span class="p">.</span><span class="n">ID</span><span class="p">))</span>
+    <span class="k">using</span> <span class="p">(</span><span class="n">SPWeb</span> <span class="n">web</span> <span class="p">=</span> <span class="n">site</span><span class="p">.</span><span class="nf">OpenWeb</span><span class="p">(</span><span class="n">currentWeb</span><span class="p">.</span><span class="n">ID</span><span class="p">))</span>
+    <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(!</span><span class="n">PublishingWeb</span><span class="p">.</span><span class="nf">IsPublishingWeb</span><span class="p">(</span><span class="n">web</span><span class="p">))</span>
+      <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="n">PublishingWeb</span> <span class="n">pubWeb</span> <span class="p">=</span> <span class="n">PublishingWeb</span><span class="p">.</span><span class="nf">GetPublishingWeb</span><span class="p">(</span><span class="n">web</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">web</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+
+      <span class="n">url</span> <span class="p">=</span> <span class="n">pubWeb</span><span class="p">.</span><span class="n">DefaultPage</span> <span class="p">==</span> <span class="k">null</span> <span class="p">?</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span> <span class="p">:</span> <span class="n">pubWeb</span><span class="p">.</span><span class="n">DefaultPage</span><span class="p">.</span><span class="n">Url</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+  <span class="k">return</span> <span class="n">url</span><span class="p">;</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Thanks to this post for the answer about re-opening the site and web inside the RunWithElevatedPrivileges code:
+<a href="http://henry-chong.com/2010/11/sharepoint-anonymous-access-and-publishing-web-default-page">http://henry-chong.com/2010/11/sharepoint-anonymous-access-and-publishing-web-default-page</a>.</p>
+
 
     </article>
+
+    <section>
+        <a href="/2013/05/23/sharepoint-2010-401-unauthorized-error/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -557,7 +638,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

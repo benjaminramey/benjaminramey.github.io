@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,57 +533,43 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2011/04/25/opening-all-sharepoint-2010-documents-in-a-new-window/">
-                Opening all SharePoint 2010 Documents in a new window
+            <a href="/2011/08/24/file-name-sanitizer-one-liner/">
+                File Name Sanitizer One-Liner
             </a>
         </h1>
 
-        <time datetime="2011-04-25T00:00:00-05:00" class="post-date">25 Apr 2011</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2011-08-24T00:00:00-05:00" class="post-date">24 Aug 2011</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/command-line">#command-line</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>We wanted an easy solution to open every document in a SharePoint from a document library in a new window.  This way, the user stays on the page he is originally on and the document (PDF, Word doc, Excel files–whatever) will open in a blank window.</p>
+        <p>I find myself often having to sanitize file names and paths because I’m creating files from some kind of user input that I’m unsure about.  I found this handy way of doing this in one line today:</p>
 
-<p>I don’t know of any way to do this via a setting in SharePoint, but a little JavaScript employing jQuery does the job just perfectly.</p>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">fileName = Path.GetInvalidFileNameChars().Aggregate(fileName, (name, c) =&gt; name.Replace(c, ‘_’));</code></pre></figure>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">$</span><span class="p">(</span><span class="nb">document</span><span class="p">).</span><span class="nx">ready</span><span class="p">(</span>
-	<span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-		<span class="c1">// has to be on an interval for grouped doc libraries</span>
-		<span class="c1">// where the actual links are loaded only once a group</span>
-		<span class="c1">// is expanded</span>
-		<span class="nx">setInterval</span><span class="p">(</span>
-			<span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-				<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">a[onclick*=’return DispEx’][target!=’_blank’]</span><span class="dl">"</span><span class="p">)</span>
-					<span class="p">.</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">target</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">_blank</span><span class="dl">"</span><span class="p">)</span>
-					<span class="p">.</span><span class="nx">removeAttr</span><span class="p">(</span><span class="dl">"</span><span class="s2">onclick</span><span class="dl">"</span><span class="p">);</span>
+<p>Note that the same goes for paths. The only thing that changes is the static method you use from Path:</p>
 
-				<span class="c1">// document type icons</span>
-				<span class="nx">$</span><span class="p">(</span><span class="dl">"</span><span class="s2">td.ms-vb-icon&gt;img[onclick]:not([documentUrl])</span><span class="dl">"</span><span class="p">)</span>
-					<span class="p">.</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
-						<span class="nb">window</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">documentUrl</span><span class="dl">"</span><span class="p">),</span> <span class="dl">"</span><span class="s2">_blank</span><span class="dl">"</span><span class="p">);</span>
-						<span class="nx">e</span><span class="p">.</span><span class="nx">stopPropagation</span><span class="p">();</span>
-						<span class="nx">e</span><span class="p">.</span><span class="nx">preventDefault</span><span class="p">();</span>
-						<span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-					<span class="p">})</span>
-					<span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-						<span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span>
-							<span class="dl">"</span><span class="s2">documentUrl</span><span class="dl">"</span><span class="p">,</span>
-							<span class="nx">$</span><span class="p">.</span><span class="nx">trim</span><span class="p">(</span><span class="nb">String</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="k">this</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="dl">"</span><span class="s2">onclick</span><span class="dl">"</span><span class="p">))</span>
-								<span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">"</span><span class="s2">=</span><span class="dl">"</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
-								<span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/</span><span class="se">[</span><span class="sr">"'{}</span><span class="se">]</span><span class="sr">/g</span><span class="p">,</span> <span class="dl">""</span><span class="p">)</span>
-								<span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">"</span><span class="s2">;</span><span class="dl">"</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-							<span class="p">);</span>
-						<span class="k">this</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kc">null</span><span class="p">;</span>
-					<span class="p">});</span>
-				<span class="p">},</span>
-				<span class="mi">500</span>
-		<span class="p">);</span>
-	<span class="p">}</span>
-<span class="p">);</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">filePath = Path.GetInvalidPathChars().Aggregate(filePath , (name, c) =&gt; name.Replace(c, ‘_’));</code></pre></figure>
 
-<p>This JavaScript takes into account that some Document Libraries are grouped and so not all the document links (or icon links) will appear on the page load. This is the reason for the half-second interval.  At the most half a second after the group is expanded the newly loaded links will be altered to also open in a new window.</p>
 
-<p>You’ll notice that there are two things happening on each interval.  The first line does any Title links for the document.  The second line (and following) handles the document type icons that are also links to the document.  Note that if you want only one or the other link to open in a new window (for example, on the document type icon opens in a new window and the Title link opens in the same window) then all you need to do is remove the appropriate line.</p>
 
     </article>
+
+    <section>
+        <a href="/2011/08/24/file-name-sanitizer-one-liner/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -594,7 +588,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

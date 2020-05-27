@@ -1,0 +1,1087 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>
+        
+        Iterating All EPiServer Catalog MetaObjects &middot; Ben Ramey's Blog
+        
+    </title>
+
+    <link rel="stylesheet" href="/assets/css/styles.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="">
+    <link rel="icon" type="image/png" sizes="32x32" href="">
+    <link rel="icon" type="image/png" sizes="16x16" href="">
+    <link rel="manifest" href="">
+
+    <link rel="alternate" type="application/atom+xml" title="Ben Ramey's Blog" href="/atom.xml">
+
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<meta name="generator" content="Jekyll v3.8.5" />
+<meta property="og:title" content="Iterating All EPiServer Catalog MetaObjects" />
+<meta name="author" content="Ben Ramey" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="C# iterators to walk through all EPiServer catalog node and entry content meta objects." />
+<meta property="og:description" content="C# iterators to walk through all EPiServer catalog node and entry content meta objects." />
+<link rel="canonical" href="https://www.benramey.com/2020/05/27/iterating-all-catalog-metaobjects/" />
+<meta property="og:url" content="https://www.benramey.com/2020/05/27/iterating-all-catalog-metaobjects/" />
+<meta property="og:site_name" content="Ben Ramey’s Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-27T00:00:00-05:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","dateModified":"2020-05-27T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.benramey.com/2020/05/27/iterating-all-catalog-metaobjects/"},"url":"https://www.benramey.com/2020/05/27/iterating-all-catalog-metaobjects/","author":{"@type":"Person","name":"Ben Ramey"},"headline":"Iterating All EPiServer Catalog MetaObjects","description":"C# iterators to walk through all EPiServer catalog node and entry content meta objects.","datePublished":"2020-05-27T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+
+<body>
+    <header>
+        <div class="container">
+            <div class="d-flex justify-content-between align-item-center">
+                <a href="/" class="d-flex justify-content-start align-items-center mr-2" title="Home">
+                    <img src="https://en.gravatar.com/userimage/738990/32d8e61848233a67f5e02dcc43be0ff8.jpeg"
+                        alt="Gravatar" />
+                    <span class="ml-2">Ben Ramey's Blog</span>
+                </a>
+                <div class="d-none d-sm-flex flex-column justify-content-around ml-2">
+                    <small>Scripture, programming problems, solutions and stories.</small>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main">
+        <div class="container d-flex justify-content-center">
+            
+            
+            
+            
+            
+            
+            
+            <a href="/archive/">Archive</a>
+            
+            
+            
+            
+            
+            
+            
+            <a href="/categories/">Categories</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <a href="/tags/">Tags</a>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <article class="post">
+    <h1 class="post-title">Iterating All EPiServer Catalog MetaObjects</h1>
+    <div class="post-info d-flex justify-content-start">
+        <time datetime="2020-05-27T00:00:00-05:00" class="post-date">27 May 2020</time>
+        <nav class="post-tags">
+            
+            <a href="/tags/episerver">#episerver</a>
+            
+            <a href="/tags/csharp">#csharp</a>
+            
+            <a href="/tags/.net">#.net</a>
+            
+        </nav>
+        <nav class="post-categories">
+            <span>posted in:</span>
+            
+            <a href="/categories/programming">programming</a>
+            
+        </nav>
+    </div>
+    <p>If you’re maintaining an e-commerce-enabled site in EPiServer and you’re using the built-in catalog, then
+you have probably found the need to incorporate external data into the catalog, perhaps from various sources.</p>
+
+<p>Such is the case for me on an EPiServer site I’ve been working on over the last (almost) four years.  The primary
+data for the catalog comes into EPiServer from an external PIM system.  But, then there is all sorts of ancillary
+data that needs to calculated from existing fields or pulled from external sources.  These external data sources
+don’t really provide a way to incrementally apply deltas for the data they provide.  The only option to make updates is to walk
+through the entire catalog and see if anything needs updating when matched against the external data I’ve pulled.</p>
+
+<p>This external data is stored in the catalog as custom EPiServer MetaFields.  So,
+a need arose to easily walk through the entire catalog, pick up every MetaObject (to update the custom MetaFields)
+in every available catalog culture and make the appropriate updates.</p>
+
+<p>Below are the iterators I wrote to accomplish this.  They let you walk the entire catalog tree (in a breadth-first manner)
+starting from the top as if you were iterating a simple C# array or list.</p>
+
+<h2 id="high-level-usage">High-Level Usage</h2>
+<p>Because all we’re doing is writing iterators, the high-level usage looks just like you were interating through
+an <code class="highlighter-rouge">IEnumerable</code> in C# like an array or a <code class="highlighter-rouge">List&lt;T&gt;</code>.</p>
+
+<p>The iterators are implemented as extension methods on the <code class="highlighter-rouge">ICatalogSystem</code> interface.  So, iterating through all
+of the catalog entry MetaObjects looks like this.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">using</span> <span class="nn">Mediachase.Commerce.Catalog</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Mediachase.MetaDataPlus</span><span class="p">;</span>
+
+<span class="n">ICatalogSystem</span> <span class="n">catalog</span> <span class="p">=</span> <span class="n">CatalogContext</span><span class="p">.</span><span class="n">Current</span><span class="p">;</span>
+<span class="n">MetaDataContext</span> <span class="n">mdc</span> <span class="p">=</span> <span class="n">MetaDataContext</span><span class="p">.</span><span class="n">Instance</span><span class="p">;</span>
+
+<span class="k">foreach</span> <span class="p">((</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)</span> <span class="n">entryMO</span> <span class="k">in</span> <span class="n">catalog</span><span class="p">.</span><span class="nf">AllCatalogSystemEntryMetaObjects</span><span class="p">(</span><span class="n">mdc</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="n">entryMO</span><span class="p">.</span><span class="n">metaObject</span><span class="p">[</span><span class="s">"SomeCustomMetaFieldName"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"external data source value here"</span><span class="p">;</span>
+    <span class="n">entryMO</span><span class="p">.</span><span class="n">metaObject</span><span class="p">.</span><span class="nf">AcceptChanges</span><span class="p">(</span><span class="n">entryMO</span><span class="p">.</span><span class="n">metaDataContext</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>I implemented the separate iterators for NodeContent MetaObjects and the EntryContent
+MetaObjects.  You easily use them in combination to iterate through the MetaObjects of the entire catalog tree.</p>
+
+<p>Note a couple of things from the example code above:</p>
+<ol>
+  <li>You have to give the iterator the MetaDataContext.  As we’ll see in the iterator code, it will copy this MDC for each catalog language so that you get a MetaObject for every culture present in your catalog.</li>
+  <li>Because of #1 above, the current MetaDataContext is passed to you during iteration so that you know which catalog culture this MetaObject is for.</li>
+</ol>
+
+<h2 id="extension-method-code">Extension Method Code</h2>
+<p>The extension method code for AllCatalogSystemEntryMetaObjects is pretty simple.  It uses four iterators in nested foreach loops to loop through</p>
+<ol>
+  <li>All catalogs</li>
+  <li>All nodes</li>
+  <li>All entries</li>
+  <li>All meta objects</li>
+</ol>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">static</span> <span class="n">IEnumerable</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)&gt;</span> <span class="nf">AllCatalogSystemEntryMetaObjects</span><span class="p">(</span>
+    <span class="k">this</span> <span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span>
+    <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">catalog</span> <span class="k">in</span> <span class="k">new</span> <span class="nf">CatalogSystemCatalogs</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">node</span> <span class="k">in</span> <span class="k">new</span> <span class="nf">CatalogSystemNodes</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">,</span> <span class="n">catalog</span><span class="p">.</span><span class="n">CatalogId</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">entry</span> <span class="k">in</span> <span class="k">new</span> <span class="nf">CatalogSystemEntries</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">,</span> <span class="n">catalog</span><span class="p">.</span><span class="n">CatalogId</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">CatalogNodeId</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">tuple</span> <span class="k">in</span> <span class="k">new</span> <span class="nf">CatalogSystemEntryMetaObjects</span><span class="p">(</span><span class="n">metaDataContext</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">entry</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="k">yield</span> <span class="k">return</span> <span class="n">tuple</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>I broke the iteration down into separate iterators in this fashion so that I could easily iterate through all the entries (for example) in a single node, if I knew from the beginning which node I wanted to start at.  If that was the case, I could easily write another extension method that took a node ID (or node code) as a parameter, use the ICatalogSystem to find that node and then pass the node ID to the CatalogSystemEntries iterator to iterate just the entries under that node.</p>
+
+<h2 id="iterators">Iterators</h2>
+<p>We have four iterators in use:</p>
+<ol>
+  <li>CatalogSystemCatalogs - iterates through all catalogs</li>
+  <li>CatalogSystemNodes - iterates through all nodes, in a breadth-first fashion, in a catalog</li>
+  <li>CatalogSystemEntries - iterates through all entries in a node</li>
+  <li>CatalogSystemEntryMetaObjects - iterates through all MetaObjects for an entry</li>
+</ol>
+
+<h3 id="catalogsystemcatalogs-iterator">CatalogSystemCatalogs Iterator</h3>
+<p>The code is pretty simple.  We implement an IEnumerable which uses our implementation of an IEnumerator.</p>
+
+<p>The IEnumerator simply gets all the catalogs from the ICatalogSystem and, as you call MoveNext() (usually done for you by the foreach loop), increments an index value to give you the current CatalogDto.CatalogRow to work with.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemCatalogs</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogSystemCatalogEnumerator</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">CatalogSystemCatalogs</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_enumerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CatalogSystemCatalogEnumerator</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemCatalogEnumerator</span> <span class="p">:</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ICatalogSystem</span> <span class="n">_catalogSystem</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;&gt;</span> <span class="n">_catalogs</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">CatalogSystemCatalogEnumerator</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_catalogSystem</span> <span class="p">=</span> <span class="n">catalogSystem</span><span class="p">;</span>
+        <span class="n">_catalogs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;&gt;(</span><span class="n">GetCatalogs</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span> <span class="n">Current</span>
+    <span class="p">{</span>
+        <span class="k">get</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_catalogs</span><span class="p">.</span><span class="n">Value</span><span class="p">[</span><span class="n">_currentIndex</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">object</span> <span class="n">IEnumerator</span><span class="p">.</span><span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">Current</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Reset</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">MoveNext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_catalogs</span><span class="p">.</span><span class="n">IsValueCreated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_currentIndex</span><span class="p">++;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">_currentIndex</span> <span class="p">&gt;=</span> <span class="n">_catalogs</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Reset</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_catalogs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;&gt;(</span><span class="n">GetCatalogs</span><span class="p">);</span>
+        <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;</span> <span class="nf">GetCatalogs</span><span class="p">()</span>
+        <span class="p">=&gt;</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">GetCatalogDto</span><span class="p">().</span><span class="n">Catalog</span><span class="p">.</span><span class="nf">Freeze</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="catalogsystemnodes-iterator">CatalogSystemNodes Iterator</h3>
+<p>For the nodes iterator, things get a little more complicated.  Nodes can be nested, so we have tree structure we have to navigate.  We use a Queue to walk through the nodes in a breadth-first fashion.</p>
+
+<p>I like to use as many functional programming techniques as I can in C# these days.  I use the great <a href="https://github.com/louthy/language-ext">LanguageExt</a> library for this.  This library is where the <code class="highlighter-rouge">Que&lt;T&gt;</code>, <code class="highlighter-rouge">Option&lt;T&gt;</code> and <code class="highlighter-rouge">Lst&lt;T&gt;</code> data structures come from.  I don’t want to go in depth about what they are, but to understand the code below, you should now this: <code class="highlighter-rouge">Que&lt;T&gt;</code> is an immutable <code class="highlighter-rouge">Queue&lt;T&gt;</code>, <code class="highlighter-rouge">Lst&lt;T&gt;</code> is an immutable <code class="highlighter-rouge">List&lt;T&gt;</code> and <code class="highlighter-rouge">Option&lt;T&gt;</code> is basically the functional way to do the null-object pattern (instead of dealing with nulls, use an object to represent “I don’t have a value”).</p>
+
+<p>If you’re not familiar with breadth-first tree traversals, it’s not too complicated.  What we do first is get all the nodes at the top level (in our case, all the nodes that are direct children of the catalog we pass in) and put them in the queue.  Then, we iterate through each of the nodes we put in the queue and add their child nodes to the queue.  We do this until we run out of nodes to process in the queue which indicates we’ve gone through all nodes in the tree.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemNodes</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogSystemNodeEnumerator</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">CatalogSystemNodes</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startingParentNodeId</span> <span class="p">=</span> <span class="m">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_enumerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CatalogSystemNodeEnumerator</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">,</span> <span class="n">catalogId</span><span class="p">,</span> <span class="n">startingParentNodeId</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemNodeEnumerator</span> <span class="p">:</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="n">Que</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">_nodeQue</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ICatalogSystem</span> <span class="n">_catalogSystem</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_catalogId</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_startingParentNodeId</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Option</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span> <span class="n">_current</span><span class="p">;</span>
+
+    <span class="c1">// We have a parameter for the starting node ID (startingParentNodeId) which defaults to 0.  If you</span>
+    <span class="c1">// pass in a node ID, we'll start iterating child nodes of that node.  If you don't pass a value (keep</span>
+    <span class="c1">// the default of 0), then we'll iterate through all nodes in the catalog.</span>
+    <span class="k">public</span> <span class="nf">CatalogSystemNodeEnumerator</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startingParentNodeId</span> <span class="p">=</span> <span class="m">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_catalogSystem</span> <span class="p">=</span> <span class="n">catalogSystem</span><span class="p">;</span>
+        <span class="n">_catalogId</span> <span class="p">=</span> <span class="n">catalogId</span><span class="p">;</span>
+        <span class="n">_startingParentNodeId</span> <span class="p">=</span> <span class="n">startingParentNodeId</span><span class="p">;</span>
+        <span class="n">_nodeQue</span> <span class="p">=</span> <span class="n">Prelude</span><span class="p">.</span><span class="nf">Queue</span><span class="p">(</span><span class="n">_startingParentNodeId</span><span class="p">);</span>
+        <span class="n">_current</span> <span class="p">=</span> <span class="n">Option</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;.</span><span class="n">None</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">// ValueUnsafe() lets us get the value of _current (which is an Option&lt;T&gt;)</span>
+    <span class="c1">// or null if the Option&lt;T&gt; has no value.</span>
+    <span class="k">public</span> <span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span> <span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">_current</span><span class="p">.</span><span class="nf">ValueUnsafe</span><span class="p">();</span>
+
+    <span class="kt">object</span> <span class="n">IEnumerator</span><span class="p">.</span><span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">Current</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Reset</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">MoveNext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// end-case scenario--we've run out of nodes in the queue, so we're</span>
+        <span class="c1">// done traversing the node tree</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">_nodeQue</span><span class="p">.</span><span class="nf">Any</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="kt">int</span> <span class="n">nextNodeId</span> <span class="p">=</span> <span class="nf">GetNextNodeIdAndUpdateQue</span><span class="p">();</span>
+
+        <span class="c1">// special starting condition when we want to do the entire tree</span>
+        <span class="c1">// and no other starting node was passed in</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nextNodeId</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// special case of there being a catalog node with no category nodes beneath it</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">_nodeQue</span><span class="p">.</span><span class="nf">Any</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">nextNodeId</span> <span class="p">=</span> <span class="nf">GetNextNodeIdAndUpdateQue</span><span class="p">();</span>
+        <span class="p">}</span>
+
+        <span class="n">_current</span> <span class="p">=</span> <span class="nf">GetNode</span><span class="p">(</span><span class="n">nextNodeId</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">_current</span><span class="p">.</span><span class="n">IsSome</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="kt">int</span> <span class="nf">GetNextNodeIdAndUpdateQue</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// get the next node ID from the queue</span>
+        <span class="kt">int</span> <span class="n">nextNodeId</span> <span class="p">=</span> <span class="n">_nodeQue</span><span class="p">.</span><span class="nf">Peek</span><span class="p">();</span>
+        <span class="c1">// remove the retrieved node from the queue</span>
+        <span class="n">_nodeQue</span> <span class="p">=</span> <span class="n">_nodeQue</span><span class="p">.</span><span class="nf">Dequeue</span><span class="p">();</span>
+        <span class="c1">// get all of this node's children and add their IDs to the queue</span>
+        <span class="n">_nodeQue</span> <span class="p">=</span> <span class="nf">GetChildren</span><span class="p">(</span><span class="n">nextNodeId</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Fold</span><span class="p">(</span><span class="n">_nodeQue</span><span class="p">,</span> <span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">nodeRow</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">q</span><span class="p">.</span><span class="nf">Enqueue</span><span class="p">(</span><span class="n">nodeRow</span><span class="p">.</span><span class="n">CatalogNodeId</span><span class="p">));</span>
+
+        <span class="k">return</span> <span class="n">nextNodeId</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="n">Option</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span> <span class="nf">GetNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">nodeId</span><span class="p">)</span>
+        <span class="p">=&gt;</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">GetCatalogNodeDto</span><span class="p">(</span><span class="n">nodeId</span><span class="p">).</span><span class="n">CatalogNode</span><span class="p">.</span><span class="nf">HeadOrNone</span><span class="p">();</span>
+
+    <span class="k">private</span> <span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span> <span class="nf">GetChildren</span><span class="p">(</span><span class="kt">int</span> <span class="n">nodeId</span><span class="p">)</span>
+        <span class="p">=&gt;</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">GetCatalogNodesDto</span><span class="p">(</span><span class="n">_catalogId</span><span class="p">,</span> <span class="n">nodeId</span><span class="p">).</span><span class="n">CatalogNode</span><span class="p">.</span><span class="nf">Freeze</span><span class="p">();</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Reset</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_nodeQue</span> <span class="p">=</span> <span class="n">Prelude</span><span class="p">.</span><span class="nf">Queue</span><span class="p">(</span><span class="n">_startingParentNodeId</span><span class="p">);</span>
+        <span class="n">_current</span> <span class="p">=</span> <span class="n">Option</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;.</span><span class="n">None</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="catalogsystementries-iterator">CatalogSystemEntries Iterator</h3>
+<p>Since entries cannot be arrange in a nested fashion, this iterator is a little less complicated than the nodes iterator.  All we do is take in a catalogId and a catalogNodeId and retrieve all the entries below the given node ID, passing them to you one at a time as you call MoveNext().</p>
+
+<p>The only mildly complex thing here is that we use a <code class="highlighter-rouge">Lazy&lt;T&gt;</code> so that we’re not retrieving the entries immediately when you instanstiate the IEnumerator.  We only load the entries when you MoveNext() and access Current which indicates you really do want some entries.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemEntries</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogSystemEntryEnumerator</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">CatalogSystemEntries</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogNodeId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_enumerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CatalogSystemEntryEnumerator</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">,</span> <span class="n">catalogId</span><span class="p">,</span> <span class="n">catalogNodeId</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemEntryEnumerator</span> <span class="p">:</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ICatalogSystem</span> <span class="n">_catalogSystem</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;&gt;</span> <span class="n">_entries</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_catalogNodeId</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_catalogId</span><span class="p">;</span>
+
+    <span class="c1">// we take in the catalogNodeId to start at so that you could use this IEnumerator</span>
+    <span class="c1">// to collect entries at any starting node in the catalog.</span>
+    <span class="k">public</span> <span class="nf">CatalogSystemEntryEnumerator</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogNodeId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_catalogSystem</span> <span class="p">=</span> <span class="n">catalogSystem</span><span class="p">;</span>
+        <span class="c1">// we use a Lazy&lt;T&gt; object here so that we don't do a database call</span>
+        <span class="c1">// as soon as you instantiate this class.  We only do it once you</span>
+        <span class="c1">// access Current, indicating you really want to iterate the entries now</span>
+        <span class="n">_entries</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;&gt;(</span><span class="n">GetEntries</span><span class="p">);</span>
+        <span class="n">_catalogNodeId</span> <span class="p">=</span> <span class="n">catalogNodeId</span><span class="p">;</span>
+        <span class="n">_catalogId</span> <span class="p">=</span> <span class="n">catalogId</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span> <span class="n">Current</span>
+    <span class="p">{</span>
+        <span class="k">get</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_entries</span><span class="p">.</span><span class="n">Value</span><span class="p">[</span><span class="n">_currentIndex</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">object</span> <span class="n">IEnumerator</span><span class="p">.</span><span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">Current</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Reset</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">MoveNext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// the first MoveNext() call will be when when _entries doesn't have</span>
+        <span class="c1">// a value yet (but will after Current is accessed).  So, this leaves</span>
+        <span class="c1">// the _currentIndex at 0 the first time MoveNext() is called.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_entries</span><span class="p">.</span><span class="n">IsValueCreated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_currentIndex</span><span class="p">++;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// we just incremented _currentIndex to the count of the _entries list,</span>
+        <span class="c1">// so we return false to indicate there are no more values.  We really could</span>
+        <span class="c1">// use == here instead of &gt;=.  I guess &gt;= feels safer for some reason.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_currentIndex</span> <span class="p">&gt;=</span> <span class="n">_entries</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Reset</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_entries</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;&gt;(</span><span class="n">GetEntries</span><span class="p">);</span>
+        <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;</span> <span class="nf">GetEntries</span><span class="p">()</span>
+        <span class="p">=&gt;</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">GetCatalogEntriesDto</span><span class="p">(</span><span class="n">_catalogId</span><span class="p">,</span> <span class="n">_catalogNodeId</span><span class="p">).</span><span class="n">CatalogEntry</span><span class="p">.</span><span class="nf">Freeze</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="catalogsystementrymetaobjects-iterator">CatalogSystemEntryMetaObjects Iterator</h3>
+<p>The MetaObjects iterator is a different than the other iterators in that it doesn’t really iterate through a list or tree of MetaObjects.  Instead, it iterates through all fo the MetaObject instances for a particular entry–one instance for reach culture available for the catalog.</p>
+
+<p>So, as you’ll see in the code below, one of the first things we do is grab all of the languages for the catalog so that we know what we need to interate through.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemEntryMetaObjects</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogSystemEntryMetaObjectsEnumerator</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">CatalogSystemEntryMetaObjects</span><span class="p">(</span><span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">,</span> <span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span> <span class="n">entry</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_enumerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CatalogSystemEntryMetaObjectsEnumerator</span><span class="p">(</span><span class="n">metaDataContext</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">entry</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemEntryMetaObjectsEnumerator</span> <span class="p">:</span> <span class="n">IEnumerator</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span> <span class="n">_entry</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">MetaDataContext</span> <span class="n">_metaDataContext</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CultureInfo</span><span class="p">&gt;&gt;</span> <span class="n">_catalogLanguages</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span> <span class="n">_catalog</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">CatalogSystemEntryMetaObjectsEnumerator</span><span class="p">(</span><span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">,</span>
+        <span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span> <span class="n">catalog</span><span class="p">,</span>
+        <span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span> <span class="n">entry</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_catalog</span> <span class="p">=</span> <span class="n">catalog</span><span class="p">;</span>
+        <span class="n">_entry</span> <span class="p">=</span> <span class="n">entry</span><span class="p">;</span>
+        <span class="n">_metaDataContext</span> <span class="p">=</span> <span class="n">metaDataContext</span><span class="p">;</span>
+        <span class="n">_catalogLanguages</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CultureInfo</span><span class="p">&gt;&gt;(</span><span class="n">GetCatalogLanguages</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="p">(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)</span> <span class="n">Current</span>
+    <span class="p">{</span>
+        <span class="k">get</span>
+        <span class="p">{</span>
+            <span class="c1">// what we're really iterating through is the catalog languages.</span>
+            <span class="c1">// as we iterate through them, we grab the associate MetaObject for the current</span>
+            <span class="c1">// language for the given entry</span>
+            <span class="n">CultureInfo</span> <span class="n">currentCultureInfo</span> <span class="p">=</span> <span class="n">_catalogLanguages</span><span class="p">.</span><span class="n">Value</span><span class="p">[</span><span class="n">_currentIndex</span><span class="p">];</span>
+
+            <span class="kt">var</span> <span class="n">mdc</span> <span class="p">=</span> <span class="n">_metaDataContext</span><span class="p">.</span><span class="nf">Clone</span><span class="p">();</span>
+            <span class="n">mdc</span><span class="p">.</span><span class="n">UseCurrentThreadCulture</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+            <span class="n">mdc</span><span class="p">.</span><span class="n">Language</span> <span class="p">=</span> <span class="n">currentCultureInfo</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="p">(</span><span class="n">MetaObject</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="n">mdc</span><span class="p">,</span> <span class="n">_entry</span><span class="p">.</span><span class="n">CatalogEntryId</span><span class="p">,</span> <span class="n">_entry</span><span class="p">.</span><span class="n">MetaClassId</span><span class="p">),</span> <span class="n">mdc</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">object</span> <span class="n">IEnumerator</span><span class="p">.</span><span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">Current</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Reset</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">MoveNext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// As with the Lazy&lt;T&gt; for iterating through the entries, the first tie MoveNext() is called</span>
+        <span class="c1">// the _catalogLanguages Lazy&lt;T&gt; will not have a value.  It will after the first Current access.</span>
+        <span class="c1">// So, for the first MoveNext(), we want to keep the _currentIndex at 0, which is what this if-statement</span>
+        <span class="c1">// accomplishes.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_catalogLanguages</span><span class="p">.</span><span class="n">IsValueCreated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_currentIndex</span><span class="p">++;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">_currentIndex</span> <span class="p">&gt;=</span> <span class="n">_catalogLanguages</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Reset</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_catalogLanguages</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CultureInfo</span><span class="p">&gt;&gt;(</span><span class="n">GetCatalogLanguages</span><span class="p">);</span>
+        <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="n">Lst</span><span class="p">&lt;</span><span class="n">CultureInfo</span><span class="p">&gt;</span> <span class="nf">GetCatalogLanguages</span><span class="p">()</span>
+        <span class="p">=&gt;</span> <span class="n">_catalog</span><span class="p">.</span><span class="nf">GetCatalogLanguageRows</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">Map</span><span class="p">(</span><span class="n">lr</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="nf">CultureInfo</span><span class="p">(</span><span class="n">lr</span><span class="p">.</span><span class="n">LanguageCode</span><span class="p">))</span>
+            <span class="p">.</span><span class="nf">Freeze</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="warning">Warning</h2>
+<p>Even though the above code will give you the convenience of iterating through your entire EPiServer catalog(s), be warned!  You could easily forget what the IEnumerators really do above and do something like this:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">// REALLY BAD CODE, DON'T DO</span>
+<span class="n">List</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">mdc</span><span class="p">)&gt;</span> <span class="n">allTheMetaObjects</span> <span class="p">=</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">AllCatalogSystemEntryMetaObjects</span><span class="p">(</span><span class="n">mdc</span><span class="p">).</span><span class="nf">ToList</span><span class="p">();</span></code></pre></figure>
+
+<p>I hope you see the danger of this.  If you have a large catalog, you’re loading the ENTIRE set of MetaObjects into memory in your <code class="highlighter-rouge">allTheMetaObjects</code> list.  This probably won’t be good for your application.  If you have a small catalog, this might not be a big deal.  But, keep this in mind!</p>
+
+</article>
+
+<!-- Disqus comments -->
+
+<section class="comments">
+    <a id="comments-section">
+        <h2>Comments</h2>
+    </a>
+    <div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+        this.page.url = 'https://www.benramey.com/2020/05/27/iterating-all-catalog-metaobjects/';
+        this.page.identifier = '/2020/05/27/iterating-all-catalog-metaobjects';
+        this.page.title = 'Iterating All EPiServer Catalog MetaObjects';
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+    var d = document, s = d.createElement('script');
+    s.src = 'https://fishybusiness.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+                            
+</section>
+
+
+
+<section class="related">
+    <h2>Related posts</h2>
+    <ul class="related-posts">
+        
+        <li>
+            <a href="/2020/05/12/psalm-130/">
+                Psalm 130
+                <small><time
+                        datetime="2020-05-12T00:00:00-05:00">12 May 2020</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/">
+                I Like Languages That Expect Me To Be a Great Programmer
+                <small><time
+                        datetime="2017-01-20T14:05:00-06:00">20 Jan 2017</time></small>
+            </a>
+        </li>
+        
+        <li>
+            <a href="/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/">
+                Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior
+                <small><time
+                        datetime="2016-08-24T07:37:00-05:00">24 Aug 2016</time></small>
+            </a>
+        </li>
+        
+    </ul>
+    </aside>
+    
+
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <small>
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
+                rights reserved.
+            </small>
+        </div>
+    </footer>
+
+    <!-- <script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-1380501-7', 'auto');
+	ga('send', 'pageview');
+</script> -->
+<script>var clicky_site_ids = clicky_site_ids || []; clicky_site_ids.push(101254860);</script>
+<script async src="//static.getclicky.com/js"></script>
+
+</body>
+
+</html>

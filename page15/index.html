@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,51 +533,154 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2014/04/17/episerver-7-cannot-decrypt-password/">
-                EPiServer 7: Cannot decrypt password
+            <a href="/2014/05/21/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/">
+                Create a List Selector Field in a Widget Designer in Sitefinity 6.2
             </a>
         </h1>
 
-        <time datetime="2014-04-17T00:00:00-05:00" class="post-date">17 Apr 2014</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2014-05-21T00:00:00-05:00" class="post-date">21 May 2014</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/sitefinity">#sitefinity</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <h2 id="problem">Problem</h2>
-<p>I’ve been dealing with an issue in EPiServer 7 recently.  I got this error when trying to log into the admin back-end of the site.</p>
-
-<figure class="highlight"><pre><code class="language-text" data-lang="text">Cannot decrypt password
-
-Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
-
-Exception Details: System.InvalidOperationException: Cannot decrypt password
-
-Source Error:
-
-An unhandled exception was generated during the execution of the current web request. Information regarding the origin and location of the exception can be identified using the exception stack trace below.
-
-Stack Trace:
-
-[InvalidOperationException: Cannot decrypt password]
-EPiServer.Common.Security.HMACPasswordProvider.DecryptPassword(Byte[] ciphertext) +60
-EPiServer.Common.Web.Authorization.Integrator.SynchronizeUser(MembershipUser membershipUser, String password, Boolean enableCreateNew) +1116
-System.Web.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute() +80
-System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously) +165</code></pre></figure>
+        <blockquote>
+  <p>[9/25/14 update] See Hardy’s comments below for necessary updates to my steps when using Sitefinity 7.1 and up.  Thanks, Hardy!</p>
+</blockquote>
 
 <h2 id="scenario">Scenario</h2>
-<p>We originally installed the Relate+ site for our EPiServer installation. Through various bad decisions, we didn’t keep the custom code and templates we wrote separate from the Relate+ stuff. So, we inevitably created a mess where we did not need a ton of the Relate+ templates, page types, block types, etc but we could not longer easily pull our custom stuff out from the tangled mess.</p>
 
-<p>Well, we undertook the disentangling anyway (a good decision) and ended up with a much cleaner code base. This meant re-installing EPiServer for a clean (without Relate+) beginning. The database would remain the same to keep our content.</p>
+<p>I am designing a fairly simple widget in Sitefinity (version 6.2, but this probably applies to other versions as well) that will display a simple FAQ list.  The FAQ list has two major parts: 1) a “table of contents” type ordered-list at the top that lists each question and links to the answer further down the page, and 2) the list of questions with the answers below them.</p>
 
-<p>We ran into this error when we got the new, cleaned-up site installed and running and then tried to log into the administration portion of the site.</p>
+<h2 id="approach">Approach</h2>
+
+<p>I wanted to create a simple Sitefinity list that would contain the FAQ content (questions and answers).  The default fields for a Sitefinity list are Title and Content which are really all I needed to collect a Question and Answer for a FAQ item.</p>
+
+<p>So, my widget, after being placed on a page, would only need to allow a content author to simply select the FAQ list they had created earlier.  The widget would then find the list, collect the items in the list and display them.</p>
 
 <h2 id="solution">Solution</h2>
-<p>At first, I found this post online: http://world.episerver.com/Modules/Forum/Pages/Thread.aspx?id=77776 which suggested changing over to the multiplexing membership and role providers and described the new hashing mechanism in EPiServer 7.</p>
 
-<p>At first, this seemed to work. Yay! But, the joy didn’t last long. I soon got the error again even after using the multiplexing providers. I dug a little deeper into the issue.</p>
+<p>My solution would involved a widget designer control and a customized FlatSelector field.  Here’s an overview with details below.</p>
 
-<p>What I found was (in retrospect) pretty obvious. When we did the new, clean installation of EPiServer, it also created a new web.config with new attributes on the machineKey element. These properties are used with forms authentication to encrypt and decrypt information. Well, we didn’t make sure to keep the same values between the old install and the new install. So, when it tried to decrypt login information created with the old descryptionKey using the new decryptionKey, it obviously didn’t work.</p>
+<h3 id="overview">Overview</h3>
+<ol>
+  <li>Create a Sitefinity MVC widget with a single “List” field that will contain the list GUID</li>
+  <li>Create a Sitefinity widget designer for this MVC widget with a single FlatSelector field</li>
+  <li>Update the FlatSelector ItemType field</li>
+  <li>Update the FlatSelector ServiceURL field</li>
+  <li>Update the FlatSelector DataMembers</li>
+  <li>Update the widget designer Javascript to choose the list ID</li>
+</ol>
 
-<p>Luckily, our trusty Systems Admins always keep backups of stuff they replace. We just went into the old web.config file from the previous site, copied the entire <machineKey> element and overwrite it in the new web.config. After an app pool recycle, the login was working great.</machineKey></p>
+<h3 id="details">Details</h3>
+<p>For some reason, Sitefinity widget designer documentation is really hard for me to find.  Maybe I’m the only one.  Maybe Sitefinity needs to put some more dollars toward good documentation!  Anyway, after some searching and some trial and error, I found this page giving me an idea of how I should accomplish what I was trying to do: <a href="http://www.sitefinity.com/documentation/documentationarticles/change-your-dynamic-content-selector-to-choose-from-generic-content">Sitefinity article</a></p>
+
+<p>To summarize, it tells you how to create a widget designer with Sitefinity Thunder and then change the generated control to point to some of the generic content types (like Lists).  However, it didn’t have all the details I needed.  I had to troubleshoot and that’s why I’m writing this post.</p>
+
+<h4 id="step-1-create-the-widget">Step 1: Create the Widget</h4>
+<p>Below are the details for how I setup my MVC widget.  Translate the various tasks for the same effect if you prefer a WebForms widget.</p>
+
+<p>Using Sitefinity Thunder, create your widget.  Don’t create the designer at this time.  I like using MVC widgets but there’s no reason this won’t work with a WebForms widget.  I called my widget “FAQList”.</p>
+
+<h5 id="step-11-update-controller-properties">Step 1.1: Update controller properties</h5>
+<p>Remove whatever properties Thunder automatically adds on the MVC controller and add your own List property of type Guid.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="p">[</span><span class="nf">Category</span><span class="p">(</span><span class="s">"Widget Properties"</span><span class="p">)]</span>
+<span class="k">public</span> <span class="n">Guid</span> <span class="n">List</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span></code></pre></figure>
+
+<h5 id="step-12-update-widget-view-model">Step 1.2: Update widget view model</h5>
+<p>I added a simple POCO to describe each FAQ item (containing a question and answer) and then added a list of these POCOs as the only property on my view model.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">FAQListModel</span>
+<span class="p">{</span>
+	<span class="k">public</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">FAQItem</span><span class="p">&gt;</span> <span class="n">Items</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">FAQItem</span>
+<span class="p">{</span>
+	<span class="k">public</span> <span class="kt">string</span> <span class="n">Answer</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+	<span class="k">public</span> <span class="kt">string</span> <span class="n">Question</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<h5 id="step-13-update-index-action">Step 1.3: Update Index action</h5>
+<p>Update the Index action to use the List property to access the content-author-chosen list, pull the items and stick them in the model.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="n">ActionResult</span> <span class="nf">Index</span><span class="p">()</span>
+<span class="p">{</span>
+	<span class="kt">var</span> <span class="n">model</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FAQListModel</span><span class="p">();</span>
+
+	<span class="k">if</span> <span class="p">(</span><span class="n">List</span> <span class="p">!=</span> <span class="n">Guid</span><span class="p">.</span><span class="n">Empty</span><span class="p">)</span>
+	<span class="p">{</span>
+		<span class="n">model</span><span class="p">.</span><span class="n">Items</span> <span class="p">=</span> <span class="n">App</span><span class="p">.</span><span class="nf">WorkWith</span><span class="p">()</span>
+			<span class="p">.</span><span class="nf">List</span><span class="p">(</span><span class="n">List</span><span class="p">)</span>
+			<span class="p">.</span><span class="nf">ListItems</span><span class="p">()</span>
+			<span class="p">.</span><span class="nf">Get</span><span class="p">()</span>
+			<span class="p">.</span><span class="nf">Where</span><span class="p">(</span><span class="n">li</span> <span class="p">=&gt;</span> <span class="n">li</span><span class="p">.</span><span class="n">Status</span> <span class="p">==</span> <span class="n">ContentLifecycleStatus</span><span class="p">.</span><span class="n">Live</span><span class="p">)</span>
+			<span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">li</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="n">FAQItem</span> <span class="p">{</span> <span class="n">Question</span> <span class="p">=</span> <span class="n">li</span><span class="p">.</span><span class="n">Title</span><span class="p">,</span> <span class="n">Answer</span> <span class="p">=</span> <span class="n">li</span><span class="p">.</span><span class="n">Content</span> <span class="p">})</span>
+			<span class="p">.</span><span class="nf">ToList</span><span class="p">();</span>
+	<span class="p">}</span>
+	<span class="k">else</span>
+	<span class="p">{</span>
+		<span class="n">model</span><span class="p">.</span><span class="n">Items</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">FAQItem</span><span class="p">&gt;();</span>
+	<span class="p">}</span>
+
+	<span class="k">return</span> <span class="nf">View</span><span class="p">(</span><span class="s">"Default"</span><span class="p">,</span> <span class="n">model</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<h4 id="step-2-create-widget-designerpublic">Step 2: Create widget designer/public</h4>
+<p>Once your widget is created, you can create your widget designer.  Using Thunder, create a widget designer for an existing widget. Name your widget designer.  I use the name of the widget and append “Designer”.</p>
+
+<p><img src="/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-naming.png" alt="FAQItemDesigner widget designer naming" /></p>
+
+<p>Click “Next” on the next screen. Choose your FAQItemController from the list on the next screen.</p>
+
+<h5 id="step-21-choose-widget-designer-fields">Step 2.1: Choose widget designer fields</h5>
+<p>Next, choose the List property from your controller and set it up as follows.  Especially note two things.  First, choose the DynamicContentSelector.  Second, update the “Select the content type for the selector” to ‘Telerik.Sitefinity.Lists.Model.List’.  Click on “Add”.</p>
+
+<p><img src="/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-fields1.png" alt="Create a widget designer" /></p>
+
+<h5 id="step-22-update-generated-widget-designer-files">Step 2.2: Update generated widget designer files</h5>
+<p>In the generated .ascx file, update the ‘ServiceUrl’ property on the FlatSelector control to ‘/Sitefinity/Services/Lists/ListService.svc/?managerType=&amp;providerName=&amp;itemType=Telerik.Sitefinity.Lists.Model.List&amp;provider=&amp;sortExpression=LastModified%20DESC&amp;skip=0&amp;take=50’.</p>
+
+<p><img src="/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-serviceurl1.png" alt="Service URL 1" /></p>
+
+<p>In the generated .cs file, remove line 135 that sets the ConstantFilter property to ‘Visible=true’.</p>
+
+<p><img src="/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-removeline135.png" alt="FAQItemDesigner remove line 135" /></p>
+
+<p>Finally, in the generated .js file, change the property that is used as the value of the selected list from ‘OriginalContentId’ to ‘Id’.  This code can be found in the ‘_ListDoneSelecting’ method.</p>
+
+<p><img src="/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-changejsfile.png" alt="FAQItemDesigner update js file" /></p>
+
+<p>At this point, you should be done!  Build your project, plop your new widget on a page and test it out!  Here’s what mine looks like.</p>
+
+<p>The edit dialog:
+<img src="/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-editscreen.png" alt="FAQItemDesigner edit screen" /></p>
+
+<p>The list select screen:
+<img src="/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectscreen.png" alt="FAQItemDesigner select screen" /></p>
+
+<p>The selected item screen:
+<img src="/assets/images/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/widget-designer-selectedscreen.png" alt="FAQItemDesigner selected screen" /></p>
+
+
 
     </article>
+
+    <section>
+        <a href="/2014/05/21/create-a-list-selector-field-in-a-widget-designer-in-sitefinity-6-2/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -588,7 +699,7 @@ System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; complet
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,25 +533,55 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2012/06/12/replacing-newline-characters-in-vb-net-strings/">
-                Replacing newline characters in VB.NET strings
+            <a href="/2012/06/12/limit-selected-items-on-sitecore-multilist-field/">
+                Limit Selected Items on Sitecore Multilist Field
             </a>
         </h1>
 
-        <time datetime="2012-06-12T00:00:00-05:00" class="post-date">12 Jun 2012</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2012-06-12T00:00:00-05:00" class="post-date">12 Jun 2012</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/sitecore">#sitecore</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>I’m not very familiar (which I am actually very happy for!) with VB.NET and so I had a hard time figuring out how to trim newline characters from a string in a Reporting Services report I was working on.</p>
+        <h2 id="problem">Problem</h2>
+<p>You want to limit the number of items a user can choose for a multilist field in a data template in sitecore.</p>
 
-<p>Turns out none of the “regular” methods really work.  The Trim function only removes spaces and anything like Replace(“string”, “\n”, “”) didn’t work.</p>
+<h2 id="solution">Solution</h2>
+<p>The solution is easy enough.  Just add some validation to the field that will “count” the number of GUIDs in the raw value of the MultiList field.</p>
 
-<p>You have to use the Chr(13) or Chr(10) functions to actually get the character values for the newline characters.  So, my solution looked like this:</p>
+<ol>
+  <li>
+    <p>Open up the template in the tree navigation and click on the MultiList field you want to limit
+<img src="/assets/images/2012-06-12-limit-selected-items-on-sitecore-multilist-field/sitecore_template_property_nav.png" alt="sitecore_template_property_nav" /></p>
+  </li>
+  <li>
+    <p>Scroll down to the Validation field and enter this: ^({[^}]+}|?){0,5}$.  This regular expression simply makes sure you have between 0 and 5 GUIDs in the value of the MultiList, effectively limiting the number of items you select in the list.  The {0,5} is the range.  So, change the 0 to limit the lower bound and change the 5 to limit the upper bound.
+<img src="/assets/images/2012-06-12-limit-selected-items-on-sitecore-multilist-field/sitecore_template_validation_field.png" alt="sitecore_template_validation_field" /></p>
+  </li>
+  <li>
+    <p>Enter an appropriate message that explains why the validation failed in the ValidationText field.
+<img src="/assets/images/2012-06-12-limit-selected-items-on-sitecore-multilist-field/sitecore_template_validationtext_field.png" alt="sitecore_template_validationtext_field" /></p>
+  </li>
+</ol>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="nf">Replace</span><span class="p">(</span><span class="nf">Replace</span><span class="p">(</span><span class="n">stringVariable</span><span class="p">,</span> <span class="nf">Chr</span><span class="p">(</span><span class="m">10</span><span class="p">),</span> <span class="err">“”</span><span class="p">),</span> <span class="nf">Chr</span><span class="p">(</span><span class="m">13</span><span class="p">),</span> <span class="err">“”</span><span class="p">)</span></code></pre></figure>
-
-<p>Thanks to this forum post for providing the clues:
-<a href="http://www.daniweb.com/forums/thread54797.html">http://www.daniweb.com/forums/thread54797.html</a></p>
 
     </article>
+
+    <section>
+        <a href="/2012/06/12/limit-selected-items-on-sitecore-multilist-field/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -562,7 +600,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

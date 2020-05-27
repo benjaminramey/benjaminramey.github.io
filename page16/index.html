@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,35 +533,71 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2014/03/27/episerver-7-the-file-linkguid-aspx-does-not-exist-error/">
-                EPiServer 7 “The file ‘/link/GUID.aspx’ does not exist.” Error
+            <a href="/2014/04/17/episerver-7-cannot-decrypt-password/">
+                EPiServer 7: Cannot decrypt password
             </a>
         </h1>
 
-        <time datetime="2014-03-27T00:00:00-05:00" class="post-date">27 Mar 2014</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2014-04-17T00:00:00-05:00" class="post-date">17 Apr 2014</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/episerver">#episerver</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>I ran into the following error while working with an installation of EPiServer 7 this week. It took me a long time to finally figure out the solution.</p>
+        <h2 id="problem">Problem</h2>
+<p>I’ve been dealing with an issue in EPiServer 7 recently.  I got this error when trying to log into the admin back-end of the site.</p>
 
-<p>First, here’s the error and stack trace:</p>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">Cannot decrypt password
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text">2014-03-27 12:12:43,396 [6] ERROR EPiServer.Global: 1.2.5 Unhandled exception in ASP.NET
-System.Web.HttpException (0x80004005): The file ‘/link/cc299342a697494c8a4bc47717210bf0.aspx’ does not exist.
-at System.Web.Compilation.BuildManager.GetVPathBuildResultInternal(VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-at System.Web.Compilation.BuildManager.GetVPathBuildResultWithNoAssert(HttpContext context, VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
-at System.Web.Compilation.BuildManager.GetVirtualPathObjectFactory(VirtualPath virtualPath, HttpContext context, Boolean allowCrossApp, Boolean throwIfNotFound)
-at System.Web.Compilation.BuildManager.CreateInstanceFromVirtualPath(VirtualPath virtualPath, Type requiredBaseType, HttpContext context, Boolean allowCrossApp)
-at System.Web.Routing.PageRouteHandler.GetHttpHandler(RequestContext requestContext)
-at System.Web.Routing.UrlRoutingModule.PostResolveRequestCache(HttpContextBase context)
-at System.Web.HttpApplication.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
-at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)</code></pre></figure>
+Description: An unhandled exception occurred during the execution of the current web request. Please review the stack trace for more information about the error and where it originated in the code.
 
-<p>As it turns out, I did not have a TemplateDescriptor attribute on the page template that I was trying to access. Adding the following TemplateDescriptor attribute to the code-behind class for my page template saved me.</p>
+Exception Details: System.InvalidOperationException: Cannot decrypt password
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="p">[</span><span class="nf">TemplateDescriptor</span><span class="p">(</span><span class="n">Path</span> <span class="p">=</span> <span class="s">"~/Templates/PageTemplates/Home.aspx"</span><span class="p">)]</span>
-<span class="k">public</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">Home</span> <span class="p">:</span> <span class="n">TemplatePage</span><span class="p">&lt;</span><span class="n">HomePage</span><span class="p">&gt;</span></code></pre></figure>
+Source Error:
+
+An unhandled exception was generated during the execution of the current web request. Information regarding the origin and location of the exception can be identified using the exception stack trace below.
+
+Stack Trace:
+
+[InvalidOperationException: Cannot decrypt password]
+EPiServer.Common.Security.HMACPasswordProvider.DecryptPassword(Byte[] ciphertext) +60
+EPiServer.Common.Web.Authorization.Integrator.SynchronizeUser(MembershipUser membershipUser, String password, Boolean enableCreateNew) +1116
+System.Web.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute() +80
+System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously) +165</code></pre></figure>
+
+<h2 id="scenario">Scenario</h2>
+<p>We originally installed the Relate+ site for our EPiServer installation. Through various bad decisions, we didn’t keep the custom code and templates we wrote separate from the Relate+ stuff. So, we inevitably created a mess where we did not need a ton of the Relate+ templates, page types, block types, etc but we could not longer easily pull our custom stuff out from the tangled mess.</p>
+
+<p>Well, we undertook the disentangling anyway (a good decision) and ended up with a much cleaner code base. This meant re-installing EPiServer for a clean (without Relate+) beginning. The database would remain the same to keep our content.</p>
+
+<p>We ran into this error when we got the new, cleaned-up site installed and running and then tried to log into the administration portion of the site.</p>
+
+<h2 id="solution">Solution</h2>
+<p>At first, I found this post online: http://world.episerver.com/Modules/Forum/Pages/Thread.aspx?id=77776 which suggested changing over to the multiplexing membership and role providers and described the new hashing mechanism in EPiServer 7.</p>
+
+<p>At first, this seemed to work. Yay! But, the joy didn’t last long. I soon got the error again even after using the multiplexing providers. I dug a little deeper into the issue.</p>
+
+<p>What I found was (in retrospect) pretty obvious. When we did the new, clean installation of EPiServer, it also created a new web.config with new attributes on the machineKey element. These properties are used with forms authentication to encrypt and decrypt information. Well, we didn’t make sure to keep the same values between the old install and the new install. So, when it tried to decrypt login information created with the old descryptionKey using the new decryptionKey, it obviously didn’t work.</p>
+
+<p>Luckily, our trusty Systems Admins always keep backups of stuff they replace. We just went into the old web.config file from the previous site, copied the entire <machineKey> element and overwrite it in the new web.config. After an app pool recycle, the login was working great.</machineKey></p>
 
 
     </article>
+
+    <section>
+        <a href="/2014/04/17/episerver-7-cannot-decrypt-password/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -572,7 +616,7 @@ at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; comp
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

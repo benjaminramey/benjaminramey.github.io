@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,28 +533,46 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2012/02/03/install-sharepoint-on-windows-7/">
-                Install SharePoint on Windows 7
+            <a href="/2012/02/27/ektron-license-key-update/">
+                Ektron License Key Update
             </a>
         </h1>
 
-        <time datetime="2012-02-03T00:00:00-06:00" class="post-date">03 Feb 2012</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2012-02-27T00:00:00-06:00" class="post-date">27 Feb 2012</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/ektron">#ektron</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>If you try to do a SharePoint 2010 installation on your client machine (that is, not a Windows Server OS) then you’ll get an error explaining that SharePoint 2010 can’t be installed on your operating system.</p>
+        <h2 id="problem">Problem</h2>
+<p>We use a temporary license key with our Ektron development website here at work. Because it’s temporary, we have to update it every-so-often. That happened today.</p>
 
-<p>Never fear, CodeProject is here. Check out this helpful post to get it installed (it couldn’t be easier):</p>
+<p>I got the new key and copy-pasted it into the right License Key field under Configuration / Settings. I clicked on “Save” and thought I was done. When I tried to log back in with my regular account (the way you are notified of the license expiration is a license violation error when you try log in) and it still gave me the license violation error. So, I logged back in with the built-in account (which lets you log in with limited features so that you can update the license key) and found out that I had copy-pasted the license key wrong. It was missing part of the domain name.</p>
 
-<p><a href="http://www.codeproject.com/Articles/44210/Installing-SharePoint-Server-2010-on-Windows-7-x64">CodeProject article</a></p>
+<p>Naturally, I tried simply updating the license key domain name, but Ektron threw a Javascript error which prevented me from saving the page saying that I had updated the license key in a way that would make it invalid. What?! I tried re-pasting the key in, thinking I had it wrong still. I didn’t work.</p>
 
-<p>Even though the post is from 2009, it still works great.</p>
+<h2 id="solution">Solution</h2>
+<p>Turns out this has to be an Ektron bug. I ended up trying something random: I changed the last number of the license key to something arbitrary (along with making my domain name change) and it updated fine. Strange, I know…but this IS Ektron.</p>
 
-<p>For more detailed steps (including the ones outlined in the link above) following these instructions:</p>
+<p>Of course, that is an invalid key, so once the page saved, I changed that last digit back to the original digit from the valid license key and it let me save it and I could log in again.</p>
 
-<p><a href="http://msdn.microsoft.com/en-us/library/ie/ee554869.aspx">Microsoft’s detailed steps</a></p>
-
-<p>They will help you get the prerequisites installed as well.</p>
 
     </article>
+
+    <section>
+        <a href="/2012/02/27/ektron-license-key-update/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -565,7 +591,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

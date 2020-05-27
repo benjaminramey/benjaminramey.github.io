@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,26 +533,40 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2011/11/21/jquery-tools-overlay-v1-2-5-bug/">
-                jQuery Tools Overlay v1.2.5 Bug
+            <a href="/2011/12/01/blank-sharepoint-site-problem/">
+                Blank SharePoint Site Problem
             </a>
         </h1>
 
-        <time datetime="2011-11-21T00:00:00-06:00" class="post-date">21 Nov 2011</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2011-12-01T00:00:00-06:00" class="post-date">01 Dec 2011</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/sharepoint">#sharepoint</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
         <h2 id="problem">Problem</h2>
-<p>I noticed a bug in the jQuery Tools library today, specifically in version 1.2.5 and the Overlay plugin. I should say, I’m assuming it’s a bug. This is an existing website I am working on where I am not in a position to upgrade the jQuery Tools library to the latest version (1.2.6 is out, it looks like) and I don’t know how much of the problem may be due to how existing code is possibly interfering with the library.</p>
-
-<p>In any case, the bug showed up when I had an existing overlay showing and wanted to show another overlay. By default, the library allows one overlay at a time. This was fine with me as I needed to close the existing overlay before showing the new one. The library handles this automatically. However, when the second overlay was displayed, the mask would not display and the z-index was not set, so it showed up behind other content.</p>
+<p>A SharePoint site renders completely blank in the browser. It shows up immediately without any “processing” time and when looking at the HTML source for the page, it is completely blank–no HTML tags whatsoever.</p>
 
 <h2 id="solution">Solution</h2>
-<p>While it’s somewhat of a hack, the best solution I found was to simply remove the div that Overlay creates with id “exposeMask” before I display the second overlay.</p>
+<p>In my case, the web.config file for the SharePoint application had duplicate entries in the system.webServer/handlers and system.webServer/modules elements. Once I removed those, the site rendered as expected.</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text">$(“#exposeMask”).remove();</code></pre></figure>
-
-<p>I believe this is what is happening: when the first overlay is closed by the library, it doesn’t properly handle the existing exposeMask div and so when the second overlay shows it misunderstands the mask to be displaying properly and doesn’t calculate its own display values properly. Therefore, its z-index is wrong (or non-existing) and the mask remains hidden (because the library hid it when it closed the first overlay).</p>
 
     </article>
+
+    <section>
+        <a href="/2011/12/01/blank-sharepoint-site-problem/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -563,7 +585,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

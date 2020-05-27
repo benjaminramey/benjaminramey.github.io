@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,137 +533,64 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2016/08/24/castle-windsor-typedfactoryfacility-and-property-injection/">
-                Castle.Windsor TypedFactoryFacility and Unexpected Property Injection Behavior
+            <a href="/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/">
+                I Like Languages That Expect Me To Be a Great Programmer
             </a>
         </h1>
 
-        <time datetime="2016-08-24T07:37:00-05:00" class="post-date">24 Aug 2016</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2017-01-20T14:05:00-06:00" class="post-date">20 Jan 2017</time>
+            <nav class="post-tags">
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>I finally got to the bottom of an issue today that came down to the way Castle.Windsor
-does property injection (injecting dependencies into public properties) when
-you are also using their TypedFactoryFacility.  It was a tough one to track down, so
-I thought I’d put the solution out there for everyone else’s benefit.</p>
+        <p>A co-worker of mine recently turned me on to Uncle Bob’s blog.  Yup, that’s Uncle Bob Martin.</p>
 
-<h2 id="the-problem">The Problem</h2>
-<p>Here’s what the problem looked like.</p>
+<p>Here’s one of his latest posts that sparked a thought in me: <a href="http://blog.cleancoder.com/uncle-bob/2017/01/11/TheDarkPath.html">The Dark Path</a>.</p>
 
-<h3 id="the-error-message">The Error Message</h3>
-<p>First things first, this is what the symptom looked like:</p>
+<p>Make sure to read his follow-up post too: <a href="http://blog.cleancoder.com/uncle-bob/2017/01/13/TypesAndTests.html">Types and Tests</a>.</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text">[ComponentNotFoundException: No component for supporting the service System.Threading.Tasks.Task was found]
-   Castle.MicroKernel.DefaultKernel.Castle.MicroKernel.IKernelInternal.Resolve(Type service, IDictionary arguments, IReleasePolicy policy) +120
-   Castle.Facilities.TypedFactory.Internal.TypedFactoryInterceptor.Resolve(IInvocation invocation) +147
-   Castle.Facilities.TypedFactory.Internal.TypedFactoryInterceptor.Intercept(IInvocation invocation) +123
-   Castle.DynamicProxy.AbstractInvocation.Proceed() +448
-   Castle.Proxies.Func`2Proxy.Invoke(OAuthMatchEndpointContext arg) +168
+<p>When I got done reading those posts, this was my simple thought: I like programming languages
+that expect me to be a great programmer.</p>
 
-   ...</code></pre></figure>
+<p>Think of anyone you know who is <em>great</em> at something.  Is it an artist? A politician? A teacher?
+I just watched <em>American Sniper</em> so I’m thinking of someone like Chris Kyle. He was a great
+sniper.  His skill with a rifle was amazing.</p>
 
-<p>This is actually a pretty standard error when you’re using Castle.Windsor. It usually
-means Windsor tried to resolve some dependency but discovered that it was missing a
-registration.  Translation: you forgot to register a component or type in your Windsor
-setup.  Usually it’s an easy fix; just register your dependency properly.</p>
+<p>Now, think of why that person is considered great at what they do.  Is it because what they
+do is easy?  Probably not.  It’s probably because what they do is extremely difficult, but
+they still do it well.  Or, it may be something that’s easy to do, but very difficult to
+do <em>really</em> well.  Think of shooting a rifle.  It’s very easy to shoot a rifle.  Make sure it’s
+loaded.  Aim it somewhere (safe). Pull the trigger. That’s it.  But how about hitting a target
+100 yards away?  How about 1000 yards?  Yeah, that gets really hard.  Only a <em>great</em>
+marksman could do that.</p>
 
-<p>In this case, however, as you can see, the missing registration was of type
-System.Threading.Tasks.Task.  I didn’t have any dependencies on the <code class="highlighter-rouge">Task</code> class and so
-I didn’t want to “fix” any Windsor setup to register it.  This wasn’t making sense.</p>
+<p>The reason it’s hard to be a great marksman is because of the flexibility of a rifle.  It’s
+relatively simple design lets you take it almost anywhere and lets you aim it at almost anything.
+The only way to make a rifle that even a novice could use to hit targets 1000 yards away
+would be to mount it on some kind of stand, add advanced aiming software somehow and let it
+pull the trigger.  But, that makes it hard to use, doesn’t it?  You now at the least have a bulky tripod to
+lug around a need for a power source for the computer to aim the thing.</p>
 
-<h3 id="step-one-typedfactoryinterceptor">Step One: TypedFactoryInterceptor?</h3>
-<p>The first oddity I noticed was that this error was happening somewhere in the flow
-of the TypedFactoryInterceptor.  I could tell where the error was coming from in my
-code (from the rest of the stack trace that I didn’t include above).  The problem
-was that it had nothing to do with any TypedFactoryFacility.</p>
+<p>That’s how overly restrictive programming languages have become for the sake of safety.  They’re
+getting unwieldy.  I want a flexible language that may be harder to use when I’m a novice, but
+once I’m an expert, it lets me do amazing things.</p>
 
-<p>So, I inspected my registrations a little closer.  I basically had a setup like this.</p>
-
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">ChildClass</span> <span class="p">:</span> <span class="n">ParentClass</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="k">override</span> <span class="n">Task</span> <span class="nf">DoSomething</span><span class="p">(</span><span class="n">Options</span> <span class="n">options</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="p">...</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">public</span> <span class="k">class</span> <span class="nc">ParentClass</span> <span class="p">:</span> <span class="n">IInterface</span>
-<span class="p">{</span>
-  <span class="k">public</span> <span class="n">Func</span><span class="p">&lt;</span><span class="n">Options</span><span class="p">,</span> <span class="n">Task</span><span class="p">&gt;</span> <span class="n">OnDoSomething</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-  <span class="k">public</span> <span class="n">Func</span><span class="p">&lt;</span><span class="n">Options</span><span class="p">,</span> <span class="n">Task</span><span class="p">&gt;</span> <span class="n">OnDoSomethingElse</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-
-  <span class="k">public</span> <span class="k">virtual</span> <span class="n">Task</span> <span class="nf">DoSomething</span><span class="p">(</span><span class="n">Options</span> <span class="n">options</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">return</span> <span class="nf">OnDoSomething</span><span class="p">(</span><span class="n">options</span><span class="p">);</span>
-  <span class="p">}</span>
-
-  <span class="k">public</span> <span class="k">virtual</span> <span class="n">Task</span> <span class="nf">DoSomethingElse</span><span class="p">(</span><span class="n">Options</span> <span class="n">options</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">return</span> <span class="n">OnDoSomethingElse</span><span class="p">.</span><span class="nf">Invoke</span><span class="p">(</span><span class="n">options</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>Notice a couple of things.</p>
-<ol>
-  <li>ParentClass has several virtual methods.  I’m only overriding one.</li>
-  <li>ParentClass is setup to allow you to override the virtual methods or to just supply
- it with Funcs.</li>
-  <li>The implementation of the virtual methods is to simply call the corresponding Funcs.</li>
-</ol>
-
-<h3 id="finding-the-location-of-the-problem">Finding the Location of the Problem</h3>
-<p>After lots of testing and debugging, I finally figured out that somehow a FuncProxy
-(see line 6 in the error stack trace above) was being injected into all of the
-public <code class="highlighter-rouge">Func&lt;,&gt;</code> properties on ParentClass.  Then, when methods were called that
-I did not override in my ChildClass, the Func would be called in the ParentClass
-and that’s where Windsor was hooking in and eventually causing an error when it
-eventually tried to resolve a dependency on <code class="highlighter-rouge">Task</code>.</p>
-
-<h3 id="one-more-clue">One More Clue</h3>
-<p>As I mentioned above, the presence of a TypedFactoryInterceptor in the stack trace
-was strange to me.  I wasn’t using Windor’s TypedFactoryFacility to register my ChildClass.
-So, why was it sticking its nose into my class somehow?</p>
-
-<p>I did some simple debugging and turned off the TypedFactoryFacility in my Windsor setup.
-Just like magic,
-the error I was seeing went away.  So, my conclusion: somehow TypedFactoryFacility was
-inserting itself into my ChildClass registration and injecting <code class="highlighter-rouge">FuncProxy</code>s into the
-ParentClass public <code class="highlighter-rouge">Func&lt;,&gt;</code> properties.</p>
-
-<h2 id="the-solution">The Solution</h2>
-<p>This looked an aweful lot like property injection to me.  I started searching related to
-TypedFactoryFacility and property injection.  I pretty quickly came upon this documentation:
-<a href="https://github.com/castleproject/Windsor/blob/master/docs/how-properties-are-injected.md">https://github.com/castleproject/Windsor/blob/master/docs/how-properties-are-injected.md</a>.</p>
-
-<p>That page describes how Windsor does property injection, which I actually thought was
-an opt-in feature of Windsor.  In fact, Windsor does it by default, as describe on that page.</p>
-
-<p>Combining this revelation (to me) with the fact that TypedFactoryFacility also allows you
-to take a dependency on a simple <code class="highlighter-rouge">Func</code> and turn it into a factory call into your Windsor
-container, I concluded that, by turning on the TypedFactoryFacility in Windsor, I was opening
-up public properties that had <code class="highlighter-rouge">Func&lt;&gt;</code> types to property injection by Windsor.</p>
-
-<p>Now, I hate property injection, so I was fine with just turning it off completely.  Luckily,
-the documentation link above also included instructions how to do it. I’ve included that code
-here.</p>
-
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="kt">var</span> <span class="n">propInjector</span> <span class="p">=</span> <span class="n">Kernel</span><span class="p">.</span><span class="n">ComponentModelBuilder</span>
-                         <span class="p">.</span><span class="n">Contributors</span>
-                         <span class="p">.</span><span class="n">OfType</span><span class="p">&lt;</span><span class="n">PropertiesDependenciesModelInspector</span><span class="p">&gt;()</span>
-                         <span class="p">.</span><span class="nf">Single</span><span class="p">();</span>
-<span class="n">Kernel</span><span class="p">.</span><span class="n">ComponentModelBuilder</span><span class="p">.</span><span class="nf">RemoveContributor</span><span class="p">(</span><span class="n">propInjector</span><span class="p">);</span></code></pre></figure>
-
-<p>I added this code into my Windsor container setup and tried again.  Everything worked just
-as expected.</p>
-
-<h2 id="lessons-learned">Lessons Learned</h2>
-<p>A couple of quick takeaways:</p>
-<ol>
-  <li>Windsor does property injection by default.  Check out the documentation link above for
- the criteria it uses to determine when it should or not.</li>
-  <li>Using TypedFactoryFacility is fantastic, but turn off property injection if you have
- public <code class="highlighter-rouge">Func&lt;&gt;</code> properties anywhere.</li>
-</ol>
 
     </article>
+
+    <section>
+        <a href="/2017/01/20/I-Like-Languages-That-Expect-Me-To-Be-a-Great-Programmer/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -674,7 +609,7 @@ as expected.</p>
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,86 +533,97 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2016/02/25/you-cant-subscribe-to-ievent-with-nservicebus/">
-                You Can't Subscribe to IEvent with NServiceBus
+            <a href="/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/">
+                Using NuGetPackager 0.5.5 with GitVersionTask 3.4.1
             </a>
         </h1>
 
-        <time datetime="2016-02-25T09:56:00-06:00" class="post-date">25 Feb 2016</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2016-03-03T09:04:00-06:00" class="post-date">03 Mar 2016</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/nuget">#nuget</a>
+                
+                <a href="/tags/git">#git</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>The reason you might want to subscribe to <code class="highlighter-rouge">IEvent</code> is pretty straightforward. I
-wanted to do it for the simple reason of wanting to be able to choose (based
-on configuration) whether I wanted to notify anyone of any event that
-could be published on my bus.</p>
+        <p>I’m using both <a href="https://www.nuget.org/packages/NuGetPackager/">NuGetPackager</a>
+with <a href="https://www.nuget.org/packages/GitVersionTask/">GitVersionTask</a> on
+my project that provides EntityFramework persisters for NServiceBus:
+<a href="https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework">GoodlyFere.NServiceBus.EntityFramework</a>.</p>
 
-<p>In other words, whenever an event of any type was published, I wanted one particular
-endpoint to subscribe to that event and then decide whether it should do
-anything with it.</p>
+<p>NuGetPackager seems to work seamlessly with GitVersionTask 2.0.0.  However,
+GitVersionTask is up to version 3.4.1 and I just hate sitting at a version that
+far behind!</p>
 
-<p>I thought the code to do that should be pretty simple.  Since all published
-events <em>should</em> implement the <code class="highlighter-rouge">IEvent</code> interface and NServiceBus supports
-polymorphism in its message handling, creating a message handler that
-implemented <code class="highlighter-rouge">IHandleMessages&lt;IEvent&gt;</code> should be all I should have needed!</p>
+<p>So, I updated my NuGet package to the latest version of GitVersionTask.  That’s
+3.4.1 right now.  Too bad, so sad!  That caused this error:</p>
 
-<p>I was testing this with only partial success and so I thought it was working.</p>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml">The "CreatePackages" task was not given a value for the required parameter "Version".	1</code></pre></figure>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">EventHandler</span> <span class="p">:</span> <span class="n">IHandleMessages</span><span class="p">&lt;</span><span class="n">IEvent</span><span class="p">&gt;</span>
-<span class="p">{</span>
-   <span class="k">public</span> <span class="k">void</span> <span class="nf">Handle</span><span class="p">(</span><span class="n">IEvent</span> <span class="n">message</span><span class="p">)</span>
-   <span class="p">{</span>
-     <span class="p">...</span>
-   <span class="p">}</span>
-<span class="p">}</span></code></pre></figure>
+<h2 id="the-problem">The Problem</h2>
+<p>The problem turns out that NuGetPackager 0.5.5 is looking for a MSBuild property
+called “GfvNuGetVersion”.  See the code in the .targets file <a href="https://github.com/Particular/NuGetPackager/blob/0.5.6/src/NuGetPackager/NuGetPackager.targets#L5">here</a>.</p>
 
-<h2 id="my-partial-success">My Partial Success</h2>
-<p>The reason I had partial success was because I was also <em>explicitly</em> handling
-other events in the same endpoint on a special saga I had setup.  So, when
-the endpoint started up, it would subscribe to these events.  At first, I only
-wanted to send notifications for these events anyway, so it all seemed to be
-working.  My special <code class="highlighter-rouge">IEvent</code> would work because the <code class="highlighter-rouge">Saga</code> subscribed this same
-endpoint to those few events explicitly.</p>
+<p>GitVersionTask 3.4.1 (somewhere in a release since 2.0.0) changed that property
+name to “GitVersion_NuGetVersion”.  See the code <a href="https://github.com/GitTools/GitVersion/blob/master/src/GitVersionTask/NugetAssets/GitVersionTask.targets#L68">here</a>.</p>
 
-<h2 id="my-full-failure">My Full Failure</h2>
-<p>I realized I had only partially succeeded when I started wanting to send notifications
-for other events that were not in that <code class="highlighter-rouge">Saga</code>.  I dug into the issue for a few
-hours and finally began to wonder if NServiceBus (or maybe the RabbitMQ transport)
-was explicitly ignoring <code class="highlighter-rouge">IEvent</code> when it setup subscriptions.</p>
+<h2 id="the-solution">The Solution</h2>
+<p>So, how to fix this?  NuGetPackager will probably be updated some day, but for
+now you can just translate the property in your .csproj file before the
+CreatePackage task is called in NuGetPackager.</p>
 
-<p>Sure enough, it does.</p>
+<p>Open up your .csproj file directly in some text editor like Notepad++.  Find
+these two lines at the bottom of the file:</p>
 
-<p>To build a list of types to subscribe to, NServiceBus uses the <code class="highlighter-rouge">Conventions</code>
-class in the <code class="highlighter-rouge">NServiceBus.Core</code> namespace.  One of the checks that code does
-is to filter the list of potential types with the <code class="highlighter-rouge">IsEventType</code> method.  This
-method checks if the <code class="highlighter-rouge">Type</code> is in a Particular (NServiceBus) DLL.  See the
-code here: <a href="https://github.com/Particular/NServiceBus/blob/e4bc405509e3b9c3fc91e21a56333bb40ac54a60/src/NServiceBus.Core/Conventions.cs#L154">IsEventType</a></p>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"</span>
+        <span class="na">Condition=</span><span class="s">"Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"</span>
+        <span class="na">Condition=</span><span class="s">"Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')"</span> <span class="nt">/&gt;</span></code></pre></figure>
 
-<h2 id="my-solution">My Solution</h2>
-<p>The solution is simple enough.  Instead of listening to <code class="highlighter-rouge">IEvent</code>, listen
-to a custom interface that you implement on all of your events.  This is probably
-more close to what you are trying to do anyway–listen to all events that your
-system produces.</p>
+<p>Before those two lines, add a target and a property group.  The target will
+create a task that translates the new property to the new property.  The
+property group wil define a BuildDependsOn to call that target before the
+CreatePackages target is called.</p>
 
-<p>So, I simply created a marker interface called <code class="highlighter-rouge">ICustomEvent</code>.</p>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;Target</span> <span class="na">Name=</span><span class="s">"TranslateNugetVersion"</span>
+        <span class="na">Condition=</span><span class="s">"'$(Configuration)' == 'Release'"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;CreateProperty</span>
+        <span class="na">Value=</span><span class="s">"$(GitVersion_NuGetVersion)"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;Output</span>
+            <span class="na">TaskParameter=</span><span class="s">"Value"</span>
+            <span class="na">PropertyName=</span><span class="s">"GfvNuGetVersion"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/CreateProperty&gt;</span>
+<span class="nt">&lt;/Target&gt;</span>
+<span class="nt">&lt;PropertyGroup&gt;</span>
+    <span class="nt">&lt;BuildDependsOn&gt;</span>
+        $(BuildDependsOn);
+        TranslateNugetVersion
+    <span class="nt">&lt;/BuildDependsOn&gt;</span>
+<span class="nt">&lt;/PropertyGroup&gt;</span>
+<span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"</span>
+        <span class="na">Condition=</span><span class="s">"Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"</span>
+        <span class="na">Condition=</span><span class="s">"Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')"</span> <span class="nt">/&gt;</span></code></pre></figure>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">interface</span> <span class="nc">ICustomEvent</span> <span class="p">:</span> <span class="n">IEvent</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
+<p>Now, when you build your project, everything should work great!</p>
 
-<p>Then, on all of my bus event classes, instead of implementing <code class="highlighter-rouge">IEvent</code> directly,
-I implemented <code class="highlighter-rouge">ICustomEvent</code>.</p>
-
-<p>My handler then looked like this.</p>
-
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">EventHandler</span> <span class="p">:</span> <span class="n">IHandleMessages</span><span class="p">&lt;</span><span class="n">ICustomEvent</span><span class="p">&gt;</span>
-<span class="p">{</span>
-   <span class="k">public</span> <span class="k">void</span> <span class="nf">Handle</span><span class="p">(</span><span class="n">ICustomEvent</span> <span class="n">message</span><span class="p">)</span>
-   <span class="p">{</span>
-     <span class="p">...</span>
-   <span class="p">}</span>
-<span class="p">}</span></code></pre></figure>
-
-<p>Now, the right subscriptions are all set up and my single handler gets
-every single event published by my entire bus.</p>
 
     </article>
+
+    <section>
+        <a href="/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -623,7 +642,7 @@ every single event published by my entire bus.</p>
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

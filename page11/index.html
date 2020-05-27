@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,16 +533,207 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2014/09/23/apply-git-patches-to-svn-repository/">
-                Apply Git Patches to SVN Repository
+            <a href="/2014/10/20/active-directory-authentication-in-asp-net-mvc-5-with-forms-authentication-and-group-based-authorization/">
+                Active Directory Authentication in ASP.NET MVC 5 with Forms Authentication and Group-Based Authorization
             </a>
         </h1>
 
-        <time datetime="2014-09-23T00:00:00-05:00" class="post-date">23 Sep 2014</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2014-10-20T04:03:00-05:00" class="post-date">20 Oct 2014</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/mvc">#mvc</a>
+                
+                <a href="/tags/asp.net">#asp.net</a>
+                
+                <a href="/tags/active-directory">#active-directory</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p><a href="http://codeprairie.net/blogs/chrisortman/archive/2008/01/14/creating-subversion-patches-with-git.aspx">Creating Subversion patches with Git</a></p>
+        <p>I know that blog post title is sure a mouth-full, but it describes the whole problem I was trying to solve in a recent project.</p>
+
+<h2 id="the-project">The Project</h2>
+
+<p>Let me outline the project briefly.  We were building a report dashboard-type site that will live inside the client’s network.  The dashboard gives an overview of various, very important information that relates to how the company is performing on a hourly basis.  So, the dashboard is only available to a certain group of directors.</p>
+
+<p>To limit the solution to the these directors, authentication and authorization would go through their existing Active Directory setup by putting the authorized users in a special AD group.</p>
+
+<h2 id="the-problem">The Problem</h2>
+
+<p>Getting authentication to work was a snap.  Microsoft provides the System.Web.Security.ActiveDirectoryMembershipProvider
+class to use as your membership provider.  Putting an <code class="highlighter-rouge">[Authorize]</code> attribute on my action methods or entire controllers was all I needed to get it working (besides, of course, the system.web/authentication web.config updates and a controller to show my login form and handle the submit credentials).</p>
+
+<p>Here’s my relevant web.config setup:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;connectionStrings&gt;</span>
+    <span class="nt">&lt;add</span> <span class="na">name=</span><span class="s">"ADConnectionString"</span> <span class="na">connectionString=</span><span class="s">"&lt;ldap connection string here&gt;"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/connectionStrings&gt;</span>
+…
+<span class="nt">&lt;authentication</span> <span class="na">mode=</span><span class="s">"Forms"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;forms</span> <span class="na">name=</span><span class="s">".AuthCookie"</span> <span class="na">loginUrl=</span><span class="s">"~/login"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/authentication&gt;</span>
+<span class="nt">&lt;membership</span> <span class="na">defaultProvider=</span><span class="s">"ADMembershipProvider"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;providers&gt;</span>
+            <span class="nt">&lt;clear/&gt;</span>
+            <span class="nt">&lt;add</span> <span class="na">name=</span><span class="s">"ADMembershipProvider"</span>
+                 <span class="na">type=</span><span class="s">"System.Web.Security.ActiveDirectoryMembershipProvider"</span>
+                 <span class="na">connectionStringName=</span><span class="s">"ADConnectionString"</span>
+                 <span class="na">attributeMapUsername=</span><span class="s">"sAMAccountName"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;/providers&gt;</span>
+<span class="nt">&lt;/membership&gt;</span></code></pre></figure>
+
+<p>The tough part came when I wanted to limit access to users in that AD group. Microsoft doesn’t provide a RoleProvider along with its ActiveDirectoryMembershipProvider. So, what to do?</p>
+
+<p>I tried several methods I found online. Most of them were based on creating my own custom RoleProvider and querying AD to iterate through the user’s groups (treating them like roles) and seeing if one of them matched my AD group I was looking for. However, I could never get it to work. Each code example I found eventually gave me this AD error when I iterated through the current user’s AD groups:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">The specified directory service attribute or value does not exist.</code></pre></figure>
+
+<h2 id="the-solution">The Solution</h2>
+
+<p>Eventually, I found a solution online that worked. Instead of setting up a custom RoleProvider, all it involved was creating a custom AuthorizeAttribute for your MVC controllers (or action methods) that checked the user’s .IsMemberOf method to see if the member belonged the sought after group (or groups). I don’t know why this method does not cause the same AD error as describe above, but I’m glad it doesn’t! All I can assume is that it queries AD in a more friendly way.</p>
+
+<p>Here is my custom AuthorizeAttribute:</p>
+
+<figure class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="k">class</span> <span class="nc">AuthorizeADAttribute</span> <span class="p">:</span> <span class="n">AuthorizeAttribute</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">bool</span> <span class="n">_authenticated</span><span class="p">;</span>
+    <span class="k">private</span> <span class="kt">bool</span> <span class="n">_authorized</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Groups</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">override</span> <span class="k">void</span> <span class="nf">HandleUnauthorizedRequest</span><span class="p">(</span><span class="n">AuthorizationContext</span> <span class="n">filterContext</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">base</span><span class="p">.</span><span class="nf">HandleUnauthorizedRequest</span><span class="p">(</span><span class="n">filterContext</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">_authenticated</span> <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="n">_authorized</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">filterContext</span><span class="p">.</span><span class="n">Result</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">RedirectResult</span><span class="p">(</span><span class="s">"/error/notauthorized"</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">AuthorizeCore</span><span class="p">(</span><span class="n">HttpContextBase</span> <span class="n">httpContext</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_authenticated</span> <span class="p">=</span> <span class="k">base</span><span class="p">.</span><span class="nf">AuthorizeCore</span><span class="p">(</span><span class="n">httpContext</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">_authenticated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">Groups</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="n">_authorized</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">_authorized</span><span class="p">;</span>
+            <span class="p">}</span>
+
+            <span class="kt">var</span> <span class="n">groups</span> <span class="p">=</span> <span class="n">Groups</span><span class="p">.</span><span class="nf">Split</span><span class="p">(</span><span class="sc">','</span><span class="p">);</span>
+            <span class="kt">string</span> <span class="n">username</span> <span class="p">=</span> <span class="n">httpContext</span><span class="p">.</span><span class="n">User</span><span class="p">.</span><span class="n">Identity</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+
+            <span class="k">try</span>
+            <span class="p">{</span>
+                <span class="n">_authorized</span> <span class="p">=</span> <span class="n">LDAPHelper</span><span class="p">.</span><span class="nf">UserIsMemberOfGroups</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">groups</span><span class="p">);</span>
+                <span class="k">return</span> <span class="n">_authorized</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">this</span><span class="p">.</span><span class="nf">Log</span><span class="p">().</span><span class="nf">Error</span><span class="p">(()</span> <span class="p">=&gt;</span> <span class="s">"Error attempting to authorize user"</span><span class="p">,</span> <span class="n">ex</span><span class="p">);</span>
+                <span class="n">_authorized</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+                <span class="k">return</span> <span class="n">_authorized</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="n">_authorized</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+        <span class="k">return</span> <span class="n">_authorized</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Notice that I also included a little code to distinguish between the user not being authenticated (which the call to base.AuthorizeCore takes care of) and not being authorized. Without the code in HandleUnauthorizedRequest, if the user successfully logs in but is not in the AD group, he just sees the log in screen again which doesn’t communicate the problem very well.</p>
+
+<p>The this.Log() code uses a Nuget package called this.Log. The LDAPHelper class is something I wrote. The code is below:</p>
+
+<figure class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">LDAPHelper</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">static</span> <span class="kt">string</span> <span class="nf">GetLDAPContainer</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Uri</span> <span class="n">ldapUri</span><span class="p">;</span>
+        <span class="nf">ParseLDAPConnectionString</span><span class="p">(</span><span class="k">out</span> <span class="n">ldapUri</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">HttpUtility</span><span class="p">.</span><span class="nf">UrlDecode</span><span class="p">(</span><span class="n">ldapUri</span><span class="p">.</span><span class="n">PathAndQuery</span><span class="p">.</span><span class="nf">TrimStart</span><span class="p">(</span><span class="sc">'/'</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="kt">string</span> <span class="nf">GetLDAPHost</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Uri</span> <span class="n">ldapUri</span><span class="p">;</span>
+        <span class="nf">ParseLDAPConnectionString</span><span class="p">(</span><span class="k">out</span> <span class="n">ldapUri</span><span class="p">);</span>
+
+        <span class="k">return</span> <span class="n">ldapUri</span><span class="p">.</span><span class="n">Host</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">ParseLDAPConnectionString</span><span class="p">(</span><span class="k">out</span> <span class="n">Uri</span> <span class="n">ldapUri</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">connString</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">ConnectionStrings</span><span class="p">[</span><span class="s">"ADConnectionString"</span><span class="p">].</span><span class="n">ConnectionString</span><span class="p">;</span>
+
+        <span class="k">return</span> <span class="n">Uri</span><span class="p">.</span><span class="nf">TryCreate</span><span class="p">(</span><span class="n">connString</span><span class="p">,</span> <span class="n">UriKind</span><span class="p">.</span><span class="n">Absolute</span><span class="p">,</span> <span class="k">out</span> <span class="n">ldapUri</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="kt">bool</span> <span class="nf">UserIsMemberOfGroups</span><span class="p">(</span><span class="kt">string</span> <span class="n">username</span><span class="p">,</span> <span class="kt">string</span><span class="p">[]</span> <span class="n">groups</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="cm">/* Return true immediately if the authorization is not
+        locked down to any particular AD group */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">groups</span> <span class="p">==</span> <span class="k">null</span> <span class="p">||</span> <span class="n">groups</span><span class="p">.</span><span class="n">Length</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Verify that the user is in the given AD group (if any)</span>
+        <span class="k">using</span> <span class="p">(</span><span class="kt">var</span> <span class="n">context</span> <span class="p">=</span> <span class="nf">BuildPrincipalContext</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">userPrincipal</span> <span class="p">=</span> <span class="n">UserPrincipal</span><span class="p">.</span><span class="nf">FindByIdentity</span><span class="p">(</span><span class="n">context</span><span class="p">,</span>
+                <span class="n">IdentityType</span><span class="p">.</span><span class="n">SamAccountName</span><span class="p">,</span>
+                <span class="n">username</span><span class="p">);</span>
+
+            <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="k">group</span> <span class="k">in</span> <span class="n">groups</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">userPrincipal</span><span class="p">.</span><span class="nf">IsMemberOf</span><span class="p">(</span><span class="n">context</span><span class="p">,</span> <span class="n">IdentityType</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="k">group</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">static</span> <span class="n">PrincipalContext</span> <span class="nf">BuildPrincipalContext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="kt">string</span> <span class="n">container</span> <span class="p">=</span> <span class="n">LDAPHelper</span><span class="p">.</span><span class="nf">GetLDAPContainer</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">PrincipalContext</span><span class="p">(</span><span class="n">ContextType</span><span class="p">.</span><span class="n">Domain</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="n">container</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>My code is mostly based on example code I found on a very helpful <a href="http://stackoverflow.com/questions/4342271/asp-net-mvc-forms-authorization-with-active-directory-groups/4383502#4383502">StackOverflow post</a>.</p>
+
+<p>To use this code, all you have to do is use your custom AuthorizeAttribute instead of the built-in one. Something like this:</p>
+
+<figure class="highlight"><pre><code class="language-c#" data-lang="c#"><span class="p">[</span><span class="nf">AuthorizeAD</span><span class="p">(</span><span class="n">Groups</span><span class="p">=</span><span class="s">"Some AD group name"</span><span class="p">)]</span>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">HomeController</span> <span class="p">:</span> <span class="n">Controller</span>
+<span class="p">{</span>
+<span class="err">…</span>
+<span class="p">}</span></code></pre></figure>
+
+
 
     </article>
+
+    <section>
+        <a href="/2014/10/20/active-directory-authentication-in-asp-net-mvc-5-with-forms-authentication-and-group-based-authorization/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -553,7 +752,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

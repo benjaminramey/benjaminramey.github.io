@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,75 +533,117 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2016/03/03/using-nugetpackager-0.5.5-with-gitversiontask-3.4.1/">
-                Using NuGetPackager 0.5.5 with GitVersionTask 3.4.1
+            <a href="/2016/04/11/owin-oauth-integration-testing-with-bearer-token/">
+                OWIN Integration Testing with OAuth Bearer Tokens
             </a>
         </h1>
 
-        <time datetime="2016-03-03T09:04:00-06:00" class="post-date">03 Mar 2016</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2016-04-11T08:34:00-05:00" class="post-date">11 Apr 2016</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/owin">#owin</a>
+                
+                <a href="/tags/.net">#.net</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>I’m using both <a href="https://www.nuget.org/packages/NuGetPackager/">NuGetPackager</a>
-with <a href="https://www.nuget.org/packages/GitVersionTask/">GitVersionTask</a> on
-my project that provides EntityFramework persisters for NServiceBus:
-<a href="https://github.com/benjaminramey/GoodlyFere.NServiceBus.EntityFramework">GoodlyFere.NServiceBus.EntityFramework</a>.</p>
+        <h2 id="situation">Situation</h2>
+<p>The situation is pretty simple.  We have a project written with Web API 2.2
+that we have running with OWIN.  The API requires user authorization.  To
+accomplish that, we use the OWIN OAuth libraries.</p>
 
-<p>NuGetPackager seems to work seamlessly with GitVersionTask 2.0.0.  However,
-GitVersionTask is up to version 3.4.1 and I just hate sitting at a version that
-far behind!</p>
+<p>Upon until recently, the OAuth authorization server (the thing that takes in
+the user credentials and issues the token) and the API (the resource server) were
+hosted in the same site and web project.</p>
 
-<p>So, I updated my NuGet package to the latest version of GitVersionTask.  That’s
-3.4.1 right now.  Too bad, so sad!  That caused this error:</p>
+<p>Integration testing was pretty easy at this point.  For the authorized calls,
+we simply wrote helper methods that logged a test user in through the authorization
+server (hosted along with the API in the OWIN test server), got a bearer token
+and then made the integration test calls.</p>
 
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml">The "CreatePackages" task was not given a value for the required parameter "Version".	1</code></pre></figure>
+<h2 id="problem">Problem</h2>
+<p>When we recently decided to split the authorization server and resource server
+code up into two separate code bases (so that they could be hosted separately)
+we ran into issues with the authorization and API calls no longer being possible within a
+single integration test.  The code to generate the bearer token was now no
+longer accessible in the test server for the API integration tests because the authorization
+server was now designed to be hosted separately.  We’d have
+to somehow generate the bearer token without making a call with the OWIN test
+server.</p>
 
-<h2 id="the-problem">The Problem</h2>
-<p>The problem turns out that NuGetPackager 0.5.5 is looking for a MSBuild property
-called “GfvNuGetVersion”.  See the code in the .targets file <a href="https://github.com/Particular/NuGetPackager/blob/0.5.6/src/NuGetPackager/NuGetPackager.targets#L5">here</a>.</p>
+<h2 id="solution">Solution</h2>
+<p>The solution is to generate a valid bearer token in your test code and send it
+along with your test API call as you would have previous.  How to generate that
+valid bearer token though??  It turns out to be easier than I thought.</p>
 
-<p>GitVersionTask 3.4.1 (somewhere in a release since 2.0.0) changed that property
-name to “GitVersion_NuGetVersion”.  See the code <a href="https://github.com/GitTools/GitVersion/blob/master/src/GitVersionTask/NugetAssets/GitVersionTask.targets#L68">here</a>.</p>
+<p>How you use OWIN’s test server is beyond the scope of this blog post, but
+eventually you’ll have some code resembling this:</p>
 
-<h2 id="the-solution">The Solution</h2>
-<p>So, how to fix this?  NuGetPackager will probably be updated some day, but for
-now you can just translate the property in your .csproj file before the
-CreatePackage task is called in NuGetPackager.</p>
+<p>var server = TestServer.Create<Startup>();</Startup></p>
 
-<p>Open up your .csproj file directly in some text editor like Notepad++.  Find
-these two lines at the bottom of the file:</p>
+<p>You’ll have to use a overload of the <code class="highlighter-rouge">Create()</code> method to capture a reference
+to the server’s <code class="highlighter-rouge">IDataProtector</code>.  This interface defines what OWIN OAuth will
+use to encrypt a <code class="highlighter-rouge">ClaimsIdentity</code> into a valid bearer token.</p>
 
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"</span>
-        <span class="na">Condition=</span><span class="s">"Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"</span>
-        <span class="na">Condition=</span><span class="s">"Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')"</span> <span class="nt">/&gt;</span></code></pre></figure>
+<p>Update your server creation code like this:</p>
 
-<p>Before those two lines, add a target and a property group.  The target will
-create a task that translates the new property to the new property.  The
-property group wil define a BuildDependsOn to call that target before the
-CreatePackages target is called.</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">  <span class="kt">var</span> <span class="n">dataProtector</span><span class="p">;</span>
+  <span class="kt">var</span> <span class="n">server</span> <span class="p">=</span> <span class="n">TestServer</span><span class="p">.</span><span class="nf">Create</span><span class="p">(</span><span class="n">app</span> <span class="p">=&gt;</span>
+  <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">s</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">Startup</span><span class="p">();</span>
+    <span class="n">s</span><span class="p">.</span><span class="nf">Configuration</span><span class="p">(</span><span class="n">app</span><span class="p">);</span>
 
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;Target</span> <span class="na">Name=</span><span class="s">"TranslateNugetVersion"</span>
-        <span class="na">Condition=</span><span class="s">"'$(Configuration)' == 'Release'"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;CreateProperty</span>
-        <span class="na">Value=</span><span class="s">"$(GitVersion_NuGetVersion)"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;Output</span>
-            <span class="na">TaskParameter=</span><span class="s">"Value"</span>
-            <span class="na">PropertyName=</span><span class="s">"GfvNuGetVersion"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/CreateProperty&gt;</span>
-<span class="nt">&lt;/Target&gt;</span>
-<span class="nt">&lt;PropertyGroup&gt;</span>
-    <span class="nt">&lt;BuildDependsOn&gt;</span>
-        $(BuildDependsOn);
-        TranslateNugetVersion
-    <span class="nt">&lt;/BuildDependsOn&gt;</span>
-<span class="nt">&lt;/PropertyGroup&gt;</span>
-<span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets"</span>
-        <span class="na">Condition=</span><span class="s">"Exists('..\packages\GitVersionTask.3.4.1\Build\dotnet\GitVersionTask.targets')"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;Import</span> <span class="na">Project=</span><span class="s">"..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets"</span>
-        <span class="na">Condition=</span><span class="s">"Exists('..\packages\NuGetPackager.0.5.5\build\NuGetPackager.targets')"</span> <span class="nt">/&gt;</span></code></pre></figure>
+    <span class="n">dataProtector</span> <span class="p">=</span> <span class="n">app</span><span class="p">.</span><span class="nf">CreateDataProtector</span><span class="p">(</span>
+      <span class="k">typeof</span><span class="p">(</span><span class="n">OAuthBearerAuthenticationMiddleware</span><span class="p">).</span><span class="n">Namespace</span><span class="p">,</span>
+      <span class="s">"Access_Token"</span><span class="p">,</span> <span class="s">"v1"</span><span class="p">);</span>
+  <span class="p">});</span></code></pre></figure>
 
-<p>Now, when you build your project, everything should work great!</p>
+<p>You have to get the <code class="highlighter-rouge">dataProtector</code> this way because it’s the same way that
+the OWIN OAuth libraries get it before trying to decrypt the bearer token.
+See the source for the OWIN OAuth code here:
+<a href="http://katanaproject.codeplex.com/SourceControl/latest#src/Microsoft.Owin.Security.OAuth/OAuthBearerAuthenticationMiddleware.cs">OAuthBearerAuthenticationMiddleware.cs</a></p>
+
+<p>Once you’ve “captured” the <code class="highlighter-rouge">dataProtector</code>, in your integration test (or in some
+helper code, probably) you can generate your <code class="highlighter-rouge">ClaimsIdentity</code> and then your
+bearer token with the <code class="highlighter-rouge">dataProtector</code>.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp">  <span class="c1">// inside an integration test</span>
+  <span class="k">using</span> <span class="p">(</span><span class="n">server</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="c1">// create your valid identity any way you need to here</span>
+    <span class="n">ClaimsIdentity</span> <span class="n">identity</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">ClaimsIdentity</span><span class="p">(</span><span class="k">new</span> <span class="nf">GenericIdentity</span><span class="p">(</span><span class="s">"username"</span><span class="p">));</span>
+
+    <span class="c1">// these classes are defined in the OWIN OAuth libraries.</span>
+    <span class="kt">var</span> <span class="n">properties</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthenticationProperties</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">ticket</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">AuthenticationTicket</span><span class="p">(</span><span class="n">identity</span><span class="p">,</span> <span class="n">properties</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">format</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">TicketDataFormat</span><span class="p">(</span><span class="n">dataProtector</span><span class="p">);</span>
+
+    <span class="kt">string</span> <span class="n">bearerToken</span> <span class="p">=</span> <span class="n">format</span><span class="p">.</span><span class="nf">Protect</span><span class="p">(</span><span class="n">ticket</span><span class="p">);</span>
+
+    <span class="c1">// ... call your API through the test server with the bearer token...</span>
+    <span class="kt">var</span> <span class="n">response</span> <span class="p">=</span> <span class="n">server</span><span class="p">.</span><span class="nf">CreateRequest</span><span class="p">(</span><span class="s">"/api/someendpoint"</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">AddHeader</span><span class="p">(</span><span class="s">"Authorization"</span><span class="p">,</span> <span class="s">"Bearer "</span> <span class="p">+</span> <span class="n">bearerToken</span><span class="p">)</span>
+        <span class="p">.</span><span class="nf">GetAsync</span><span class="p">()</span>
+        <span class="p">.</span><span class="n">Result</span><span class="p">;</span>
+  <span class="p">}</span></code></pre></figure>
+
+
 
     </article>
+
+    <section>
+        <a href="/2016/04/11/owin-oauth-integration-testing-with-bearer-token/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -612,7 +662,7 @@ CreatePackages target is called.</p>
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

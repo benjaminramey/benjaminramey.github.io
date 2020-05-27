@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,22 +533,66 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2015/12/02/working-with-x509-certificates-in-net/">
-                Working with x.509 Certificates in .NET
+            <a href="/2016/01/04/adding-a-rabbitmq-configuration-file-when-running-as-a-windows-service/">
+                Adding a RabbitMQ Configuration File When Running as a Windows Service
             </a>
         </h1>
 
-        <time datetime="2015-12-02T10:35:00-06:00" class="post-date">02 Dec 2015</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2016-01-04T09:26:00-06:00" class="post-date">04 Jan 2016</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/rabbitmq">#rabbitmq</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>I found a lot of very helpful details about certificate storage and usage in Windows and
-.NET in this article.</p>
+        <h2 id="a-little-context">A little context</h2>
+<p>I was having a hard time adding a rabbitmq.config file today.  I added it in the right location, restarted
+the RabbitMQ Windows service and the logs still showed that the configuration file was not found.</p>
 
-<p>Particularly, the explanation of where certificates and private keys can be stored for UserStore
-certificates was very helpful in debugging some issues I’m currently having on a production server.</p>
+<p>If you’re experiencing the same problem, you’ll see a similar error message in the RabbitMQ log file after
+you restart the Windows service.</p>
 
-<p><a href="http://paulstovell.com/blog/x509certificate2">Paul Stovell’s blog post</a></p>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">=INFO REPORT==== &lt;date here&gt;
+node			: rabbit@&lt;server&gt;
+home dir		: C:\Windows
+config file(s)	: c:/path/to/config/rabbitmq.config (not found)
+...some other stuff...</code></pre></figure>
+
+<p>This will happen if you just install your RabbitMQ server with the normal, default installation process
+and then try to add a configuration file later.  By default, RabbitMQ doesn’t install configuration file and just
+uses all it’s defined defaults.</p>
+
+<h2 id="solution">Solution</h2>
+<p>I read the <a href="http://www.rabbitmq.com/configure.html">documentation</a> a little more closely
+and finally came upon this line: “Windows service users will need to re-install the service after adding
+or removing a configuration file.”</p>
+
+<p>Oops.  Guess I should have read the documentation more closely the first time around!  The easiest way to
+do this is as follows (start a command prompt as administrator):</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">&gt; cd "C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.6.0\sbin"
+&gt; .\rabbitmq-service.bat remove
+&gt; .\rabbitmq-service.bat install
+&gt; .\rabbitmq-service.bat start</code></pre></figure>
+
+<p>Of course, The path you cd into will depend on the version of RabbitMQ you have installed.</p>
+
 
     </article>
+
+    <section>
+        <a href="/2016/01/04/adding-a-rabbitmq-configuration-file-when-running-as-a-windows-service/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -559,7 +611,7 @@ certificates was very helpful in debugging some issues I’m currently having on
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

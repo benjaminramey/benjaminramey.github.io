@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,116 +533,65 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2012/10/25/setting-selected-items-on-sitefinity-5-1-pagesselector-in-javascript/">
-                Setting Selected Items on Sitefinity 5.1 PagesSelector in Javascript
+            <a href="/2013/01/15/linq-to-ektron-search-library/">
+                LINQ to Ektron Search Library
             </a>
         </h1>
 
-        <time datetime="2012-10-25T00:00:00-05:00" class="post-date">25 Oct 2012</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2013-01-15T00:00:00-06:00" class="post-date">15 Jan 2013</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/ektron">#ektron</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <h2 id="problem">Problem</h2>
-<p>Today I nearly tore my hair out trying to get set the selected items (having a list of GUIDs) on the PagesSelector control in Sitefinity through the Javascript API to the control.</p>
+        <p>I am currently working on a project at VML that will make use of Ektron’s 3-tier architecture. It will be an MVC 4.0 site that basically uses an existing Ektron site as a datasource. It pulls in various Ektron content and then feeds it into the MVC application (a mobile version of the Ektron site).</p>
 
-<p>You are supposed to be able to use the set_selectedItemIds method to do this, but it doesn’t work. Nothing happens after you call this method.</p>
+<p>I wanted to take time on this project to make everything “right”. I am using MVC as my presentation layer, I have a distinct business logic layer and underneath that I have a nice data layer. This data layer is what is interacting with Ektron. The data model for the application is defined separately through a set of interfaces that describe different data objects. The presentation and business logic layers know nothing about the concrete implementations of these interfaces. So, my project structure looks like this:</p>
 
-<p>After doing some debugging through Sitefinity’s javascript, I found a bug which, when fixed, causes the set_selectedItemIds method to work as expected.</p>
+<ul>
+  <li>Project.Web – my MVC application</li>
+  <li>Project.Data – the set of interfaces that define my data model and repositories</li>
+  <li>Project.Data.Ektron – the implementation of the Project.Data interfaces with Ektron (data model and repositories)</li>
+  <li>Project.BusinessLayer – the service layer that sits on top of Project.Data.Ektron (with no direct knowledge of it)
+I tie it all neatly together with dependency injection using Autofac (that’s how my business layer doesn’t need to know about Project.Data.Ektron).</li>
+</ul>
 
-<h2 id="solution">Solution</h2>
-<p>I am using a WidgetDesigner in which I have the PagesSelector control. My goal is pretty simple: I want the content editors to be able to select a set of pages for which to show links in the footer of their website. When they edit the footer widget, the PagesSelector should show up, let them choose pages (showing the currently selected ones) and let them save those selections.</p>
+<p>I thought about a few designs for how my repositories would receive queries for data.  Of course, nothing beats LINQ for this purpose.  The problem is, Ektron doesn’t implement anything like LINQ-to-Ektron to query its data.  So, what to do?</p>
 
-<p>Everything works fine. Except, once I save a selection in the PagesSelector, on subsequent edits, the currently selected items would not show up, as described above.</p>
+<p>I really didn’t want to move away from LINQ.  Anything else was going to be too rigid and cumbersome to use.  I started looking into my own implementation of LINQ-to-Ektron.  Ektron already implements a LINQ-like expression tree search via it’s AdvancedSearchCriteria search API.  So, my thinking was to take LINQ queries and translate them into those AdvancedSearchCriteria expressions.</p>
 
-<p>Here is the bug I found in the Sitefinity code. The set_selectedItemIds function is really simple. It looks like this:</p>
+<p>As I started to look into what it took to create a LINQ QueryProvider, I was overwhelmed.  I read through the first few posts of Matt Warren’s “tutorial” here: <a href="http://blogs.msdn.com/b/mattwar/archive/2007/07/30/linq-building-an-iqueryable-provider-part-i.aspx">http://blogs.msdn.com/b/mattwar/archive/2007/07/30/linq-building-an-iqueryable-provider-part-i.aspx</a>.  I didn’t even understand half of what he was talking about, but I copied his code and started tinkering.  I gave up a couple of times, thinking this would take way too long to implement. But, I always came back to wanting to use LINQ for my repositories.  This meant I had to do some kind of LINQ-to-Ektron search translation and that meant I had do a LINQ query provider for it.</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">set_selectedItemIds</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ids</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span> <span class="o">=</span> <span class="nx">ids</span><span class="p">;</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">_updateGridSelection</span><span class="p">();</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">_updateTreeSelection</span><span class="p">();</span>
-<span class="p">}</span></code></pre></figure>
+<p>I actually got to the point where I had a working query provider that successfully performed searches through Ektron.  It was pretty exciting.  Somewhere along the way, however, I discovered Remotion’s re-linq library and I knew I needed to rewrite my entire library.  re-linq does a great job of pre-parsing any LINQ expression into a more consistent format to translate into whatever you want to translate it into.  You still have to do the actual work of translating the query into something useful, but the gazillions of tiny tasks of parsing the query, evaluating evaluatable parts, etc are all taken care of for you.  In addition, it gives real structure to your query parsing code.</p>
 
-<p>It updates a property (_selectedItemIds) and then updates the grid (not sure what that is) and then the tree (of page nodes). The _updateTreeSelection method is what we’re looking for–this is where the bug is. The method looks like this:</p>
+<p>What I ended up with, I decided to put on GitHub as an open-source project so that other Ektron developers (which I do NOT claim to be!) could benefit from it.  I’ve also created a NuGet package out of it to easily include in your own projects.</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">_updateTreeSelection</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_treeIsBound</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">_treeMustBeUpdated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-    <span class="k">return</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">_treeMustBeUpdated</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">tree</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_itemsTree</span><span class="p">();</span>
-  <span class="kd">var</span> <span class="nx">binder</span> <span class="o">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">getBinder</span><span class="p">();</span>
-  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemId</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedValues</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemId</span><span class="p">],</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">selectedItems</span> <span class="o">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">get_selectedItems</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">selectedItems</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">binder</span><span class="p">.</span><span class="nx">clearSelection</span><span class="p">();</span>
-      <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedItems</span><span class="p">(</span><span class="nx">selectedItems</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedValues</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-  <span class="k">this</span><span class="p">.</span><span class="nx">_raiseSelectionApplied</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{});</span>
-<span class="p">}</span></code></pre></figure>
+<p>I need users and contributors to beef it up and test it out.  So far, I’ve only had time to test it with the one project I developed it for (which is an Ektron 8.5 installation).  So, my domain of testing has been pretty limited.  I need it tested/expanded for 8.6 and for all sorts of different uses.</p>
 
-<p>The problem is on line 13. tree.get_selectedItems() returns an empty array when there are no items selected. So, the expression if (selectedItems) { } will always be true–but we want to get to the else statement, as you can see, to set the selection from the this._selectedItemIds array.</p>
+<p>Check out the library here:</p>
 
-<p>The beauty (and danger!) of javascript is that you can easily fix something like this in your own code by simply redefining their method. Here is my code that fixes this bug:</p>
+<p>GitHub: <a href="https://github.com/benjaminramey/GoodlyFere.Ektron.Linq">https://github.com/benjaminramey/GoodlyFere.Ektron.Linq</a>
+NuGet: <a href="http://nuget.org/packages/GoodlyFere.Ektron.Linq">http://nuget.org/packages/GoodlyFere.Ektron.Linq</a></p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">wrapper</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_pagesSelector</span><span class="p">();</span>
-<span class="kd">var</span> <span class="nx">selector</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_pagesSelector</span><span class="p">().</span><span class="nx">get_pageSelector</span><span class="p">();</span>
-<span class="kd">var</span> <span class="nx">selecting</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-<span class="nx">wrapper</span><span class="p">.</span><span class="nx">add_selectionApplied</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">selecting</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span><span class="p">;</span>
-  <span class="p">}</span>
-  <span class="nx">selecting</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-  <span class="kd">var</span> <span class="nx">pageIds</span> <span class="o">=</span> <span class="nx">controlData</span><span class="p">.</span><span class="nx">FooterPages</span><span class="p">;</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">pageIds</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">pages</span> <span class="o">=</span> <span class="nx">pageIds</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">"</span><span class="s2">,</span><span class="dl">"</span><span class="p">);</span>
-    <span class="kd">var</span> <span class="nx">oldMethod</span> <span class="o">=</span> <span class="nx">selector</span><span class="p">.</span><span class="nx">_updateTreeSelection</span><span class="p">;</span>
-    <span class="nx">selector</span><span class="p">.</span><span class="nx">_updateTreeSelection</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_treeIsBound</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="nx">_treeMustBeUpdated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-        <span class="k">return</span><span class="p">;</span>
-      <span class="p">}</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">_treeMustBeUpdated</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
-      <span class="kd">var</span> <span class="nx">tree</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_itemsTree</span><span class="p">();</span>
-      <span class="kd">var</span> <span class="nx">binder</span> <span class="o">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">getBinder</span><span class="p">();</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemId</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedValues</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemId</span><span class="p">],</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">selectedItems</span> <span class="o">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">get_selectedItems</span><span class="p">();</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">selectedItems</span> <span class="o">&amp;&amp;</span> <span class="nx">selectedItems</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">binder</span><span class="p">.</span><span class="nx">clearSelection</span><span class="p">();</span>
-          <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedItems</span><span class="p">(</span><span class="nx">selectedItems</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedValues</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
-          <span class="p">}</span>
-        <span class="p">}</span>
-      <span class="p">}</span>
-      <span class="k">this</span><span class="p">.</span><span class="nx">_raiseSelectionApplied</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{});</span>
-    <span class="p">};</span>
-    <span class="nx">selector</span><span class="p">.</span><span class="nx">set_selectedItemIds</span><span class="p">(</span><span class="nx">pages</span><span class="p">);</span>
-    <span class="nx">selector</span><span class="p">.</span><span class="nx">_updateTreeSelection</span> <span class="o">=</span> <span class="nx">oldMethod</span><span class="p">;</span>
-  <span class="p">}</span>
-<span class="p">});</span></code></pre></figure>
+<p>PS A note on the name “Goodly Fere”.  Goodly Fere is the name given to Christ in a ballad by Ezra Pound.  Read it here: <a href="http://www.bartleby.com/265/295.html">http://www.bartleby.com/265/295.html</a>.  My faith in Christ defines everything I do and say (at least, it should–often I fall short of that ideal). Colossians 3:17 says to do everything in the name of the Lord Jesus.  That’s quite a standard!  After all, Paul started off that letter to the Colossians talking about how all of Creation was made by, through and for Christ.  I think Creation is a pretty high standard of quality.  I desire to reflect that standard of quality (as much as I can) in everything I do too–including writing code libraries.</p>
 
-<p>First, I attach to the selectionApplied method. If you try to do the above code before that is done, your selection will just be overridden (or just not work–not sure which). This event will get called when you call set_selectedItemIds. To avoid an infinite loop, then, I use the selecting flag at the top of the event function I am attaching.</p>
-
-<p>Second, I parse out my ids into an array.</p>
-
-<p>Third, I save the old version of the _updateTreeSelection method and then override it with my own. Notice, the fix on line 13 of that method. I have added ” &amp;&amp; selectedItems.length &gt; 0″.</p>
-
-<p>Fourth, now that I have a fixed method, I call selector.set_selectedItemIds, passing in my array of ids and it works!</p>
-
-<p>Lastly, I change the method back to the original (just in case the seemingly faulty if expression is what they intended in other situations).</p>
-
-<p>Hope that helps!</p>
 
     </article>
+
+    <section>
+        <a href="/2013/01/15/linq-to-ektron-search-library/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -653,7 +610,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

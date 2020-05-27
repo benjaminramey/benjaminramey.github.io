@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,19 +533,55 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2014/03/21/the-dumbest-code-i-ever-wrote/">
-                The Dumbest Code I Ever Wrote
+            <a href="/2014/03/27/episerver-7-the-file-linkguid-aspx-does-not-exist-error/">
+                EPiServer 7 “The file ‘/link/GUID.aspx’ does not exist.” Error
             </a>
         </h1>
 
-        <time datetime="2014-03-21T00:00:00-05:00" class="post-date">21 Mar 2014</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2014-03-27T00:00:00-05:00" class="post-date">27 Mar 2014</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/episerver">#episerver</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>Here it is, folks: some of the dumbest code I’ve ever written and I just now noticed it.</p>
+        <p>I ran into the following error while working with an installation of EPiServer 7 this week. It took me a long time to finally figure out the solution.</p>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="kt">string</span><span class="p">.</span><span class="nf">Concat</span><span class="p">(</span><span class="s">"attachment; filename=\""</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Concat</span><span class="p">(</span><span class="n">pagePdf</span><span class="p">.</span><span class="n">Name</span><span class="p">,</span> <span class="s">".pdf"</span><span class="p">),</span> <span class="s">"\""</span><span class="p">);</span></code></pre></figure>
+<p>First, here’s the error and stack trace:</p>
+
+<figure class="highlight"><pre><code class="language-text" data-lang="text">2014-03-27 12:12:43,396 [6] ERROR EPiServer.Global: 1.2.5 Unhandled exception in ASP.NET
+System.Web.HttpException (0x80004005): The file ‘/link/cc299342a697494c8a4bc47717210bf0.aspx’ does not exist.
+at System.Web.Compilation.BuildManager.GetVPathBuildResultInternal(VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
+at System.Web.Compilation.BuildManager.GetVPathBuildResultWithNoAssert(HttpContext context, VirtualPath virtualPath, Boolean noBuild, Boolean allowCrossApp, Boolean allowBuildInPrecompile, Boolean throwIfNotFound, Boolean ensureIsUpToDate)
+at System.Web.Compilation.BuildManager.GetVirtualPathObjectFactory(VirtualPath virtualPath, HttpContext context, Boolean allowCrossApp, Boolean throwIfNotFound)
+at System.Web.Compilation.BuildManager.CreateInstanceFromVirtualPath(VirtualPath virtualPath, Type requiredBaseType, HttpContext context, Boolean allowCrossApp)
+at System.Web.Routing.PageRouteHandler.GetHttpHandler(RequestContext requestContext)
+at System.Web.Routing.UrlRoutingModule.PostResolveRequestCache(HttpContextBase context)
+at System.Web.HttpApplication.SyncEventExecutionStep.System.Web.HttpApplication.IExecutionStep.Execute()
+at System.Web.HttpApplication.ExecuteStep(IExecutionStep step, Boolean&amp; completedSynchronously)</code></pre></figure>
+
+<p>As it turns out, I did not have a TemplateDescriptor attribute on the page template that I was trying to access. Adding the following TemplateDescriptor attribute to the code-behind class for my page template saved me.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="p">[</span><span class="nf">TemplateDescriptor</span><span class="p">(</span><span class="n">Path</span> <span class="p">=</span> <span class="s">"~/Templates/PageTemplates/Home.aspx"</span><span class="p">)]</span>
+<span class="k">public</span> <span class="k">partial</span> <span class="k">class</span> <span class="nc">Home</span> <span class="p">:</span> <span class="n">TemplatePage</span><span class="p">&lt;</span><span class="n">HomePage</span><span class="p">&gt;</span></code></pre></figure>
+
 
 
     </article>
+
+    <section>
+        <a href="/2014/03/27/episerver-7-the-file-linkguid-aspx-does-not-exist-error/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -556,7 +600,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

@@ -515,6 +515,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -524,159 +532,484 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2020/05/12/psalm-130/">
-                Psalm 130
+            <a href="/2020/05/27/iterating-all-catalog-metaobjects/">
+                Iterating All EPiServer Catalog MetaObjects
             </a>
         </h1>
 
-        <time datetime="2020-05-12T00:00:00-05:00" class="post-date">12 May 2020</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2020-05-27T00:00:00-05:00" class="post-date">27 May 2020</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/episerver">#episerver</a>
+                
+                <a href="/tags/csharp">#csharp</a>
+                
+                <a href="/tags/.net">#.net</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <h2 id="introduction">Introduction</h2>
-<p>Psalm 130 records the thoughts of a believer who goes through a remarkable transformation: from the depths of despair to proclaiming hope in the Lord to his nation.</p>
+        <p>If you’re maintaining an e-commerce-enabled site in EPiServer and you’re using the built-in catalog, then
+you have probably found the need to incorporate external data into the catalog, perhaps from various sources.</p>
 
-<p>How does this transformation happen?</p>
+<p>Such is the case for me on an EPiServer site I’ve been working on over the last (almost) four years.  The primary
+data for the catalog comes into EPiServer from an external PIM system.  But, then there is all sorts of ancillary
+data that needs to calculated from existing fields or pulled from external sources.  These external data sources
+don’t really provide a way to incrementally apply deltas for the data they provide.  The only option to make updates is to walk
+through the entire catalog and see if anything needs updating when matched against the external data I’ve pulled.</p>
 
-<p>This is not a psalm about a unique event or a special tragedy or an especially remarkable man accomplishing a gargantuan feat that no one can again accomplish.  This is not a super-Christian battling forces of darkness with fantastic spiritual super powers.</p>
+<p>This external data is stored in the catalog as custom EPiServer MetaFields.  So,
+a need arose to easily walk through the entire catalog, pick up every MetaObject (to update the custom MetaFields)
+in every available catalog culture and make the appropriate updates.</p>
 
-<p>No, instead, it is the straightforward revelation of a man’s internal thoughts as they transform from deep darkness to light; of despair to hope for the future; of desperation for his own rescue to confidence that others can be rescued as well.</p>
+<p>Below are the iterators I wrote to accomplish this.  They let you walk the entire catalog tree (in a breadth-first manner)
+starting from the top as if you were iterating a simple C# array or list.</p>
 
-<p>What we see in this psalm are the thought patterns of a mature believer; patterns we ought to emulate and repeat in our own lives.</p>
+<h2 id="high-level-usage">High-Level Usage</h2>
+<p>Because all we’re doing is writing iterators, the high-level usage looks just like you were interating through
+an <code class="highlighter-rouge">IEnumerable</code> in C# like an array or a <code class="highlighter-rouge">List&lt;T&gt;</code>.</p>
 
-<p>Now, when I say “mature believer”, I want to make sure you’ve got the same picture that I do.  I don’t mean someone who “has it all figured out”.  I definitely don’t mean someone who has reached some “higher spiritual plane”.  All I mean is someone who has walked with the Lord for a long time and has trained his thoughts in the patterns we’ll see.  He falls.  He fails.  He’s done it before and he’s experienced enough to recognize it and know how to get back up again.</p>
+<p>The iterators are implemented as extension methods on the <code class="highlighter-rouge">ICatalogSystem</code> interface.  So, iterating through all
+of the catalog entry MetaObjects looks like this.</p>
 
-<p>If we copy these patterns of thought, they will drive us to strengthen our upward confidence in the Lord and then mature us to expand our thoughts outward toward our fellow men.  But, it begins where it must: our inward thoughts, thoughts directed toward ourselves.</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">using</span> <span class="nn">Mediachase.Commerce.Catalog</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">Mediachase.MetaDataPlus</span><span class="p">;</span>
 
-<h2 id="inward">Inward</h2>
-<p>Verses 1-2.</p>
+<span class="n">ICatalogSystem</span> <span class="n">catalog</span> <span class="p">=</span> <span class="n">CatalogContext</span><span class="p">.</span><span class="n">Current</span><span class="p">;</span>
+<span class="n">MetaDataContext</span> <span class="n">mdc</span> <span class="p">=</span> <span class="n">MetaDataContext</span><span class="p">.</span><span class="n">Instance</span><span class="p">;</span>
 
-<p>The author of this psalm begins by revealing the state of his mind: his inward thoughts.  He uses only two words to do this: “the depths”.</p>
+<span class="k">foreach</span> <span class="p">((</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)</span> <span class="n">entryMO</span> <span class="k">in</span> <span class="n">catalog</span><span class="p">.</span><span class="nf">AllCatalogSystemEntryMetaObjects</span><span class="p">(</span><span class="n">mdc</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="n">entryMO</span><span class="p">.</span><span class="n">metaObject</span><span class="p">[</span><span class="s">"SomeCustomMetaFieldName"</span><span class="p">]</span> <span class="p">=</span> <span class="s">"external data source value here"</span><span class="p">;</span>
+    <span class="n">entryMO</span><span class="p">.</span><span class="n">metaObject</span><span class="p">.</span><span class="nf">AcceptChanges</span><span class="p">(</span><span class="n">entryMO</span><span class="p">.</span><span class="n">metaDataContext</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
 
-<h3 id="he-is-in-trouble">He is in trouble</h3>
-<p>By themselves “the depths” might conjure up enough for us to imagine that he is in some kind of trouble.  He’s not feeling good.  But, this word isn’t just a word for how deep a hole might be.  Everywhere else it’s used in Scripture, it’s used to describe deep waters and especially the depths of the sea.  That’s another kind of “depths” altogether.</p>
+<p>I implemented the separate iterators for NodeContent MetaObjects and the EntryContent
+MetaObjects.  You easily use them in combination to iterate through the MetaObjects of the entire catalog tree.</p>
 
-<p>If you’ve ever taken a swim you can begin to imagine the analogy he is painting.  You’ve probably felt the slight panic to get back to the surface when you stayed under the water a little too long.  You’ve perhaps felt the water pressure when you dove down to the deep end of the pool.</p>
+<p>Note a couple of things from the example code above:</p>
+<ol>
+  <li>You have to give the iterator the MetaDataContext.  As we’ll see in the iterator code, it will copy this MDC for each catalog language so that you get a MetaObject for every culture present in your catalog.</li>
+  <li>Because of #1 above, the current MetaDataContext is passed to you during iteration so that you know which catalog culture this MetaObject is for.</li>
+</ol>
 
-<p>But, the swimming pool is nothing like the depths of the sea.  When you get down deep, the light disappears.  The sunlight fades until there is only utter blackness.  If help was on the way to pull you out, you couldn’t see it coming.  You can’t even see your hand in front of your face.  You’re surrounded by darkness.  There are no waypoints.  No landmarks to recognize.  No signs to point the way of escape.</p>
+<h2 id="extension-method-code">Extension Method Code</h2>
+<p>The extension method code for AllCatalogSystemEntryMetaObjects is pretty simple.  It uses four iterators in nested foreach loops to loop through</p>
+<ol>
+  <li>All catalogs</li>
+  <li>All nodes</li>
+  <li>All entries</li>
+  <li>All meta objects</li>
+</ol>
 
-<p>All comfort of heat vanishes the deeper you sink.  Before much depth, the cold becomes unbearable.</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">static</span> <span class="n">IEnumerable</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)&gt;</span> <span class="nf">AllCatalogSystemEntryMetaObjects</span><span class="p">(</span>
+    <span class="k">this</span> <span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span>
+    <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">catalog</span> <span class="k">in</span> <span class="k">new</span> <span class="nf">CatalogSystemCatalogs</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">))</span>
+    <span class="p">{</span>
+        <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">node</span> <span class="k">in</span> <span class="k">new</span> <span class="nf">CatalogSystemNodes</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">,</span> <span class="n">catalog</span><span class="p">.</span><span class="n">CatalogId</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">entry</span> <span class="k">in</span> <span class="k">new</span> <span class="nf">CatalogSystemEntries</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">,</span> <span class="n">catalog</span><span class="p">.</span><span class="n">CatalogId</span><span class="p">,</span> <span class="n">node</span><span class="p">.</span><span class="n">CatalogNodeId</span><span class="p">))</span>
+            <span class="p">{</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">tuple</span> <span class="k">in</span> <span class="k">new</span> <span class="nf">CatalogSystemEntryMetaObjects</span><span class="p">(</span><span class="n">metaDataContext</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">entry</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="k">yield</span> <span class="k">return</span> <span class="n">tuple</span><span class="p">;</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
-<p>As the waters above increase, the pressure mounts until it would easily crush you.</p>
+<p>I broke the iteration down into separate iterators in this fashion so that I could easily iterate through all the entries (for example) in a single node, if I knew from the beginning which node I wanted to start at.  If that was the case, I could easily write another extension method that took a node ID (or node code) as a parameter, use the ICatalogSystem to find that node and then pass the node ID to the CatalogSystemEntries iterator to iterate just the entries under that node.</p>
 
-<p>Then, of course, you cannot breath.  In the depths of the sea you are far from the surface, far from breath.  You will suffocate in a matter of minutes–certainly before you make it to the top on your own.</p>
+<h2 id="iterators">Iterators</h2>
+<p>We have four iterators in use:</p>
+<ol>
+  <li>CatalogSystemCatalogs - iterates through all catalogs</li>
+  <li>CatalogSystemNodes - iterates through all nodes, in a breadth-first fashion, in a catalog</li>
+  <li>CatalogSystemEntries - iterates through all entries in a node</li>
+  <li>CatalogSystemEntryMetaObjects - iterates through all MetaObjects for an entry</li>
+</ol>
 
-<p>Darkness, cold, pressure, suffocation–it paints a desperate, hopeless, life-threatening situation.  This man is in great trouble.</p>
+<h3 id="catalogsystemcatalogs-iterator">CatalogSystemCatalogs Iterator</h3>
+<p>The code is pretty simple.  We implement an IEnumerable which uses our implementation of an IEnumerator.</p>
 
-<h3 id="he-admits-hes-in-trouble">He admits he’s in trouble</h3>
-<p>But, notice the first thought pattern we can recognize of a mature believer.  It’s the one important thing he does first: he admits he’s in trouble.  There’s no denial here.  There’s no trying to make the situation not seem so bleak.  He’s in trouble he cannot escape.  He knows it and he says so.  This is the first thing we can note as the sign of a mature believer.  The mature believer makes honest confession of his desperate need.  He frankly admits his trouble and makes no attempt to hide it from himself or from the Lord.</p>
+<p>The IEnumerator simply gets all the catalogs from the ICatalogSystem and, as you call MoveNext() (usually done for you by the foreach loop), increments an index value to give you the current CatalogDto.CatalogRow to work with.</p>
 
-<h3 id="he-calls-out-to-the-lord">He calls out to the Lord</h3>
-<p>The second thought pattern of a mature believer is quickly noticed next.  Admitting his situation has freed him ask for help.</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemCatalogs</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogSystemCatalogEnumerator</span> <span class="n">_enumerator</span><span class="p">;</span>
 
-<p>What would you do if you were sinking, with no one in sight to save you?</p>
+    <span class="k">public</span> <span class="nf">CatalogSystemCatalogs</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_enumerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CatalogSystemCatalogEnumerator</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">);</span>
+    <span class="p">}</span>
 
-<p>I think my first instinct would be to call out as loudly as I could for someone–anyone at all–to come rescue me!</p>
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
 
-<p>My second oldest, Gideon, is not quite able to dress himself yet.  When he gets stuck in his shirt or can’t quite work the button on his pants, he has the habit of desperately calling out “Somebody! Anybody!”.  He doesn’t care if me or Grace or even his brother (sometimes) helps him.  He just needs someone to get this shirt off!</p>
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p>But, this is not exactly what he does here.  He cries out.  But he specifically calls out to only one person: the Lord.  And there’s no doubt who he means.  He uses the name of the Lord, Yahweh.  He pleads with Him to hear his voice, to hear the voice of his supplications; or, “pleas for mercy” as the ESV translates it.</p>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemCatalogEnumerator</span> <span class="p">:</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ICatalogSystem</span> <span class="n">_catalogSystem</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;&gt;</span> <span class="n">_catalogs</span><span class="p">;</span>
 
-<p>It seems counterintuitive to call out for a specific person.  If he’s truly desperate wouldn’t any help be welcome, no matter who it came from?  But, this too is a thought pattern of a mature believer.  He knows the One who not only can save him, but is willing to save him. There is only One such person and He is the Lord.</p>
+    <span class="k">public</span> <span class="nf">CatalogSystemCatalogEnumerator</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_catalogSystem</span> <span class="p">=</span> <span class="n">catalogSystem</span><span class="p">;</span>
+        <span class="n">_catalogs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;&gt;(</span><span class="n">GetCatalogs</span><span class="p">);</span>
+    <span class="p">}</span>
 
-<p>He is the one who will put it on the heart of your spouse to say the right kind word at the right time. Or burden a preacher with an exhortation from the Word that encourages you. Or embolden your brother to give you the strong admonition you need.</p>
+    <span class="k">public</span> <span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span> <span class="n">Current</span>
+    <span class="p">{</span>
+        <span class="k">get</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_catalogs</span><span class="p">.</span><span class="n">Value</span><span class="p">[</span><span class="n">_currentIndex</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-<p>An interesting thing happens next.  From a dire situation, his thoughts begin to shift.  His calling out to the Lord has shifted his focus from his circumstances to the Lord Himself.  He now begins to drift away from his inward thoughts and toward upward thoughts.</p>
+    <span class="kt">object</span> <span class="n">IEnumerator</span><span class="p">.</span><span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">Current</span><span class="p">;</span>
 
-<h2 id="upward">Upward</h2>
-<p>Verses 3-6.</p>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Reset</span><span class="p">();</span>
+    <span class="p">}</span>
 
-<p>Notice how his thoughts are still on himself, but no longer inward.  His thoughts have turned to who he is in light of his relationship to a holy God.  They have turned upward.</p>
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">MoveNext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_catalogs</span><span class="p">.</span><span class="n">IsValueCreated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_currentIndex</span><span class="p">++;</span>
+        <span class="p">}</span>
 
-<h3 id="sin-and-forgiveness">Sin and Forgiveness</h3>
-<p>What would it be like if the Lord marked our iniquities?  What if he kept a record and closely watched them?  It’s obvious–our case would be hopeless!  We’d have no chance of standing at that judgment.</p>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_currentIndex</span> <span class="p">&gt;=</span> <span class="n">_catalogs</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
 
-<p>Think of the things this reveals about his view of God in relation to himself:</p>
-<ul>
-  <li>First, he knows he has sinned and does not hide it</li>
-  <li>He knows his sin is serious, and it has fearful consequences</li>
-  <li>He also knows the Lord knows these sins</li>
-  <li>Beyond this, he knows he ought to be rightfully accountable to the Lord for these sins</li>
-  <li>But, he also believes that the Lord does not keep a record of these sins</li>
-  <li>More than that, he knows it’s not a matter of the Lord misplacing the official sin record, but the marks are gone because there is forgiveness with the Lord</li>
-  <li>As a result of this forgiveness, he fears the Lord</li>
-</ul>
+        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<p>So, we can notice the third and fourth thought patterns of a mature believer.</p>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Reset</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_catalogs</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;&gt;(</span><span class="n">GetCatalogs</span><span class="p">);</span>
+        <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<p>First, he knows he is a sinner, forgiven by a loving God.  This is how he stands, even though he has sinned.  This is both a humbling admission and a strengthening encouragement and they are in a kind of balance.  Thinking only of ourselves as sinners neglects the truth of God’s work to forgive us.  Thinking only of the forgiveness we have in the Lord neglects the truth of our sinfulness that necessitated His work in the first place.</p>
+    <span class="k">private</span> <span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span><span class="p">&gt;</span> <span class="nf">GetCatalogs</span><span class="p">()</span>
+        <span class="p">=&gt;</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">GetCatalogDto</span><span class="p">().</span><span class="n">Catalog</span><span class="p">.</span><span class="nf">Freeze</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
 
-<p>Second, rather than a license to sin, this forgiveness leads him to fall fearfully before the Lord in humble worship.  Perhaps, like me, you don’t normally associate God’s forgiveness with fearing Him.  I, for one, am much more likely to associate it with relief or gratefulness or happiness.</p>
+<h3 id="catalogsystemnodes-iterator">CatalogSystemNodes Iterator</h3>
+<p>For the nodes iterator, things get a little more complicated.  Nodes can be nested, so we have tree structure we have to navigate.  We use a Queue to walk through the nodes in a breadth-first fashion.</p>
 
-<p>But the connection is perhaps closer than we think. When we acknowledge that God is the one who forgives our sin, at the same time, we’re acknowledging that He has the authority and the power to do so.  The natural reaction to such a thought is to fear, follow and worship such a God who wields such power over us, but choses instead to forgive us.</p>
+<p>I like to use as many functional programming techniques as I can in C# these days.  I use the great <a href="https://github.com/louthy/language-ext">LanguageExt</a> library for this.  This library is where the <code class="highlighter-rouge">Que&lt;T&gt;</code>, <code class="highlighter-rouge">Option&lt;T&gt;</code> and <code class="highlighter-rouge">Lst&lt;T&gt;</code> data structures come from.  I don’t want to go in depth about what they are, but to understand the code below, you should now this: <code class="highlighter-rouge">Que&lt;T&gt;</code> is an immutable <code class="highlighter-rouge">Queue&lt;T&gt;</code>, <code class="highlighter-rouge">Lst&lt;T&gt;</code> is an immutable <code class="highlighter-rouge">List&lt;T&gt;</code> and <code class="highlighter-rouge">Option&lt;T&gt;</code> is basically the functional way to do the null-object pattern (instead of dealing with nulls, use an object to represent “I don’t have a value”).</p>
 
-<p>The forgiveness of the Lord also frees a man to leave the things behind him (his sins, weaknesses and failures) and press on in the work of the Lord.  In other words, it leads to a greater desire to follow the Lord.  As we follow Him, we know Him better.  As we know Him better, we can only fear Him more.  This certainly seemed to be Paul’s mindset in Philippians 3:</p>
+<p>If you’re not familiar with breadth-first tree traversals, it’s not too complicated.  What we do first is get all the nodes at the top level (in our case, all the nodes that are direct children of the catalog we pass in) and put them in the queue.  Then, we iterate through each of the nodes we put in the queue and add their child nodes to the queue.  We do this until we run out of nodes to process in the queue which indicates we’ve gone through all nodes in the tree.</p>
 
-<blockquote>
-  <p><strong>Philippians 3:12–17</strong></p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemNodes</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogSystemNodeEnumerator</span> <span class="n">_enumerator</span><span class="p">;</span>
 
-  <p>12 Not that I have already obtained it or have already become perfect, but I press on so that I may lay hold of that for which also I was laid hold of by Christ Jesus.
-13 Brethren, I do not regard myself as having laid hold of it yet; but one thing I do: forgetting what lies behind and reaching forward to what lies ahead,
-14 I press on toward the goal for the prize of the upward call of God in Christ Jesus.
-15 Let us therefore, as many as are perfect, have this attitude; and if in anything you have a different attitude, God will reveal that also to you;
-16 however, let us keep living by that same standard to which we have attained.
-17 Brethren, join in following my example, and observe those who walk according to the pattern you have in us.</p>
-</blockquote>
+    <span class="k">public</span> <span class="nf">CatalogSystemNodes</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startingParentNodeId</span> <span class="p">=</span> <span class="m">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_enumerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CatalogSystemNodeEnumerator</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">,</span> <span class="n">catalogId</span><span class="p">,</span> <span class="n">startingParentNodeId</span><span class="p">);</span>
+    <span class="p">}</span>
 
-<p>Notice the connection and progression from leaving what lays behind to striving for the upward call to keeping an attitude of holy living.</p>
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
 
-<h3 id="waiting-and-hoping">Waiting and Hoping</h3>
-<p>Earlier, in verses 1-2, the psalmist honestly admits his circumstances and this leads him to action: to call out to the Lord for rescue.  Here too, having turned his thoughts upward to the Lord’s forgiveness of his sins, he now takes action.  He trains his thoughts on waiting for the Lord and hoping in His word.</p>
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+<span class="p">}</span>
 
-<p>There are at least two things to notice in these two verses.  First, the repetition and second, the comparison to the watchmen.</p>
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemNodeEnumerator</span> <span class="p">:</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="n">Que</span><span class="p">&lt;</span><span class="kt">int</span><span class="p">&gt;</span> <span class="n">_nodeQue</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ICatalogSystem</span> <span class="n">_catalogSystem</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_catalogId</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_startingParentNodeId</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Option</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span> <span class="n">_current</span><span class="p">;</span>
 
-<p>It’s interesting how he repeats, to himself, how he will wait for the Lord.  It’s almost as if he needs more than one reminder to wait for Him.  Perhaps he is retraining his thoughts away from fearfulness and despair to an expectant, waiting hopefulness.</p>
+    <span class="c1">// We have a parameter for the starting node ID (startingParentNodeId) which defaults to 0.  If you</span>
+    <span class="c1">// pass in a node ID, we'll start iterating child nodes of that node.  If you don't pass a value (keep</span>
+    <span class="c1">// the default of 0), then we'll iterate through all nodes in the catalog.</span>
+    <span class="k">public</span> <span class="nf">CatalogSystemNodeEnumerator</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">startingParentNodeId</span> <span class="p">=</span> <span class="m">0</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_catalogSystem</span> <span class="p">=</span> <span class="n">catalogSystem</span><span class="p">;</span>
+        <span class="n">_catalogId</span> <span class="p">=</span> <span class="n">catalogId</span><span class="p">;</span>
+        <span class="n">_startingParentNodeId</span> <span class="p">=</span> <span class="n">startingParentNodeId</span><span class="p">;</span>
+        <span class="n">_nodeQue</span> <span class="p">=</span> <span class="n">Prelude</span><span class="p">.</span><span class="nf">Queue</span><span class="p">(</span><span class="n">_startingParentNodeId</span><span class="p">);</span>
+        <span class="n">_current</span> <span class="p">=</span> <span class="n">Option</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;.</span><span class="n">None</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<p>Keep in mind that we have no indication that his circumstances have changed at all.  But his thinking is brightening considerably.  His concentration is no longer on his circumstances, but on the Lord who certainly will rescue him.</p>
+    <span class="c1">// ValueUnsafe() lets us get the value of _current (which is an Option&lt;T&gt;)</span>
+    <span class="c1">// or null if the Option&lt;T&gt; has no value.</span>
+    <span class="k">public</span> <span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span> <span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">_current</span><span class="p">.</span><span class="nf">ValueUnsafe</span><span class="p">();</span>
 
-<p>Second, we should ask ourselves what the waiting of a watchman for the morning is like.  Even for a new watchman, on his first day on the job, I can’t imagine he has any question or uncertainty about the morning coming!  There is a confidence that the sun will rise and the watch will end.</p>
+    <span class="kt">object</span> <span class="n">IEnumerator</span><span class="p">.</span><span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">Current</span><span class="p">;</span>
 
-<p>The fifth thought pattern of a mature believer now emerges.  He trains his thoughts to confidently hope in the Lord, waiting on His rescue, no matter the circumstances.</p>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Reset</span><span class="p">();</span>
+    <span class="p">}</span>
 
-<p>As before, now another interesting things happens.  As he moves away from inward thinking to upward thinking, he grows in his confidence to trust the Lord as he remembers the lovingkindness of the Lord.  In that confidence his thoughts now turn completely away from himself and outward, towards his fellow countrymen.</p>
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">MoveNext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// end-case scenario--we've run out of nodes in the queue, so we're</span>
+        <span class="c1">// done traversing the node tree</span>
+        <span class="k">if</span> <span class="p">(!</span><span class="n">_nodeQue</span><span class="p">.</span><span class="nf">Any</span><span class="p">())</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
 
-<h2 id="outward">Outward</h2>
-<p>Verses 7-8.</p>
+        <span class="kt">int</span> <span class="n">nextNodeId</span> <span class="p">=</span> <span class="nf">GetNextNodeIdAndUpdateQue</span><span class="p">();</span>
 
-<p>Now, the mood of the psalmist has completely changed from where he started.  Far from crying out in desperation for help, he is now calling out to his countrymen to hope in the Lord!</p>
+        <span class="c1">// special starting condition when we want to do the entire tree</span>
+        <span class="c1">// and no other starting node was passed in</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">nextNodeId</span> <span class="p">==</span> <span class="m">0</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// special case of there being a catalog node with no category nodes beneath it</span>
+            <span class="k">if</span> <span class="p">(!</span><span class="n">_nodeQue</span><span class="p">.</span><span class="nf">Any</span><span class="p">())</span>
+            <span class="p">{</span>
+                <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+            <span class="p">}</span>
+            <span class="n">nextNodeId</span> <span class="p">=</span> <span class="nf">GetNextNodeIdAndUpdateQue</span><span class="p">();</span>
+        <span class="p">}</span>
 
-<p>I think we can notice two more thought patterns of the psalmist to emulate.</p>
+        <span class="n">_current</span> <span class="p">=</span> <span class="nf">GetNode</span><span class="p">(</span><span class="n">nextNodeId</span><span class="p">);</span>
 
-<h3 id="seeing-the-needs-of-others">Seeing the needs of others</h3>
-<p>The first is a sense of responsibility to share his confidence in the Lord with others.
-His thinking has been so transformed that, though we still have no indication that he has been rescued, he sees the need of his fellow man for the same trusting hope in the Lord.  His own issues are no longer the only ones he sees.  Others are in similar circumstances, similar “depths”.  So, he calls on them to hope based on two characteristics of the Lord: His lovingkindness and his abundant redemption.</p>
+        <span class="k">return</span> <span class="n">_current</span><span class="p">.</span><span class="n">IsSome</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<h3 id="confidence-in-the-future">Confidence in the future</h3>
-<p>The second is a confidence in the future actions of the Lord.</p>
+    <span class="k">private</span> <span class="kt">int</span> <span class="nf">GetNextNodeIdAndUpdateQue</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// get the next node ID from the queue</span>
+        <span class="kt">int</span> <span class="n">nextNodeId</span> <span class="p">=</span> <span class="n">_nodeQue</span><span class="p">.</span><span class="nf">Peek</span><span class="p">();</span>
+        <span class="c1">// remove the retrieved node from the queue</span>
+        <span class="n">_nodeQue</span> <span class="p">=</span> <span class="n">_nodeQue</span><span class="p">.</span><span class="nf">Dequeue</span><span class="p">();</span>
+        <span class="c1">// get all of this node's children and add their IDs to the queue</span>
+        <span class="n">_nodeQue</span> <span class="p">=</span> <span class="nf">GetChildren</span><span class="p">(</span><span class="n">nextNodeId</span><span class="p">)</span>
+            <span class="p">.</span><span class="nf">Fold</span><span class="p">(</span><span class="n">_nodeQue</span><span class="p">,</span> <span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">nodeRow</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">q</span><span class="p">.</span><span class="nf">Enqueue</span><span class="p">(</span><span class="n">nodeRow</span><span class="p">.</span><span class="n">CatalogNodeId</span><span class="p">));</span>
 
-<p>How does he know that God will redeem Israel from all his iniquities?</p>
+        <span class="k">return</span> <span class="n">nextNodeId</span><span class="p">;</span>
+    <span class="p">}</span>
 
-<p>I think the answer is relatively simple.  He has seen the past actions of the Lord in his life.  He has observed the character of the Lord worked out in his own life.  Having drawn closer to the Lord, he knows Him better and can look out into the future, confident that the Lord will do the same then as He has done in the past.</p>
+    <span class="k">private</span> <span class="n">Option</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span> <span class="nf">GetNode</span><span class="p">(</span><span class="kt">int</span> <span class="n">nodeId</span><span class="p">)</span>
+        <span class="p">=&gt;</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">GetCatalogNodeDto</span><span class="p">(</span><span class="n">nodeId</span><span class="p">).</span><span class="n">CatalogNode</span><span class="p">.</span><span class="nf">HeadOrNone</span><span class="p">();</span>
 
-<h2 id="conclusion">Conclusion</h2>
-<p>To summarize this psalm, I think we could say this.  The mature believer is not someone who has reached a higher plane of Christian living, never finding himself in the depths, but always thinking upward and outward.  I’m confident that every believer finds himself in the depths at some time or another and most likely even quite regularly.</p>
+    <span class="k">private</span> <span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;</span> <span class="nf">GetChildren</span><span class="p">(</span><span class="kt">int</span> <span class="n">nodeId</span><span class="p">)</span>
+        <span class="p">=&gt;</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">GetCatalogNodesDto</span><span class="p">(</span><span class="n">_catalogId</span><span class="p">,</span> <span class="n">nodeId</span><span class="p">).</span><span class="n">CatalogNode</span><span class="p">.</span><span class="nf">Freeze</span><span class="p">();</span>
 
-<p>Remember, the one writing this psalm, who I see as a very mature believer, is one who has fallen!  But remember what Proverbs 24:16 says:</p>
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Reset</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_nodeQue</span> <span class="p">=</span> <span class="n">Prelude</span><span class="p">.</span><span class="nf">Queue</span><span class="p">(</span><span class="n">_startingParentNodeId</span><span class="p">);</span>
+        <span class="n">_current</span> <span class="p">=</span> <span class="n">Option</span><span class="p">&lt;</span><span class="n">CatalogNodeDto</span><span class="p">.</span><span class="n">CatalogNodeRow</span><span class="p">&gt;.</span><span class="n">None</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
-<blockquote>
-  <p><strong>Proverbs 24:16</strong></p>
+<h3 id="catalogsystementries-iterator">CatalogSystemEntries Iterator</h3>
+<p>Since entries cannot be arrange in a nested fashion, this iterator is a little less complicated than the nodes iterator.  All we do is take in a catalogId and a catalogNodeId and retrieve all the entries below the given node ID, passing them to you one at a time as you call MoveNext().</p>
 
-  <p>16 For a righteous man falls seven times, and rises again, But the wicked stumble in time of calamity.</p>
-</blockquote>
+<p>The only mildly complex thing here is that we use a <code class="highlighter-rouge">Lazy&lt;T&gt;</code> so that we’re not retrieving the entries immediately when you instanstiate the IEnumerator.  We only load the entries when you MoveNext() and access Current which indicates you really do want some entries.</p>
 
-<p>Rising again is what the mature believer does.  But how?  That is what this Psalm spells out for us.</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemEntries</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogSystemEntryEnumerator</span> <span class="n">_enumerator</span><span class="p">;</span>
 
-<p>The mature believer is the one whose has learned certain patterns of thought to a consistent way of thinking that does one simple thing: it always turns him to the Lord for rescue.  This then enables him to grow his thoughts from necessary introspection (those inward thoughts), upward, to the joy of the reality of his relationship with the Lord.  It also emboldens him to reach outward to share with those around him the bounty of hope and lovingkindness available in the Lord.</p>
+    <span class="k">public</span> <span class="nf">CatalogSystemEntries</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogNodeId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_enumerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CatalogSystemEntryEnumerator</span><span class="p">(</span><span class="n">catalogSystem</span><span class="p">,</span> <span class="n">catalogId</span><span class="p">,</span> <span class="n">catalogNodeId</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemEntryEnumerator</span> <span class="p">:</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">ICatalogSystem</span> <span class="n">_catalogSystem</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;&gt;</span> <span class="n">_entries</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_catalogNodeId</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="kt">int</span> <span class="n">_catalogId</span><span class="p">;</span>
+
+    <span class="c1">// we take in the catalogNodeId to start at so that you could use this IEnumerator</span>
+    <span class="c1">// to collect entries at any starting node in the catalog.</span>
+    <span class="k">public</span> <span class="nf">CatalogSystemEntryEnumerator</span><span class="p">(</span><span class="n">ICatalogSystem</span> <span class="n">catalogSystem</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogId</span><span class="p">,</span> <span class="kt">int</span> <span class="n">catalogNodeId</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_catalogSystem</span> <span class="p">=</span> <span class="n">catalogSystem</span><span class="p">;</span>
+        <span class="c1">// we use a Lazy&lt;T&gt; object here so that we don't do a database call</span>
+        <span class="c1">// as soon as you instantiate this class.  We only do it once you</span>
+        <span class="c1">// access Current, indicating you really want to iterate the entries now</span>
+        <span class="n">_entries</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;&gt;(</span><span class="n">GetEntries</span><span class="p">);</span>
+        <span class="n">_catalogNodeId</span> <span class="p">=</span> <span class="n">catalogNodeId</span><span class="p">;</span>
+        <span class="n">_catalogId</span> <span class="p">=</span> <span class="n">catalogId</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span> <span class="n">Current</span>
+    <span class="p">{</span>
+        <span class="k">get</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_entries</span><span class="p">.</span><span class="n">Value</span><span class="p">[</span><span class="n">_currentIndex</span><span class="p">];</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">object</span> <span class="n">IEnumerator</span><span class="p">.</span><span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">Current</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Reset</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">MoveNext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// the first MoveNext() call will be when when _entries doesn't have</span>
+        <span class="c1">// a value yet (but will after Current is accessed).  So, this leaves</span>
+        <span class="c1">// the _currentIndex at 0 the first time MoveNext() is called.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_entries</span><span class="p">.</span><span class="n">IsValueCreated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_currentIndex</span><span class="p">++;</span>
+        <span class="p">}</span>
+
+        <span class="c1">// we just incremented _currentIndex to the count of the _entries list,</span>
+        <span class="c1">// so we return false to indicate there are no more values.  We really could</span>
+        <span class="c1">// use == here instead of &gt;=.  I guess &gt;= feels safer for some reason.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_currentIndex</span> <span class="p">&gt;=</span> <span class="n">_entries</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Reset</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_entries</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;&gt;(</span><span class="n">GetEntries</span><span class="p">);</span>
+        <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="n">Lst</span><span class="p">&lt;</span><span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span><span class="p">&gt;</span> <span class="nf">GetEntries</span><span class="p">()</span>
+        <span class="p">=&gt;</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">GetCatalogEntriesDto</span><span class="p">(</span><span class="n">_catalogId</span><span class="p">,</span> <span class="n">_catalogNodeId</span><span class="p">).</span><span class="n">CatalogEntry</span><span class="p">.</span><span class="nf">Freeze</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
+
+<h3 id="catalogsystementrymetaobjects-iterator">CatalogSystemEntryMetaObjects Iterator</h3>
+<p>The MetaObjects iterator is a different than the other iterators in that it doesn’t really iterate through a list or tree of MetaObjects.  Instead, it iterates through all fo the MetaObject instances for a particular entry–one instance for reach culture available for the catalog.</p>
+
+<p>So, as you’ll see in the code below, one of the first things we do is grab all of the languages for the catalog so that we know what we need to interate through.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemEntryMetaObjects</span> <span class="p">:</span> <span class="n">IEnumerable</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogSystemEntryMetaObjectsEnumerator</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">CatalogSystemEntryMetaObjects</span><span class="p">(</span><span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">,</span> <span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span> <span class="n">entry</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_enumerator</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">CatalogSystemEntryMetaObjectsEnumerator</span><span class="p">(</span><span class="n">metaDataContext</span><span class="p">,</span> <span class="n">catalog</span><span class="p">,</span> <span class="n">entry</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)&gt;</span> <span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+
+    <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="nf">GetEnumerator</span><span class="p">()</span> <span class="p">=&gt;</span> <span class="n">_enumerator</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">public</span> <span class="k">class</span> <span class="nc">CatalogSystemEntryMetaObjectsEnumerator</span> <span class="p">:</span> <span class="n">IEnumerator</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)&gt;</span>
+<span class="p">{</span>
+    <span class="k">private</span> <span class="kt">int</span> <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span> <span class="n">_entry</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">MetaDataContext</span> <span class="n">_metaDataContext</span><span class="p">;</span>
+    <span class="k">private</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CultureInfo</span><span class="p">&gt;&gt;</span> <span class="n">_catalogLanguages</span><span class="p">;</span>
+    <span class="k">private</span> <span class="k">readonly</span> <span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span> <span class="n">_catalog</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nf">CatalogSystemEntryMetaObjectsEnumerator</span><span class="p">(</span><span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">,</span>
+        <span class="n">CatalogDto</span><span class="p">.</span><span class="n">CatalogRow</span> <span class="n">catalog</span><span class="p">,</span>
+        <span class="n">CatalogEntryDto</span><span class="p">.</span><span class="n">CatalogEntryRow</span> <span class="n">entry</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">_catalog</span> <span class="p">=</span> <span class="n">catalog</span><span class="p">;</span>
+        <span class="n">_entry</span> <span class="p">=</span> <span class="n">entry</span><span class="p">;</span>
+        <span class="n">_metaDataContext</span> <span class="p">=</span> <span class="n">metaDataContext</span><span class="p">;</span>
+        <span class="n">_catalogLanguages</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CultureInfo</span><span class="p">&gt;&gt;(</span><span class="n">GetCatalogLanguages</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="p">(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">metaDataContext</span><span class="p">)</span> <span class="n">Current</span>
+    <span class="p">{</span>
+        <span class="k">get</span>
+        <span class="p">{</span>
+            <span class="c1">// what we're really iterating through is the catalog languages.</span>
+            <span class="c1">// as we iterate through them, we grab the associate MetaObject for the current</span>
+            <span class="c1">// language for the given entry</span>
+            <span class="n">CultureInfo</span> <span class="n">currentCultureInfo</span> <span class="p">=</span> <span class="n">_catalogLanguages</span><span class="p">.</span><span class="n">Value</span><span class="p">[</span><span class="n">_currentIndex</span><span class="p">];</span>
+
+            <span class="kt">var</span> <span class="n">mdc</span> <span class="p">=</span> <span class="n">_metaDataContext</span><span class="p">.</span><span class="nf">Clone</span><span class="p">();</span>
+            <span class="n">mdc</span><span class="p">.</span><span class="n">UseCurrentThreadCulture</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+            <span class="n">mdc</span><span class="p">.</span><span class="n">Language</span> <span class="p">=</span> <span class="n">currentCultureInfo</span><span class="p">.</span><span class="n">Name</span><span class="p">;</span>
+
+            <span class="k">return</span> <span class="p">(</span><span class="n">MetaObject</span><span class="p">.</span><span class="nf">Load</span><span class="p">(</span><span class="n">mdc</span><span class="p">,</span> <span class="n">_entry</span><span class="p">.</span><span class="n">CatalogEntryId</span><span class="p">,</span> <span class="n">_entry</span><span class="p">.</span><span class="n">MetaClassId</span><span class="p">),</span> <span class="n">mdc</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kt">object</span> <span class="n">IEnumerator</span><span class="p">.</span><span class="n">Current</span> <span class="p">=&gt;</span> <span class="n">Current</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Dispose</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nf">Reset</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">bool</span> <span class="nf">MoveNext</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// As with the Lazy&lt;T&gt; for iterating through the entries, the first tie MoveNext() is called</span>
+        <span class="c1">// the _catalogLanguages Lazy&lt;T&gt; will not have a value.  It will after the first Current access.</span>
+        <span class="c1">// So, for the first MoveNext(), we want to keep the _currentIndex at 0, which is what this if-statement</span>
+        <span class="c1">// accomplishes.</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">_catalogLanguages</span><span class="p">.</span><span class="n">IsValueCreated</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">_currentIndex</span><span class="p">++;</span>
+        <span class="p">}</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">_currentIndex</span> <span class="p">&gt;=</span> <span class="n">_catalogLanguages</span><span class="p">.</span><span class="n">Value</span><span class="p">.</span><span class="n">Count</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">void</span> <span class="nf">Reset</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">_catalogLanguages</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Lazy</span><span class="p">&lt;</span><span class="n">Lst</span><span class="p">&lt;</span><span class="n">CultureInfo</span><span class="p">&gt;&gt;(</span><span class="n">GetCatalogLanguages</span><span class="p">);</span>
+        <span class="n">_currentIndex</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="n">Lst</span><span class="p">&lt;</span><span class="n">CultureInfo</span><span class="p">&gt;</span> <span class="nf">GetCatalogLanguages</span><span class="p">()</span>
+        <span class="p">=&gt;</span> <span class="n">_catalog</span><span class="p">.</span><span class="nf">GetCatalogLanguageRows</span><span class="p">()</span>
+            <span class="p">.</span><span class="nf">Map</span><span class="p">(</span><span class="n">lr</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="nf">CultureInfo</span><span class="p">(</span><span class="n">lr</span><span class="p">.</span><span class="n">LanguageCode</span><span class="p">))</span>
+            <span class="p">.</span><span class="nf">Freeze</span><span class="p">();</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="warning">Warning</h2>
+<p>Even though the above code will give you the convenience of iterating through your entire EPiServer catalog(s), be warned!  You could easily forget what the IEnumerators really do above and do something like this:</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="c1">// REALLY BAD CODE, DON'T DO</span>
+<span class="n">List</span><span class="p">&lt;(</span><span class="n">MetaObject</span> <span class="n">metaObject</span><span class="p">,</span> <span class="n">MetaDataContext</span> <span class="n">mdc</span><span class="p">)&gt;</span> <span class="n">allTheMetaObjects</span> <span class="p">=</span> <span class="n">_catalogSystem</span><span class="p">.</span><span class="nf">AllCatalogSystemEntryMetaObjects</span><span class="p">(</span><span class="n">mdc</span><span class="p">).</span><span class="nf">ToList</span><span class="p">();</span></code></pre></figure>
+
+<p>I hope you see the danger of this.  If you have a large catalog, you’re loading the ENTIRE set of MetaObjects into memory in your <code class="highlighter-rouge">allTheMetaObjects</code> list.  This probably won’t be good for your application.  If you have a small catalog, this might not be a big deal.  But, keep this in mind!</p>
+
 
     </article>
+
+    <section>
+        <a href="/2020/05/27/iterating-all-catalog-metaobjects/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -695,7 +1028,7 @@ His thinking has been so transformed that, though we still have no indication th
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

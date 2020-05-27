@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,28 +533,66 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2012/07/27/group-list-into-sub-lists-by-index/">
-                Group List Into Sub-lists by Index
+            <a href="/2012/08/09/rendering-must-have-placeholder-chrome-as-its-parent-got-rendering-instead/">
+                Rendering must have placeholder chrome as its parent. Got ‘rendering’ instead
             </a>
         </h1>
 
-        <time datetime="2012-07-27T00:00:00-05:00" class="post-date">27 Jul 2012</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2012-08-09T00:00:00-05:00" class="post-date">09 Aug 2012</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/sitecore">#sitecore</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
         <h2 id="problem">Problem</h2>
-<p>Everyone once-in-a-while I need to take a flat list (or array, or whatever) of items and divide it up into chunks.  It doesn’t have to be in any real order, necessarily, it just has to be in groups of two, three or four or however many items.  Most recently, I needed this to divide up a list of blog items into chunks of four to display in sets of “pages” that a user would page through with Javascript.</p>
+<p>I got the error message (in my Firebug console) in the Sitecore Page Editor on a page where I had a nested sublayout.  I had a basic two-column layout for the main sublayout of the page.  Then, in the right column, I had another sublayout that further divided up the right column as I needed.  Here is what the nested sublayout looked like:</p>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;sc:Placeholder</span> <span class="na">runat=</span><span class="s">"server"</span> <span class="na">Key=</span><span class="s">"blogRightColumnTop"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"sidebar-blog"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;sc:Placeholder</span> <span class="na">runat=</span><span class="s">"server"</span> <span class="na">Key=</span><span class="s">"blogRightColumnBottomLeft"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+
+<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"sidebar-ads"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;sc:Placeholder</span> <span class="na">runat=</span><span class="s">"server"</span> <span class="na">Key=</span><span class="s">"blogRightColumnBottomRight"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></figure>
+
+<p>This was a Javascript error that was preventing the Page Editor from fully loading the editor buttons for the edit frames I had on the page.</p>
 
 <h2 id="solution">Solution</h2>
-<p>I found a great, compact solution on Stack Overflow here: <a href="http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq">http://stackoverflow.com/questions/419019/split-list-into-sublists-with-linq</a>.  Take a look at answer number one and make sure to pay attention to the warnings others gave about performance for large sets of items.  I’m working on a small set, so it’s not too important in my case.</p>
+<p>The error message (surprise, surprise) was a little mystifying, but it gave me enough of a clue to think that there was some type of nesting issue.  I noticed that I had a sc:Placeholder element at the top of my nested sub-layout with nothing wrapping it.  Perhaps this was the issue?  I tried this edit to my nested sub-layout:</p>
 
-<p>Here’s the code I used to set a Repeater DataSource:</p>
+<figure class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div&gt;</span>
+  <span class="nt">&lt;sc:Placeholder</span> <span class="na">runat=</span><span class="s">"server"</span> <span class="na">Key=</span><span class="s">"blogRightColumnTop"</span><span class="nt">/&gt;</span>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">PodsRepeater</span><span class="p">.</span><span class="n">DataSource</span> <span class="p">=</span> <span class="n">Data</span><span class="p">.</span><span class="n">Items</span>
-  <span class="p">.</span><span class="nf">Select</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="k">new</span> <span class="p">{</span> <span class="n">Index</span> <span class="p">=</span> <span class="n">i</span><span class="p">,</span> <span class="n">Value</span> <span class="p">=</span> <span class="n">x</span> <span class="p">})</span>
-  <span class="p">.</span><span class="nf">GroupBy</span><span class="p">(</span><span class="n">obj</span> <span class="p">=&gt;</span> <span class="n">obj</span><span class="p">.</span><span class="n">Index</span> <span class="p">/</span> <span class="m">4</span><span class="p">)</span>
-  <span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">obj</span> <span class="p">=&gt;</span> <span class="n">obj</span><span class="p">.</span><span class="nf">Select</span><span class="p">(</span><span class="n">v</span> <span class="p">=&gt;</span> <span class="n">v</span><span class="p">.</span><span class="n">Value</span><span class="p">).</span><span class="nf">ToList</span><span class="p">());</span></code></pre></figure>
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"sidebar-blog"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;sc:Placeholder</span> <span class="na">runat=</span><span class="s">"server"</span> <span class="na">Key=</span><span class="s">"blogRightColumnBottomLeft"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+
+  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"sidebar-ads"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;sc:Placeholder</span> <span class="na">runat=</span><span class="s">"server"</span> <span class="na">Key=</span><span class="s">"blogRightColumnBottomRight"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></figure>
+
+<p>Notice the single, wrapping div. This worked! So, I’m not sure why, but apparently it solves this nesting problem. Perhaps Sitecore just does not expect a sc:Placeholder to be directly inside of another sc:Placeholder and so wrapping it solves that direct nesting issue.</p>
 
 
     </article>
+
+    <section>
+        <a href="/2012/08/09/rendering-must-have-placeholder-chrome-as-its-parent-got-rendering-instead/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -565,7 +611,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

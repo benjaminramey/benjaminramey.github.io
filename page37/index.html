@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,116 +533,136 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2012/10/19/indexing-taxonomy-fields-for-search-in-sitefinity-51/">
-                Indexing Taxonomy Fields For Search in Sitefinity 5.1
+            <a href="/2012/10/25/setting-selected-items-on-sitefinity-5-1-pagesselector-in-javascript/">
+                Setting Selected Items on Sitefinity 5.1 PagesSelector in Javascript
             </a>
         </h1>
 
-        <time datetime="2012-10-19T00:00:00-05:00" class="post-date">19 Oct 2012</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2012-10-25T00:00:00-05:00" class="post-date">25 Oct 2012</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/sitefinity">#sitefinity</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
         <h2 id="problem">Problem</h2>
-<p>We recently ran into a rather surprising issue with a Sitefinity 5.1 installation. We wanted a pretty simple feature: when searching and using Lucene, we wanted the values of any taxonomy fields to be indexed with Sitefinity’s Lucene back-end so that items could be searched by their attached taxonomy. This is apparently impossible with the basic installation because you can only search short text and long text fields.</p>
+<p>Today I nearly tore my hair out trying to get set the selected items (having a list of GUIDs) on the PagesSelector control in Sitefinity through the Javascript API to the control.</p>
 
-<p>So, I began on a quest to implement this somehow and ran into another wall: the Sitefinity documentation on their search API is horrendously non-existent. We mostly had to rely on forum posts and decompiling Telerik assemblies to see how stuff worked. But, this did eventually lead to a solid solution.</p>
+<p>You are supposed to be able to use the set_selectedItemIds method to do this, but it doesn’t work. Nothing happens after you call this method.</p>
+
+<p>After doing some debugging through Sitefinity’s javascript, I found a bug which, when fixed, causes the set_selectedItemIds method to work as expected.</p>
 
 <h2 id="solution">Solution</h2>
-<p>It took me about 13 hours of research to figure out what to do and then just about an hour to actually implement. So, the good news is that it’s a pretty simple solution!</p>
+<p>I am using a WidgetDesigner in which I have the PagesSelector control. My goal is pretty simple: I want the content editors to be able to select a set of pages for which to show links in the footer of their website. When they edit the footer widget, the PagesSelector should show up, let them choose pages (showing the currently selected ones) and let them save those selections.</p>
 
-<p>When you create a search index in Sitefinity’s back-end, you can add a comma-separated list of extra fields to index. Sitefinity indexes a standard set (like Title). But, if you create custom dynamic modules with other fields you want to index you have to add them in this Additional Fields box. Here here:</p>
+<p>Everything works fine. Except, once I save a selection in the PagesSelector, on subsequent edits, the currently selected items would not show up, as described above.</p>
 
-<p><img src="/assets/images/2012-10-19-indexing-taxonomy-fields-for-search-in-sitefinity-51/addtionalfields.png" alt="Additional Fields" /></p>
+<p>Here is the bug I found in the Sitefinity code. The set_selectedItemIds function is really simple. It looks like this:</p>
 
-<p>Looking through the de-compiled code for Sitefinity’s SearchModule, I found that it registered a special outbound pipe that updates the Lucene indexes (not directly, but through Sitefinity’s abstraction, it appears) when you publish an item. It also registered various Translator classes with PipeTranslatorFactory.RegisterTranslator. Digging through the code in that SearchIndexOutboundPipe and the various translator classes it registered, I finally found that when the SearchIndexOutboundPipe runs, it reads that comma-separated list of additional fields from your index and ties them to the ConcatenationTranslator through some type of mapping. It looked like these translators were being used by the SearchModule to translate content values into index-able values for the Lucene indexing system.</p>
-
-<p>Turns out, I was right. With some more trial and error from that point on, I came up with this solution.</p>
-
-<p>Override ConcatenationTranslator
-First of all, you need to create a new class that inherits from ConcatenationTranslator. This is a public class in the Telerik.Sitefinity.Publishing.Translators namespace. I called my class CustomConcatenationTranslator. IN the base class, the Translate method turns an array of object values into a space-separated string. I’ll show the code in a minute, but the first thing you need to do after creating the class is register it with the pipeline. In Global.asax.cs, add these lines (around any other code you have there):</p>
-
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_Start</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="n">Bootstrapper</span><span class="p">.</span><span class="n">Initialized</span> <span class="p">+=</span> <span class="n">Bootstrapper_Initialized</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="k">private</span> <span class="k">void</span> <span class="nf">Bootstrapper_Initialized</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">Telerik</span><span class="p">.</span><span class="n">Sitefinity</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">ExecutedEventArgs</span> <span class="n">e</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">CommandName</span> <span class="p">==</span> <span class="s">"Bootstrapped"</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">PipeTranslatorFactory</span><span class="p">.</span><span class="nf">RegisterTranslator</span><span class="p">(</span><span class="k">new</span> <span class="nf">CustomConcatenationTranslator</span><span class="p">());</span>
-  <span class="p">}</span>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">set_selectedItemIds</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ids</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span> <span class="o">=</span> <span class="nx">ids</span><span class="p">;</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_updateGridSelection</span><span class="p">();</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_updateTreeSelection</span><span class="p">();</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>You don’t have to unregistered the existing ConcatenationTranslator. Your registration will replace it as long as you don’t rename the translator by overriding it’s Name property.</p>
+<p>It updates a property (_selectedItemIds) and then updates the grid (not sure what that is) and then the tree (of page nodes). The _updateTreeSelection method is what we’re looking for–this is where the bug is. The method looks like this:</p>
 
-<p>What I wanted to do was check if the data being translated was a TrackedList<Guid> type. This is what your taxonomy fields are in code. Here is my code for the CustomConcatenationTranslator class.</Guid></p>
-
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CustomConcatenationTranslator</span> <span class="p">:</span> <span class="n">ConcatenationTranslator</span>
-<span class="p">{</span>
-  <span class="k">private</span> <span class="k">readonly</span> <span class="n">TaxonomyManager</span> <span class="n">_taxonomyManager</span><span class="p">;</span>
-
-  <span class="k">public</span> <span class="nf">CustomConcatenationTranslator</span><span class="p">()</span>
-  <span class="p">{</span>
-    <span class="n">_taxonomyManager</span> <span class="p">=</span> <span class="n">TaxonomyManager</span><span class="p">.</span><span class="nf">GetManager</span><span class="p">();</span>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">_updateTreeSelection</span><span class="p">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_treeIsBound</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">_treeMustBeUpdated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="k">return</span><span class="p">;</span>
   <span class="p">}</span>
-
-  <span class="k">public</span> <span class="k">override</span> <span class="kt">object</span> <span class="nf">Translate</span><span class="p">(</span><span class="kt">object</span><span class="p">[]</span> <span class="n">data</span><span class="p">,</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">translationSettings</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">Length</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span>
-    <span class="p">{</span>
-      <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="n">StringBuilder</span> <span class="n">concatedStr</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
-    <span class="nf">ConcatValues</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">concatedStr</span><span class="p">);</span>
-    <span class="k">return</span> <span class="n">concatedStr</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
-  <span class="p">}</span>
-
-  <span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">IsTrackedList</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="kt">object</span> <span class="n">data</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">return</span> <span class="n">data</span> <span class="k">is</span> <span class="n">TrackedList</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;;</span>
-  <span class="p">}</span>
-
-  <span class="k">private</span> <span class="k">void</span> <span class="nf">ConcatValues</span><span class="p">(</span><span class="kt">object</span><span class="p">[]</span> <span class="n">data</span><span class="p">,</span> <span class="n">StringBuilder</span> <span class="n">concatedStr</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">data</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
-    <span class="p">{</span>
-      <span class="kt">string</span> <span class="n">str</span><span class="p">;</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">IsTrackedList</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-      <span class="p">{</span>
-        <span class="n">str</span> <span class="p">=</span> <span class="nf">TranslatedTaxonomies</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
-      <span class="p">}</span>
-      <span class="k">else</span>
-      <span class="p">{</span>
-        <span class="n">str</span> <span class="p">=</span> <span class="nf">GetString</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-      <span class="p">}</span>
-
-      <span class="n">concatedStr</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span> <span class="p">&lt;</span> <span class="n">data</span><span class="p">.</span><span class="n">Length</span><span class="p">)</span>
-      <span class="p">{</span>
-        <span class="n">concatedStr</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="err">‘</span> <span class="err">‘</span><span class="p">);</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_treeMustBeUpdated</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">tree</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_itemsTree</span><span class="p">();</span>
+  <span class="kd">var</span> <span class="nx">binder</span> <span class="o">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">getBinder</span><span class="p">();</span>
+  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemId</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedValues</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemId</span><span class="p">],</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">selectedItems</span> <span class="o">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">get_selectedItems</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">selectedItems</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">binder</span><span class="p">.</span><span class="nx">clearSelection</span><span class="p">();</span>
+      <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedItems</span><span class="p">(</span><span class="nx">selectedItems</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedValues</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
       <span class="p">}</span>
     <span class="p">}</span>
   <span class="p">}</span>
-
-  <span class="k">private</span> <span class="kt">string</span> <span class="nf">TranslatedTaxonomies</span><span class="p">(</span><span class="kt">object</span><span class="p">[]</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">taxNames</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="n">Guid</span> <span class="n">guid</span> <span class="k">in</span> <span class="p">((</span><span class="n">TrackedList</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;)</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
-    <span class="p">{</span>
-      <span class="kt">var</span> <span class="n">taxon</span> <span class="p">=</span> <span class="n">_taxonomyManager</span><span class="p">.</span><span class="nf">GetTaxon</span><span class="p">(</span><span class="n">guid</span><span class="p">);</span>
-      <span class="n">taxNames</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">taxon</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span> <span class="n">taxNames</span><span class="p">);</span>
-  <span class="p">}</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">_raiseSelectionApplied</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{});</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>It should be pretty simple to follow. Basically, if I find a data value is a TrackedList<Guid>, I get the Taxon items with that Guid ID, get the name of that Taxon and then concatenate those values, separated by a space. If the data object is anything other than a TrackedList<Guid>, I used the default ConcatenationTranslator behavior.</Guid></Guid></p>
+<p>The problem is on line 13. tree.get_selectedItems() returns an empty array when there are no items selected. So, the expression if (selectedItems) { } will always be true–but we want to get to the else statement, as you can see, to set the selection from the this._selectedItemIds array.</p>
 
-<h2 id="conclusion">Conclusion</h2>
-<p>That’s really all you need to do. Just go into your Sitefinity back-end, re-index your search index and you can now search your content by any taxonomy it has attached to it.</p>
+<p>The beauty (and danger!) of javascript is that you can easily fix something like this in your own code by simply redefining their method. Here is my code that fixes this bug:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">wrapper</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_pagesSelector</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">selector</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_pagesSelector</span><span class="p">().</span><span class="nx">get_pageSelector</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">selecting</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<span class="nx">wrapper</span><span class="p">.</span><span class="nx">add_selectionApplied</span><span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">selecting</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span><span class="p">;</span>
+  <span class="p">}</span>
+  <span class="nx">selecting</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+  <span class="kd">var</span> <span class="nx">pageIds</span> <span class="o">=</span> <span class="nx">controlData</span><span class="p">.</span><span class="nx">FooterPages</span><span class="p">;</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">pageIds</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">pages</span> <span class="o">=</span> <span class="nx">pageIds</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">"</span><span class="s2">,</span><span class="dl">"</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">oldMethod</span> <span class="o">=</span> <span class="nx">selector</span><span class="p">.</span><span class="nx">_updateTreeSelection</span><span class="p">;</span>
+    <span class="nx">selector</span><span class="p">.</span><span class="nx">_updateTreeSelection</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_treeIsBound</span> <span class="o">==</span> <span class="kc">false</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="nx">_treeMustBeUpdated</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+        <span class="k">return</span><span class="p">;</span>
+      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_treeMustBeUpdated</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="kd">var</span> <span class="nx">tree</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">get_itemsTree</span><span class="p">();</span>
+      <span class="kd">var</span> <span class="nx">binder</span> <span class="o">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">getBinder</span><span class="p">();</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemId</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedValues</span><span class="p">([</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemId</span><span class="p">],</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">selectedItems</span> <span class="o">=</span> <span class="nx">tree</span><span class="p">.</span><span class="nx">get_selectedItems</span><span class="p">();</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">selectedItems</span> <span class="o">&amp;&amp;</span> <span class="nx">selectedItems</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">binder</span><span class="p">.</span><span class="nx">clearSelection</span><span class="p">();</span>
+          <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedItems</span><span class="p">(</span><span class="nx">selectedItems</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">binder</span><span class="p">.</span><span class="nx">setSelectedValues</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">_selectedItemIds</span><span class="p">,</span> <span class="kc">true</span><span class="p">,</span> <span class="kc">true</span><span class="p">);</span>
+          <span class="p">}</span>
+        <span class="p">}</span>
+      <span class="p">}</span>
+      <span class="k">this</span><span class="p">.</span><span class="nx">_raiseSelectionApplied</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="p">{});</span>
+    <span class="p">};</span>
+    <span class="nx">selector</span><span class="p">.</span><span class="nx">set_selectedItemIds</span><span class="p">(</span><span class="nx">pages</span><span class="p">);</span>
+    <span class="nx">selector</span><span class="p">.</span><span class="nx">_updateTreeSelection</span> <span class="o">=</span> <span class="nx">oldMethod</span><span class="p">;</span>
+  <span class="p">}</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>First, I attach to the selectionApplied method. If you try to do the above code before that is done, your selection will just be overridden (or just not work–not sure which). This event will get called when you call set_selectedItemIds. To avoid an infinite loop, then, I use the selecting flag at the top of the event function I am attaching.</p>
+
+<p>Second, I parse out my ids into an array.</p>
+
+<p>Third, I save the old version of the _updateTreeSelection method and then override it with my own. Notice, the fix on line 13 of that method. I have added ” &amp;&amp; selectedItems.length &gt; 0″.</p>
+
+<p>Fourth, now that I have a fixed method, I call selector.set_selectedItemIds, passing in my array of ids and it works!</p>
+
+<p>Lastly, I change the method back to the original (just in case the seemingly faulty if expression is what they intended in other situations).</p>
+
+<p>Hope that helps!</p>
+
 
     </article>
+
+    <section>
+        <a href="/2012/10/25/setting-selected-items-on-sitefinity-5-1-pagesselector-in-javascript/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -653,7 +681,7 @@ First of all, you need to create a new class that inherits from ConcatenationTra
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

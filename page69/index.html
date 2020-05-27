@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,32 +533,42 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2010/10/06/sharepoint-2007-to-2010-in-place-upgrade-servicehostingenvironment-error/">
-                SharePoint 2007 to 2010 in-place upgrade serviceHostingEnvironment error
+            <a href="/2010/10/08/error-occurred-in-deployment-step-recycle-iis-application-pool-the-local-sharepoint-server-is-not-available-check-that-the-server-is-running-and-connected-to-the-sharepoint-farm/">
+                Error occurred in deployment step ‘Recycle IIS Application Pool’: The local SharePoint server is not available. Check that the server is running and connected to the SharePoint farm.
             </a>
         </h1>
 
-        <time datetime="2010-10-06T00:00:00-05:00" class="post-date">06 Oct 2010</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2010-10-08T00:00:00-05:00" class="post-date">08 Oct 2010</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/sharepoint">#sharepoint</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>I’m testing an in-place SharePoint 2007 to SharePoint 2010 upgrade today and I came across this odd error during the update process.</p>
+        <p>I got the above error today while trying to deploy a SharePoint 2010 project in Visual Studio 2010.  Very frustrating!!</p>
 
-<p>I successfully installed SharePoint 2010 and proceeded to run the configuration wizard which updates 2007 to 2010.  The configuration process would always fail with an error in the Central Administration web.config file.  Viewing the configuration log file (the configuration wizard provided the location of it) turned up the error.</p>
+<p>The answer turned out to be simple enough, though no clues are really provided in the error message (typical).  I had to add my user account to the db_owner role for the SharePoint_Admin database that the site I was deploying to was using.</p>
 
-<p>Apparently, at some point in the process the configuration wizard looks for the serviceHostingEnvironment element under the <code class="highlighter-rouge">&lt;system.serviceModel&gt;</code> section in the Central Administration web.config.</p>
+<p>Once I did that, the deployment in Visual Studio did just great.</p>
 
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;serviceHostingEnvironment</span> <span class="na">aspNetCompatibilityEnabled=</span><span class="s">”true”</span> <span class="nt">/&gt;</span></code></pre></figure>
+<p>The following post led me to the solution: <a href="http://social.technet.microsoft.com/Forums/en-US/sharepoint2010programming/thread/a97a8413-a0ae-47f2-aab7-fae1cf40595a">http://social.technet.microsoft.com/Forums/en-US/sharepoint2010programming/thread/a97a8413-a0ae-47f2-aab7-fae1cf40595a</a></p>
 
-<p>If it doesn’t find it adds it itself, but curiously, it wraps it in an incomplete system.serviceModel tag so it looks like this:</p>
-
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;system.serviceModel&gt;</span>
-<span class="nt">&lt;serviceHostingEnvironment</span> <span class="na">aspNetCompatibilityEnabled=</span><span class="s">”true”</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/system.serviceModel&gt;</span></code></pre></figure>
-
-<p>This then caused the configuration wizard to bomb out.</p>
-
-<p>The simple solution was to just add the <code class="highlighter-rouge">&lt;serviceHostingEnvironment aspNetCompatibilityEnabled=”true” /&gt;</code> element under my existing <code class="highlighter-rouge">&lt;system.serviceModel&gt;</code> section.  The wizard completed just fine after this.</p>
 
     </article>
+
+    <section>
+        <a href="/2010/10/08/error-occurred-in-deployment-step-recycle-iis-application-pool-the-local-sharepoint-server-is-not-available-check-that-the-server-is-running-and-connected-to-the-sharepoint-farm/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -569,7 +587,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

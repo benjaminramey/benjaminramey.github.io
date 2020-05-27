@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,48 +533,66 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2013/03/15/ektron-paths/">
-                Ektron Paths
+            <a href="/2013/03/15/taxonomymanager-wcf-error-in-ektron-8-5-3-tier-setup/">
+                TaxonomyManager WCF Error in Ektron 8.5 3-tier Setup
             </a>
         </h1>
 
-        <time datetime="2013-03-15T00:00:00-05:00" class="post-date">15 Mar 2013</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2013-03-15T00:00:00-05:00" class="post-date">15 Mar 2013</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/ektron">#ektron</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>For future reference, here is how you have to construct paths for finding Ektron content items, folders and taxonomy items.</p>
+        <h2 id="problem">Problem</h2>
+<p>I’m currently working on a project to import data into an existing Ektron 8.5 SP3 installation. It is pulling existing product data from a database, transforming it into the smart form XML we need and then shoving that data into the Ektron installation.  In addition to creating content items, the import tool also updates metadata and taxonomy fields.</p>
 
-<h2 id="foldermanager-and-contentmanager">FolderManager and ContentManager</h2>
+<p>The update the taxonomy fields, I use the TaxonomyManager to get the taxonomy by name, then set the taxonomy IDs on TaxonomyItemData objects.  This import tool isn’t running inside of an Ektron installation–it’s a standalone tool–so it takes advantage of Ektron 8.5’s 3-tier setup.  This means the TaxonomyManager calls are going over the wire via the WCF services.</p>
 
-<p>Use forward slashes (/)
-Do NOT include an initial slash
-DO include a trailing slash
-Example: “folder1/folder2/otherfolder/”
-Given this code:</p>
+<p>The TaxonomyManager calls were throwing WCF errors, however, saying that the ITaxonomyManager interface was violating the WCF rules of not having any same-named methods.  If you look, the ITaxonomyManager interface defines multiple same-named methods, including two versions of GetList.</p>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">FolderManager</span> <span class="n">fm</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FolderManager</span><span class="p">();</span>
-<span class="n">FolderCriteria</span> <span class="n">folderCrit</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">FolderCriteria</span><span class="p">();</span>
-<span class="n">folderCrit</span><span class="p">.</span><span class="nf">AddFilter</span><span class="p">(</span>
-<span class="n">FolderProperty</span><span class="p">.</span><span class="n">FolderPath</span><span class="p">,</span>
-<span class="n">CriteriaFilterOperator</span><span class="p">.</span><span class="n">EqualTo</span><span class="p">,</span>
-<span class="n">folderPath</span><span class="p">);</span>
+<p>This was pretty confusing to me because I couldn’t believe that Ektron would release a major version like 8.5, touting their 3-tier capabilities, without having tested one of the major content managers liket he TaxonomyManager.</p>
 
-<span class="n">FolderData</span> <span class="n">folder</span> <span class="p">=</span> <span class="n">fm</span><span class="p">.</span><span class="nf">GetList</span><span class="p">(</span><span class="n">folderCrit</span><span class="p">).</span><span class="nf">FirstOrDefault</span><span class="p">();</span></code></pre></figure>
+<h2 id="solution">Solution</h2>
+<p>Whatever the case may be, I started snooping around on the net for others having experienced this issue.  As usual though (also a mystery), I couldn’t find any info on it.  Why does there seem to be so little content on the net about Ektron??</p>
 
-<p>Then the “folderPath” variable needs to be in this format: “folderName1/folderName2/”.  The same would apply for finding all the content in a folder via the contents’ path.</p>
+<p>I started snooping around with decompiling the Ektron.Cms.ObjectFactory DLL code where the ITaxonomyManager interface is defined.  Everything looked good–it had the same-named methods, but was using the OperationContract attribute which lets you define the action name.  The two GetList actions were defined with different names, so something wasn’t matching up with the error I was seeing in my import project.  You can see that the two GetList methods have different Action values, making it OK for WCF.</p>
 
-<h2 id="taxonomymanager">TaxonomyManager</h2>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="p">[</span><span class="nf">OperationContract</span><span class="p">(</span><span class="n">Action</span><span class="p">=</span><span class="s">"GetList"</span><span class="p">)]</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">TaxonomyData</span><span class="p">&gt;</span> <span class="nf">GetList</span><span class="p">(</span><span class="n">TaxonomyCriteria</span> <span class="n">criteria</span><span class="p">);</span>
 
-<p>Use backslashes ()
-DO use an initial slash
-Do NOT use a trailing slash
-Example: “\taxonomy1\taxonomy2\othertaxonomy”
-So, given this code:</p>
+<span class="p">[</span><span class="nf">OperationContract</span><span class="p">(</span><span class="n">Action</span><span class="p">=</span><span class="s">"GetListByCustomProperty"</span><span class="p">,</span> <span class="n">Name</span><span class="p">=</span><span class="s">"GetListByCustomPropertyCriteria"</span><span class="p">)]</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">TaxonomyData</span><span class="p">&gt;</span> <span class="nf">GetList</span><span class="p">(</span><span class="n">TaxonomyCustomPropertyCriteria</span> <span class="n">criteria</span><span class="p">);</span></code></pre></figure>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">ITaxonomyManager</span> <span class="n">_taxManager</span> <span class="p">=</span> <span class="n">ObjectFactory</span><span class="p">.</span><span class="nf">GetTaxonomyManager</span><span class="p">();</span>
-<span class="n">TaxonomyData</span> <span class="n">tax</span> <span class="p">=</span> <span class="n">_taxManager</span><span class="p">.</span><span class="nf">GetItem</span><span class="p">(</span><span class="n">taxPath</span><span class="p">);</span></code></pre></figure>
+<p>When I decompiled the Ektron.Cms.ObjectFactory DLL that I was using in my import project, I found the problem.  You can see it here:</p>
 
-<p>The “taxPath” variable needs to be in this format: “\rootTaxonomyName\subTaxonomyName1\subTaxonomyName2″.</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="p">[</span><span class="nf">OperationContract</span><span class="p">(</span><span class="n">Action</span><span class="p">=</span><span class="s">"GetList"</span><span class="p">)]</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">TaxonomyData</span><span class="p">&gt;</span> <span class="nf">GetList</span><span class="p">(</span><span class="n">TaxonomyCriteria</span> <span class="n">criteria</span><span class="p">);</span>
+
+<span class="p">[</span><span class="nf">OperationContract</span><span class="p">(</span><span class="n">Action</span><span class="p">=</span><span class="s">"GetList"</span><span class="p">)]</span>
+<span class="n">List</span><span class="p">&lt;</span><span class="n">TaxonomyData</span><span class="p">&gt;</span> <span class="nf">GetList</span><span class="p">(</span><span class="n">TaxonomyCustomPropertyCriteria</span> <span class="n">criteria</span><span class="p">);</span></code></pre></figure>
+
+<p>Notice how the Action is defined with the same name.  I checked the DLL versions of my DLL and the DLL in the Ektron 8.5 SP3 site I was pushing content too.  They were both the same: 8.5.0.356.  So, somewhere along the line, Ektron fixed the issue without updating the AssemblyFileVersion to signify a bug fix/updated code.  Once I copied the DLL from the SP3 site’s bin folder to my import project, it worked just fine.</p>
+
+<p>So, if you have the same problem somewhere, look for an updated Ektron.Cms.ObjectFactory 8.5 DLL–probably in SP3.</p>
+
 
     </article>
+
+    <section>
+        <a href="/2013/03/15/taxonomymanager-wcf-error-in-ektron-8-5-3-tier-setup/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -585,7 +611,7 @@ So, given this code:</p>
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

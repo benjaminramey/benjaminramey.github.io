@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,39 +533,46 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2011/11/14/ansiutf-8-encoding-problem/">
-                ANSI/UTF-8 Encoding Problem
+            <a href="/2011/11/21/jquery-tools-overlay-v1-2-5-bug/">
+                jQuery Tools Overlay v1.2.5 Bug
             </a>
         </h1>
 
-        <time datetime="2011-11-14T00:00:00-06:00" class="post-date">14 Nov 2011</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2011-11-21T00:00:00-06:00" class="post-date">21 Nov 2011</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/jquery">#jquery</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
         <h2 id="problem">Problem</h2>
-<p>I ran into a problem in a project I was working on recently.  The basics of the project were to take data out of a MySQL database and transform that data into an XML file schema for a
-<a href="http://day.com/day/en/products.html">Day CQ5 CMS</a>
-<a href="http://www.ibm.com/developerworks/java/library/j-jcr/">Java Content Repository (JCR)</a>.</p>
+<p>I noticed a bug in the jQuery Tools library today, specifically in version 1.2.5 and the Overlay plugin. I should say, I’m assuming it’s a bug. This is an existing website I am working on where I am not in a position to upgrade the jQuery Tools library to the latest version (1.2.6 is out, it looks like) and I don’t know how much of the problem may be due to how existing code is possibly interfering with the library.</p>
 
-<p>I kept running into an issue with certain text fields of user-entered data where I would get all these funky, special characters in the text.  I knew it had to be some kind of encoding issue where I wasn’t outputting or getting the data with the right character encoding.</p>
-
-<p>I don’t know much about character encoding, except that there is a difference between them!</p>
+<p>In any case, the bug showed up when I had an existing overlay showing and wanted to show another overlay. By default, the library allows one overlay at a time. This was fine with me as I needed to close the existing overlay before showing the new one. The library handles this automatically. However, when the second overlay was displayed, the mask would not display and the z-index was not set, so it showed up behind other content.</p>
 
 <h2 id="solution">Solution</h2>
-<p>After some digging around and playing with Notepad++ (where I could switch the encoding of the text), I found at least a glimmer of hope.  When I had the character encoding set to ANSI in Notepad++, pasted in the troublesome text, and then switched the encoding to UTF-8, all of my problems disappeared.</p>
+<p>While it’s somewhat of a hack, the best solution I found was to simply remove the div that Overlay creates with id “exposeMask” before I display the second overlay.</p>
 
-<p>So, eventually, I came up with these few lines of code which convert the encoding of my text and fixed all of my problems.  Woohoo!</p>
+<figure class="highlight"><pre><code class="language-text" data-lang="text">$(“#exposeMask”).remove();</code></pre></figure>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="n">Encoding</span> <span class="n">targetEncoding</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="nf">GetEncoding</span><span class="p">(</span><span class="m">1252</span><span class="p">);</span>
-<span class="kt">byte</span><span class="p">[]</span> <span class="n">utf8Bytes</span> <span class="p">=</span> <span class="n">targetEncoding</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
-<span class="kt">byte</span><span class="p">[]</span> <span class="n">ansiBytes</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="nf">Convert</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">,</span>
-<span class="n">targetEncoding</span><span class="p">,</span>
-<span class="n">utf8Bytes</span><span class="p">);</span>
-<span class="k">return</span> <span class="n">targetEncoding</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="n">ansiBytes</span><span class="p">);</span></code></pre></figure>
+<p>I believe this is what is happening: when the first overlay is closed by the library, it doesn’t properly handle the existing exposeMask div and so when the second overlay shows it misunderstands the mask to be displaying properly and doesn’t calculate its own display values properly. Therefore, its z-index is wrong (or non-existing) and the mask remains hidden (because the library hid it when it closed the first overlay).</p>
 
-<p>What this simple code does is first get the Encoding for the ANSI character encoding (1252 is ANSI, apparently). It then gets the bytes of the string with the ANSI encoding, converts them from the ANSI encoding to UTF-8 encoding and then gets the string with the ANSI encoding.</p>
-
-<p>So, quite honestly, I’m not 100% sure why this works. The Notepad++ experiment would seem to indicate the opposite: that I had to convert from ANSI to UTF-8. But, that only compounded the problem when I wrote it that way in code. When I reversed the conversion, it worked as I was hoping.</p>
 
     </article>
+
+    <section>
+        <a href="/2011/11/21/jquery-tools-overlay-v1-2-5-bug/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -576,7 +591,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

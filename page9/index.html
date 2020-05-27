@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,28 +533,44 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2015/09/03/permutations-with-iterators-in-csharp/">
-                Permutations with Iterators in C#
+            <a href="/2015/12/02/working-with-x509-certificates-in-net/">
+                Working with x.509 Certificates in .NET
             </a>
         </h1>
 
-        <time datetime="2015-09-03T07:27:00-05:00" class="post-date">03 Sep 2015</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2015-12-02T10:35:00-06:00" class="post-date">02 Dec 2015</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/.net">#.net</a>
+                
+                <a href="/tags/certificates">#certificates</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>I recently ran across a need to generate all permutations of an array of objects
-in some unit testing I was doing.</p>
+        <p>I found a lot of very helpful details about certificate storage and usage in Windows and
+.NET in this article.</p>
 
-<p>The specific situation was testing that, no matter what the order, when certain messages
-were picked up by an <a href="http://particular.net/">NServiceBus</a> <a href="particular.net/articles/sagas-in-nservicebus">Saga</a>, that a certain state was consistent after all
-messages were received.  Since I explicitly wanted to test the state no matter what order
-the messages arrived in, I needed all permutations of those messages so I could send
-them to the Saga in each order and test the resulting state.</p>
+<p>Particularly, the explanation of where certificates and private keys can be stored for UserStore
+certificates was very helpful in debugging some issues I’m currently having on a production server.</p>
 
-<p>I found this super article on the subject that gave all the code I needed: <a href="http://www.interact-sw.co.uk/iangblog/2004/09/16/permuterate">Generating Permutations with C# Iterators</a>.</p>
-
-<p>Thanks IanG on Tap!</p>
+<p><a href="http://paulstovell.com/blog/x509certificate2">Paul Stovell’s blog post</a></p>
 
 
     </article>
+
+    <section>
+        <a href="/2015/12/02/working-with-x509-certificates-in-net/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -565,7 +589,7 @@ them to the Saga in each order and test the resulting state.</p>
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

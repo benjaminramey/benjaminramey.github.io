@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,20 +533,42 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2013/05/23/sharepoint-linq-spmetal-in-anonymous-user-context/">
-                SharePoint LINQ (SPMetal) in Anonymous User Context
+            <a href="/2013/06/06/sharepoint-unknown-error-after-database-attach/">
+                SharePoint Unknown Error After Database Attach
             </a>
         </h1>
 
-        <time datetime="2013-05-23T00:00:00-05:00" class="post-date">23 May 2013</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2013-06-06T00:00:00-05:00" class="post-date">06 Jun 2013</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/sharepoint">#sharepoint</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>Refer to the links below to fix this issue of SPMetal LINQ queries failing in an anonymous user context in SharePoint 2010.</p>
+        <p>There are many reasons you might get one of those blank screens with just the text “An unknown error has occurred” when working with SharePoint.  Just search for it online and you’ll find many fixes.</p>
 
-<p><a href="http://blog.tylerholmes.com/2011/04/access-denied-with-linq-to-sharepoint.html">Access Denied with LINQ-to-SharePoint</a></p>
+<p>I found another one last night.  One of our system admins setup a SharePoint web application for me for development purposes.  We attached a database from a backup of our client’s production content.  But, I couldn’t get to the site.  It gave me the unknown error screen.</p>
 
-<p><a href="http://jcapka.blogspot.com/2010/05/making-linq-to-sharepoint-work-for.html">Making Linq to SharePoint work for Anonymous users</a></p>
+<p>I noticed in the ULS logs that the page request was immediately being redirected to the Access Denied page, but that wasn’t rendering either.</p>
+
+<p>As it turns out, the system admin that setup the site was let go a couple of weeks ago and as a result his Windows domain account was deactivated.  However, he was the lone Site Collection Administrator on the site.  Once I removed him and added myself, the site came up as expected.</p>
+
 
     </article>
+
+    <section>
+        <a href="/2013/06/06/sharepoint-unknown-error-after-database-attach/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -557,7 +587,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,26 +533,185 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2012/02/27/ektron-license-key-update/">
-                Ektron License Key Update
+            <a href="/2012/03/05/grouping-into-rows-with-xslt/">
+                Grouping into Rows with XSLT
             </a>
         </h1>
 
-        <time datetime="2012-02-27T00:00:00-06:00" class="post-date">27 Feb 2012</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2012-03-05T00:00:00-06:00" class="post-date">05 Mar 2012</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/xslt">#xslt</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <h2 id="problem">Problem</h2>
-<p>We use a temporary license key with our Ektron development website here at work. Because it’s temporary, we have to update it every-so-often. That happened today.</p>
+        <p>Let’s say you have a simple XML document that looks something like this:</p>
 
-<p>I got the new key and copy-pasted it into the right License Key field under Configuration / Settings. I clicked on “Save” and thought I was done. When I tried to log back in with my regular account (the way you are notified of the license expiration is a license violation error when you try log in) and it still gave me the license violation error. So, I logged back in with the built-in account (which lets you log in with limited features so that you can update the license key) and found out that I had copy-pasted the license key wrong. It was missing part of the domain name.</p>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;root&gt;</span>
+	<span class="nt">&lt;Pod</span> <span class="na">id=</span><span class="s">"1"</span><span class="nt">&gt;&lt;/Pod&gt;</span>
+	<span class="nt">&lt;Pod</span> <span class="na">id=</span><span class="s">"2"</span><span class="nt">&gt;&lt;/Pod&gt;</span>
+	<span class="nt">&lt;Pod</span> <span class="na">id=</span><span class="s">"3"</span><span class="nt">&gt;&lt;/Pod&gt;</span>
+	<span class="nt">&lt;Pod</span> <span class="na">id=</span><span class="s">"4"</span><span class="nt">&gt;&lt;/Pod&gt;</span>
+<span class="nt">&lt;/root&gt;</span></code></pre></figure>
 
-<p>Naturally, I tried simply updating the license key domain name, but Ektron threw a Javascript error which prevented me from saving the page saying that I had updated the license key in a way that would make it invalid. What?! I tried re-pasting the key in, thinking I had it wrong still. I didn’t work.</p>
+<p>The content or meaning of the pods is irrelevant. The idea is that you have a “list” of elements (pods in this case) in your XML. How, then, do you use XSLT to group these pods into rows of two, three or whatever number of pods across? Something like this:</p>
 
-<h2 id="solution">Solution</h2>
-<p>Turns out this has to be an Ektron bug. I ended up trying something random: I changed the last number of the license key to something arbitrary (along with making my domain name change) and it updated fine. Strange, I know…but this IS Ektron.</p>
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;div&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod"</span><span class="nt">&gt;</span> pod 1 <span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod"</span><span class="nt">&gt;</span> pod 2 <span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod"</span><span class="nt">&gt;</span> pod 3 <span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod"</span><span class="nt">&gt;</span> pod 4 <span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></figure>
 
-<p>Of course, that is an invalid key, so once the page saved, I changed that last digit back to the original digit from the valid license key and it let me save it and I could log in again.</p>
+<p>This example would required three pods per row. The example XSLT below will work for any number of pods per row with a simple edit (explained below).</p>
+
+<p>My first thought was from a very normal programmer’s perspective. I’d use some kind of looping (with xsl:for-each) and just start a new row for each x number of pods. So, I did it that way and it worked. It was pretty ugly XSLT, but I didn’t really think there was a better way to do it. But then a colleague looked over my shoulder and chuckled. “I did it that way at first too”, he said, “but that’s not the XSLT way to do it.” He gave me a little bit of a clue of how it really should be done then he left, leaving me determined to find the “XSLT way” of doing it!</p>
+
+<p>Turns out, it really isn’t difficult. You just have to think a little differently and start using xsl:template, xsl:call-template and xsl:apply-templates effectively along with their select and match attributes. So, take a look at this XSLT file:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;xsl:stylesheet</span> <span class="na">version=</span><span class="s">"1.0"</span>
+	<span class="na">xmlns:xsl=</span><span class="s">"http://www.w3.org/1999/XSL/Transform"</span>
+	<span class="na">xmlns:msxsl=</span><span class="s">"urn:schemas-microsoft-com:xslt"</span>
+	<span class="na">exclude-result-prefixes=</span><span class="s">"msxsl"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;xsl:output</span> <span class="na">method=</span><span class="s">"html"</span>
+		<span class="na">version=</span><span class="s">"1.0"</span>
+		<span class="na">omit-xml-declaration=</span><span class="s">"yes"</span>
+		<span class="na">indent=</span><span class="s">"yes"</span>
+		<span class="na">encoding=</span><span class="s">"utf-8"</span> <span class="nt">/&gt;</span>
+
+	<span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"/root"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;xsl:apply-templates</span> <span class="na">select=</span><span class="s">"Pod[position() mod 3 = 1]"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/xsl:template&gt;</span>
+
+	<span class="nt">&lt;xsl:template</span> <span class="na">name=</span><span class="s">"PodRow"</span>
+		<span class="na">match=</span><span class="s">"Pod[position() mod 3 = 1]"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;xsl:choose&gt;</span>
+				<span class="nt">&lt;xsl:call-template</span> <span class="na">name=</span><span class="s">"PodWrapper"</span><span class="nt">/&gt;</span>
+				<span class="nt">&lt;xsl:apply-templates</span>
+					<span class="na">select=</span><span class="s">"following-sibling::Pod[position() &amp;lt; 3]"</span><span class="nt">/&gt;</span>
+			<span class="nt">&lt;/xsl:choose&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/xsl:template&gt;</span>
+
+	<span class="nt">&lt;xsl:template</span> <span class="na">name=</span><span class="s">"PodWrapper"</span>
+		<span class="na">match=</span><span class="s">"Pod[position() mod 3 &amp;gt; 1]"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;xsl:call-template</span> <span class="na">name=</span><span class="s">"PodContent"</span><span class="nt">/&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/xsl:template&gt;</span>
+
+	<span class="nt">&lt;xsl:template</span> <span class="na">name=</span><span class="s">"PodContent"</span><span class="nt">&gt;</span>
+		<span class="cp">&lt;!– whatever content your "pods" contain can be marked up here –&gt;</span>
+	<span class="nt">&lt;/xsl:template&gt;</span>
+<span class="nt">&lt;/xsl:stylesheet&gt;</span></code></pre></figure>
+
+<p>Here’s what’s going on: first, we call xsl:apply-templates on the first and then every third Pod using “Pod[position() mod 3 = 1]”. This will select the Pod at the start of every row: Pods 1 and 4. Notice that XSLT indexing starts at 1 and NOT 0. The PodRow template will match these selected Pods.</p>
+
+<p>Inside the PodRow template we have the HTML for the row. Inside the row HTML, we explicitly call the PodWrapper template for the current Pod. We then call xsl:apply-templates on the following siblings of the current Pod, but only on the next two of them. This grabs the remaining Pods in the row. This xsl:apply-templates select will match the PodWrapper template which creates the HTML for a single Pod.</p>
+
+<p>Easy as pie! To change the number of pods in a row, update all of the “position() mod 3″s by replacing 3 with however many pods you want in a row. Then also make sure to update the xsl:apply-templates select attribute inside PodRow to be “position() &lt; n-1″ where n is the number of Pods in a row.</p>
+
+<h2 id="identifying-the-last-cell-of-every-row">Identifying the last cell of every row</h2>
+<p>I needed another feature from my XSLT though. I needed every last pod in each row to have a special CSS class. This meant determining which pod was the last one in each row whether the row was full or not. This made the XSLT significantly more complicated, but not overwhelmingly so.</p>
+
+<p>I needed my HTML to look like this (notice the additional “last” class):</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;div&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod"</span><span class="nt">&gt;</span> pod 1 <span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod"</span><span class="nt">&gt;</span> pod 2 <span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod last"</span><span class="nt">&gt;</span> pod 3 <span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod last"</span><span class="nt">&gt;</span> pod 4 <span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span></code></pre></figure>
+
+<p>So, this is what I had to do:</p>
+
+<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span>
+<span class="nt">&lt;xsl:stylesheet</span> <span class="na">version=</span><span class="s">"1.0"</span>
+	<span class="na">xmlns:xsl=</span><span class="s">"http://www.w3.org/1999/XSL/Transform"</span>
+	<span class="na">xmlns:msxsl=</span><span class="s">"urn:schemas-microsoft-com:xslt"</span>
+	<span class="na">exclude-result-prefixes=</span><span class="s">"msxsl"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;xsl:output</span> <span class="na">method=</span><span class="s">"html"</span>
+		<span class="na">version=</span><span class="s">"1.0"</span>
+		<span class="na">omit-xml-declaration=</span><span class="s">"yes"</span>
+		<span class="na">indent=</span><span class="s">"yes"</span>
+		<span class="na">encoding=</span><span class="s">"utf-8"</span> <span class="nt">/&gt;</span>
+
+	<span class="nt">&lt;xsl:template</span> <span class="na">match=</span><span class="s">"/root"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;xsl:apply-templates</span> <span class="na">select=</span><span class="s">"Pod[position() mod 3 = 1]"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/xsl:template&gt;</span>
+
+	<span class="nt">&lt;xsl:template</span> <span class="na">name=</span><span class="s">"PodRow"</span>
+		<span class="na">match=</span><span class="s">"Pod[position() mod 3 = 1]"</span>
+		<span class="na">priority=</span><span class="s">"2"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"row"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;xsl:choose&gt;</span>
+				<span class="nt">&lt;xsl:when</span> <span class="na">test=</span><span class="s">"count(following-sibling::Pod) = 0"</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;xsl:call-template</span> <span class="na">name=</span><span class="s">"PodWrapperLast"</span><span class="nt">/&gt;</span>
+				<span class="nt">&lt;/xsl:when&gt;</span>
+				<span class="nt">&lt;xsl:otherwise&gt;</span>
+					<span class="nt">&lt;xsl:call-template</span> <span class="na">name=</span><span class="s">"PodWrapper"</span><span class="nt">/&gt;</span>
+					<span class="nt">&lt;xsl:apply-templates</span>
+						<span class="na">select=</span><span class="s">"following-sibling::Pod[position() &amp;lt; 3]"</span><span class="nt">/&gt;</span>
+				<span class="nt">&lt;/xsl:otherwise&gt;</span>
+			<span class="nt">&lt;/xsl:choose&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/xsl:template&gt;</span>
+
+	<span class="nt">&lt;xsl:template</span> <span class="na">name=</span><span class="s">"PodWrapper"</span>
+		<span class="na">match=</span><span class="s">"Pod[position() mod 3 &amp;gt; 1]"</span>
+		<span class="na">priority=</span><span class="s">"0"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;xsl:call-template</span> <span class="na">name=</span><span class="s">"PodContent"</span><span class="nt">/&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/xsl:template&gt;</span>
+
+	<span class="nt">&lt;xsl:template</span> <span class="na">name=</span><span class="s">"PodWrapperLast"</span>
+		<span class="na">priority=</span><span class="s">"1"</span>
+		<span class="na">match=</span><span class="s">"Pod[position() mod 3 = 0 or position() = last()]"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"pod last"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;xsl:call-template</span> <span class="na">name=</span><span class="s">"PodContent"</span><span class="nt">/&gt;</span>
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/xsl:template&gt;</span>
+
+	<span class="nt">&lt;xsl:template</span> <span class="na">name=</span><span class="s">"PodContent"</span><span class="nt">&gt;</span>
+		<span class="cp">&lt;!– whatever content your "pods" contain can be marked up here –&gt;</span>
+	<span class="nt">&lt;/xsl:template&gt;</span>
+<span class="nt">&lt;/xsl:stylesheet&gt;</span></code></pre></figure>
+
+<p>This version of the XSLT functions exactly the same as the previous one. The only additions are for identifying the last pod in each row for all cases. So, here is what has changed.</p>
+
+<p>The xsl:apply-templates call inside of PodRow now matches one of two templates: PodWrapper or PodWrapperLast. You guessed it, PodWrapperLast just has an extra “last” class on the Pod div and a fancy match attribute. “Pod[position() mod 3 = 0 or position() = last()]” will match Pod numbers 3, 6, etc (in other words, the last Pod of every row) or the last Pod in the XML (no matter what number it is).</p>
+
+<p>Notice the new xsl:choose inside of our PodRow template. This handles the case where the last Pod in the XML is also the first Pod in a row.</p>
+
+<p>Notice also the “priority” attributes on the templates now. This prevents the PodWrapperLast template from matching the first Pod in a row if that first Pod is also the last Pod in the XML.</p>
+
 
     </article>
+
+    <section>
+        <a href="/2012/03/05/grouping-into-rows-with-xslt/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -563,7 +730,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

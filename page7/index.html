@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,46 +533,108 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2016/01/04/adding-a-rabbitmq-configuration-file-when-running-as-a-windows-service/">
-                Adding a RabbitMQ Configuration File When Running as a Windows Service
+            <a href="/2016/02/25/you-cant-subscribe-to-ievent-with-nservicebus/">
+                You Can't Subscribe to IEvent with NServiceBus
             </a>
         </h1>
 
-        <time datetime="2016-01-04T09:26:00-06:00" class="post-date">04 Jan 2016</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2016-02-25T09:56:00-06:00" class="post-date">25 Feb 2016</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/.net">#.net</a>
+                
+                <a href="/tags/nservicebus">#nservicebus</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <h2 id="a-little-context">A little context</h2>
-<p>I was having a hard time adding a rabbitmq.config file today.  I added it in the right location, restarted
-the RabbitMQ Windows service and the logs still showed that the configuration file was not found.</p>
+        <p>The reason you might want to subscribe to <code class="highlighter-rouge">IEvent</code> is pretty straightforward. I
+wanted to do it for the simple reason of wanting to be able to choose (based
+on configuration) whether I wanted to notify anyone of any event that
+could be published on my bus.</p>
 
-<p>If you’re experiencing the same problem, you’ll see a similar error message in the RabbitMQ log file after
-you restart the Windows service.</p>
+<p>In other words, whenever an event of any type was published, I wanted one particular
+endpoint to subscribe to that event and then decide whether it should do
+anything with it.</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text">=INFO REPORT==== &lt;date here&gt;
-node			: rabbit@&lt;server&gt;
-home dir		: C:\Windows
-config file(s)	: c:/path/to/config/rabbitmq.config (not found)
-...some other stuff...</code></pre></figure>
+<p>I thought the code to do that should be pretty simple.  Since all published
+events <em>should</em> implement the <code class="highlighter-rouge">IEvent</code> interface and NServiceBus supports
+polymorphism in its message handling, creating a message handler that
+implemented <code class="highlighter-rouge">IHandleMessages&lt;IEvent&gt;</code> should be all I should have needed!</p>
 
-<p>This will happen if you just install your RabbitMQ server with the normal, default installation process
-and then try to add a configuration file later.  By default, RabbitMQ doesn’t install configuration file and just
-uses all it’s defined defaults.</p>
+<p>I was testing this with only partial success and so I thought it was working.</p>
 
-<h2 id="solution">Solution</h2>
-<p>I read the <a href="http://www.rabbitmq.com/configure.html">documentation</a> a little more closely
-and finally came upon this line: “Windows service users will need to re-install the service after adding
-or removing a configuration file.”</p>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">EventHandler</span> <span class="p">:</span> <span class="n">IHandleMessages</span><span class="p">&lt;</span><span class="n">IEvent</span><span class="p">&gt;</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">void</span> <span class="nf">Handle</span><span class="p">(</span><span class="n">IEvent</span> <span class="n">message</span><span class="p">)</span>
+   <span class="p">{</span>
+     <span class="p">...</span>
+   <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
 
-<p>Oops.  Guess I should have read the documentation more closely the first time around!  The easiest way to
-do this is as follows (start a command prompt as administrator):</p>
+<h2 id="my-partial-success">My Partial Success</h2>
+<p>The reason I had partial success was because I was also <em>explicitly</em> handling
+other events in the same endpoint on a special saga I had setup.  So, when
+the endpoint started up, it would subscribe to these events.  At first, I only
+wanted to send notifications for these events anyway, so it all seemed to be
+working.  My special <code class="highlighter-rouge">IEvent</code> would work because the <code class="highlighter-rouge">Saga</code> subscribed this same
+endpoint to those few events explicitly.</p>
 
-<figure class="highlight"><pre><code class="language-text" data-lang="text">&gt; cd "C:\Program Files (x86)\RabbitMQ Server\rabbitmq_server-3.6.0\sbin"
-&gt; .\rabbitmq-service.bat remove
-&gt; .\rabbitmq-service.bat install
-&gt; .\rabbitmq-service.bat start</code></pre></figure>
+<h2 id="my-full-failure">My Full Failure</h2>
+<p>I realized I had only partially succeeded when I started wanting to send notifications
+for other events that were not in that <code class="highlighter-rouge">Saga</code>.  I dug into the issue for a few
+hours and finally began to wonder if NServiceBus (or maybe the RabbitMQ transport)
+was explicitly ignoring <code class="highlighter-rouge">IEvent</code> when it setup subscriptions.</p>
 
-<p>Of course, The path you cd into will depend on the version of RabbitMQ you have installed.</p>
+<p>Sure enough, it does.</p>
+
+<p>To build a list of types to subscribe to, NServiceBus uses the <code class="highlighter-rouge">Conventions</code>
+class in the <code class="highlighter-rouge">NServiceBus.Core</code> namespace.  One of the checks that code does
+is to filter the list of potential types with the <code class="highlighter-rouge">IsEventType</code> method.  This
+method checks if the <code class="highlighter-rouge">Type</code> is in a Particular (NServiceBus) DLL.  See the
+code here: <a href="https://github.com/Particular/NServiceBus/blob/e4bc405509e3b9c3fc91e21a56333bb40ac54a60/src/NServiceBus.Core/Conventions.cs#L154">IsEventType</a></p>
+
+<h2 id="my-solution">My Solution</h2>
+<p>The solution is simple enough.  Instead of listening to <code class="highlighter-rouge">IEvent</code>, listen
+to a custom interface that you implement on all of your events.  This is probably
+more close to what you are trying to do anyway–listen to all events that your
+system produces.</p>
+
+<p>So, I simply created a marker interface called <code class="highlighter-rouge">ICustomEvent</code>.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">interface</span> <span class="nc">ICustomEvent</span> <span class="p">:</span> <span class="n">IEvent</span> <span class="p">{</span> <span class="p">}</span></code></pre></figure>
+
+<p>Then, on all of my bus event classes, instead of implementing <code class="highlighter-rouge">IEvent</code> directly,
+I implemented <code class="highlighter-rouge">ICustomEvent</code>.</p>
+
+<p>My handler then looked like this.</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">EventHandler</span> <span class="p">:</span> <span class="n">IHandleMessages</span><span class="p">&lt;</span><span class="n">ICustomEvent</span><span class="p">&gt;</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="k">void</span> <span class="nf">Handle</span><span class="p">(</span><span class="n">ICustomEvent</span> <span class="n">message</span><span class="p">)</span>
+   <span class="p">{</span>
+     <span class="p">...</span>
+   <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Now, the right subscriptions are all set up and my single handler gets
+every single event published by my entire bus.</p>
+
 
     </article>
+
+    <section>
+        <a href="/2016/02/25/you-cant-subscribe-to-ievent-with-nservicebus/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -583,7 +653,7 @@ do this is as follows (start a command prompt as administrator):</p>
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>

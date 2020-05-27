@@ -516,6 +516,14 @@
             
             
             
+            
+            
+            
+            
+            
+            
+            
+            
         </div>
     </nav>
 
@@ -525,37 +533,136 @@
     
     <article class="post">
         <h1 class="post-title">
-            <a href="/2012/10/12/custom-error-pages-with-sitefinity/">
-                Custom Error Pages with Sitefinity
+            <a href="/2012/10/19/indexing-taxonomy-fields-for-search-in-sitefinity-51/">
+                Indexing Taxonomy Fields For Search in Sitefinity 5.1
             </a>
         </h1>
 
-        <time datetime="2012-10-12T00:00:00-05:00" class="post-date">12 Oct 2012</time>
+        <div class="post-info d-flex justify-content-start">
+            <time datetime="2012-10-19T00:00:00-05:00" class="post-date">19 Oct 2012</time>
+            <nav class="post-tags">
+                
+                <a href="/tags/sitefinity">#sitefinity</a>
+                
+            </nav>
+            <nav class="post-categories">
+                <span>posted in:</span>
+                
+                <a href="/categories/programming">programming</a>
+                
+            </nav>
+        </div>
 
-        <p>I had a considerably hard time today getting just a simple 404 error page (custom) to show up in all cases for a Sitefinity installation. It probably has nothing to do with Sitefinity and a lot more to do with my lack of experience doing this simple task. But, anyhow, here are my findings.</p>
+        <h2 id="problem">Problem</h2>
+<p>We recently ran into a rather surprising issue with a Sitefinity 5.1 installation. We wanted a pretty simple feature: when searching and using Lucene, we wanted the values of any taxonomy fields to be indexed with Sitefinity’s Lucene back-end so that items could be searched by their attached taxonomy. This is apparently impossible with the basic installation because you can only search short text and long text fields.</p>
 
-<p>You have to setup the error pages in two places in the application’s web.config to cover all of your bases.</p>
+<p>So, I began on a quest to implement this somehow and ran into another wall: the Sitefinity documentation on their search API is horrendously non-existent. We mostly had to rely on forum posts and decompiling Telerik assemblies to see how stuff worked. But, this did eventually lead to a solid solution.</p>
 
-<h2 id="systemwebcustomerrors">system.web/customErrors</h2>
-<p>You have to setup your error pages in the system.web/customErrors section of your web.config to cover calls to non-existent *.aspx pages (and probably other ASP.NET-handled pages as well). My customErrors section looks like this. It will be expanded to cover other error codes.</p>
+<h2 id="solution">Solution</h2>
+<p>It took me about 13 hours of research to figure out what to do and then just about an hour to actually implement. So, the good news is that it’s a pretty simple solution!</p>
 
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;customErrors</span> <span class="na">mode=</span><span class="s">"On"</span> <span class="na">redirectMode=</span><span class="s">"ResponseRewrite"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;error</span> <span class="na">statusCode=</span><span class="s">"404"</span> <span class="na">redirect=</span><span class="s">"~/Static/404.htm"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/customErrors&gt;</span></code></pre></figure>
+<p>When you create a search index in Sitefinity’s back-end, you can add a comma-separated list of extra fields to index. Sitefinity indexes a standard set (like Title). But, if you create custom dynamic modules with other fields you want to index you have to add them in this Additional Fields box. Here here:</p>
 
-<h2 id="systemwebserverhttperrors">system.webServer/httpErrors</h2>
-<p>The next section you need is the system.webServer/httpErrors section. I never knew this section exists, but it corresponds to the Errors panel in IIS Manager 7.5 for your website. This section covers request for non-existing folders and static files (like /bogusFolder or /bogusFile.htm). Mine looks like this and it will likewise be expanded for other error codes.</p>
+<p><img src="/assets/images/2012-10-19-indexing-taxonomy-fields-for-search-in-sitefinity-51/addtionalfields.png" alt="Additional Fields" /></p>
 
-<figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;httpErrors</span> <span class="na">errorMode=</span><span class="s">"Custom"</span> <span class="na">defaultResponseMode=</span><span class="s">"File"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;remove</span> <span class="na">statusCode=</span><span class="s">"404"</span><span class="nt">/&gt;</span>
-  <span class="nt">&lt;error</span> <span class="na">statusCode=</span><span class="s">"404"</span> <span class="na">path=</span><span class="s">"Static\404.htm"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;/httpErrors&gt;</span></code></pre></figure>
+<p>Looking through the de-compiled code for Sitefinity’s SearchModule, I found that it registered a special outbound pipe that updates the Lucene indexes (not directly, but through Sitefinity’s abstraction, it appears) when you publish an item. It also registered various Translator classes with PipeTranslatorFactory.RegisterTranslator. Digging through the code in that SearchIndexOutboundPipe and the various translator classes it registered, I finally found that when the SearchIndexOutboundPipe runs, it reads that comma-separated list of additional fields from your index and ties them to the ConcatenationTranslator through some type of mapping. It looked like these translators were being used by the SearchModule to translate content values into index-able values for the Lucene indexing system.</p>
 
-<p>Because IIS has default settings for this stuff, you need to use the remove element before adding your own error messages. You can find more specifics on this configuration element here: <a href="http://www.iis.net/configreference/system.webserver/httperrors">http://www.iis.net/configreference/system.webserver/httperrors</a>.</p>
+<p>Turns out, I was right. With some more trial and error from that point on, I came up with this solution.</p>
 
-<p>You have other options than the defaultResponseMode=”File” for the httpErrors section. See the link above for more information about this. You can redirect to *.aspx files and stuff for more dynamically handled pages. I wanted very simple, static HTML pages to ensure maximum possibility of the page rendering and displaying a legible error to the user.</p>
+<p>Override ConcatenationTranslator
+First of all, you need to create a new class that inherits from ConcatenationTranslator. This is a public class in the Telerik.Sitefinity.Publishing.Translators namespace. I called my class CustomConcatenationTranslator. IN the base class, the Translate method turns an array of object values into a space-separated string. I’ll show the code in a minute, but the first thing you need to do after creating the class is register it with the pipeline. In Global.asax.cs, add these lines (around any other code you have there):</p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">protected</span> <span class="k">void</span> <span class="nf">Application_Start</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="n">Bootstrapper</span><span class="p">.</span><span class="n">Initialized</span> <span class="p">+=</span> <span class="n">Bootstrapper_Initialized</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">private</span> <span class="k">void</span> <span class="nf">Bootstrapper_Initialized</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">Telerik</span><span class="p">.</span><span class="n">Sitefinity</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">ExecutedEventArgs</span> <span class="n">e</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">CommandName</span> <span class="p">==</span> <span class="s">"Bootstrapped"</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">PipeTranslatorFactory</span><span class="p">.</span><span class="nf">RegisterTranslator</span><span class="p">(</span><span class="k">new</span> <span class="nf">CustomConcatenationTranslator</span><span class="p">());</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>You don’t have to unregistered the existing ConcatenationTranslator. Your registration will replace it as long as you don’t rename the translator by overriding it’s Name property.</p>
+
+<p>What I wanted to do was check if the data being translated was a TrackedList<Guid> type. This is what your taxonomy fields are in code. Here is my code for the CustomConcatenationTranslator class.</Guid></p>
+
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">class</span> <span class="nc">CustomConcatenationTranslator</span> <span class="p">:</span> <span class="n">ConcatenationTranslator</span>
+<span class="p">{</span>
+  <span class="k">private</span> <span class="k">readonly</span> <span class="n">TaxonomyManager</span> <span class="n">_taxonomyManager</span><span class="p">;</span>
+
+  <span class="k">public</span> <span class="nf">CustomConcatenationTranslator</span><span class="p">()</span>
+  <span class="p">{</span>
+    <span class="n">_taxonomyManager</span> <span class="p">=</span> <span class="n">TaxonomyManager</span><span class="p">.</span><span class="nf">GetManager</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">public</span> <span class="k">override</span> <span class="kt">object</span> <span class="nf">Translate</span><span class="p">(</span><span class="kt">object</span><span class="p">[]</span> <span class="n">data</span><span class="p">,</span> <span class="n">IDictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">translationSettings</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">Length</span> <span class="p">&lt;=</span> <span class="m">0</span><span class="p">)</span>
+    <span class="p">{</span>
+      <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="n">StringBuilder</span> <span class="n">concatedStr</span> <span class="p">=</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="p">();</span>
+    <span class="nf">ConcatValues</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">concatedStr</span><span class="p">);</span>
+    <span class="k">return</span> <span class="n">concatedStr</span><span class="p">.</span><span class="nf">ToString</span><span class="p">();</span>
+  <span class="p">}</span>
+
+  <span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">IsTrackedList</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;(</span><span class="kt">object</span> <span class="n">data</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">return</span> <span class="n">data</span> <span class="k">is</span> <span class="n">TrackedList</span><span class="p">&lt;</span><span class="n">T</span><span class="p">&gt;;</span>
+  <span class="p">}</span>
+
+  <span class="k">private</span> <span class="k">void</span> <span class="nf">ConcatValues</span><span class="p">(</span><span class="kt">object</span><span class="p">[]</span> <span class="n">data</span><span class="p">,</span> <span class="n">StringBuilder</span> <span class="n">concatedStr</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">data</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span> <span class="n">i</span><span class="p">++)</span>
+    <span class="p">{</span>
+      <span class="kt">string</span> <span class="n">str</span><span class="p">;</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">IsTrackedList</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+      <span class="p">{</span>
+        <span class="n">str</span> <span class="p">=</span> <span class="nf">TranslatedTaxonomies</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">i</span><span class="p">);</span>
+      <span class="p">}</span>
+      <span class="k">else</span>
+      <span class="p">{</span>
+        <span class="n">str</span> <span class="p">=</span> <span class="nf">GetString</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+      <span class="p">}</span>
+
+      <span class="n">concatedStr</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="n">str</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="n">i</span> <span class="p">+</span> <span class="m">1</span> <span class="p">&lt;</span> <span class="n">data</span><span class="p">.</span><span class="n">Length</span><span class="p">)</span>
+      <span class="p">{</span>
+        <span class="n">concatedStr</span><span class="p">.</span><span class="nf">Append</span><span class="p">(</span><span class="err">‘</span> <span class="err">‘</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+
+  <span class="k">private</span> <span class="kt">string</span> <span class="nf">TranslatedTaxonomies</span><span class="p">(</span><span class="kt">object</span><span class="p">[]</span> <span class="n">data</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">)</span>
+  <span class="p">{</span>
+    <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;</span> <span class="n">taxNames</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">&gt;();</span>
+    <span class="k">foreach</span> <span class="p">(</span><span class="n">Guid</span> <span class="n">guid</span> <span class="k">in</span> <span class="p">((</span><span class="n">TrackedList</span><span class="p">&lt;</span><span class="n">Guid</span><span class="p">&gt;)</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+    <span class="p">{</span>
+      <span class="kt">var</span> <span class="n">taxon</span> <span class="p">=</span> <span class="n">_taxonomyManager</span><span class="p">.</span><span class="nf">GetTaxon</span><span class="p">(</span><span class="n">guid</span><span class="p">);</span>
+      <span class="n">taxNames</span><span class="p">.</span><span class="nf">Add</span><span class="p">(</span><span class="n">taxon</span><span class="p">.</span><span class="n">Name</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">Join</span><span class="p">(</span><span class="s">" "</span><span class="p">,</span> <span class="n">taxNames</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>It should be pretty simple to follow. Basically, if I find a data value is a TrackedList<Guid>, I get the Taxon items with that Guid ID, get the name of that Taxon and then concatenate those values, separated by a space. If the data object is anything other than a TrackedList<Guid>, I used the default ConcatenationTranslator behavior.</Guid></Guid></p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>That’s really all you need to do. Just go into your Sitefinity back-end, re-index your search index and you can now search your content by any taxonomy it has attached to it.</p>
+
 
     </article>
+
+    <section>
+        <a href="/2012/10/19/indexing-taxonomy-fields-for-search-in-sitefinity-51/#comments-section">
+            See comments
+        </a>
+    </section>
     
 </div>
 
@@ -574,7 +681,7 @@
     <footer class="footer">
         <div class="container">
             <small>
-                &copy; <time datetime="2020-05-14T21:16:11-05:00">2020</time>. All
+                &copy; <time datetime="2020-05-27T14:48:33-05:00">2020</time>. All
                 rights reserved.
             </small>
         </div>
